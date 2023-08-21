@@ -1,0 +1,85 @@
+﻿@model Model.EF.ProcessItemCustomer
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    var ListCustomer = (List<Model.View.Dropdownlist2>)ViewBag.Customer;
+    var Customer = new List<SelectListItem>();
+    Customer.Add(new SelectListItem
+    {
+        Value = "0",
+        Text = "Chọn Khách hàng",
+    });
+    foreach (var item in ListCustomer)
+    {
+        Customer.Add(new SelectListItem
+        {
+            Text = item.ID + ": " + item.Name,
+            Value = item.ID,
+        });
+    }
+    var ListItem = (List<Model.View.Dropdownlist2>)ViewBag.Item;
+    var Item = new List<SelectListItem>();
+    Item.Add(new SelectListItem
+    {
+        Value = "0",
+        Text = "Chọn Item",
+    });
+    foreach (var item in ListItem)
+    {
+        Item.Add(new SelectListItem
+        {
+            Text = item.ID + ": " + item.Name,
+            Value = item.ID,
+        });
+    }
+
+}
+@section jsFooter
+{
+    <script src="/Assets/plugin/ckfinder/ckfinder.js"></script>
+    <script>
+        $(function () {
+            $('.select2').select2()
+        })
+    </script>
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Tạo Item Customer</h3>
+    </div>
+    @using (Html.BeginForm("Create", "ProcessItemCustomer", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>Thông tin</h3>
+                    <div class="row" style="background: #f6fcfd; padding-bottom: 15px;">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-12">Item ID</label>
+                                @Html.DropDownListFor(model => model.Item, Item, new { @ID = "Name", @class = "form-control select2", @required = "required" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-12">Customer ID</label>
+                                @Html.DropDownListFor(model => model.Customer, Customer, new { @ID = "Factory", @class = "form-control select2" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="col-md-4">
+                <input type="submit" value="Tạo mới" class="btn btn-primary" />
+            </div>
+        </div>
+    }
+</div>
+

@@ -1,0 +1,225 @@
+﻿@model Model.EF.ProposalToMaterial
+@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    var infoCreateBy = (Model.View.UserView1)ViewBag.ngtao;
+    var dsPlaning = (List<Model.View.PlaningView2>)ViewBag.dsPlaning;
+    var detail = (Model.View.FullPTM)ViewBag.detail;
+    var lenght = detail.detail.Count();
+}
+@section jsFooter
+{
+    <script src="/Scripts/CancelMaterial.js"></script>
+}
+<div class="card card-primary">
+@using (Html.BeginForm("Edit2", "ProposalToMaterial", FormMethod.Post))
+{
+    if (detail.item.Status == true)
+    { <div class="card-header" style="background: #ffc107">
+        <h3 class="card-title"><i class="fa fa-info-circle" data-toggle="tooltip" title="@detail.item.LimitedHistory"></i>Phiếu Cấp Vật Tư Được tạo theo BOM Sản Xuất - Số Phiếu: <strong>@detail.item.ID</strong></h3>
+    </div>
+    }
+    else
+    {<div class="card-header" style="background: #dc3545">
+        <h3 class="card-title"><i class="fa fa-info-circle" data-toggle="tooltip" title="@detail.item.LimitedHistory"></i>Phiếu Cấp Vật Tư Đã Hủy - Số Phiếu: <strong>@detail.item.ID</strong></h3>
+    </div>
+    }
+
+    <div class="card-body">
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="row" style="text-align: center;">
+                    <div class="col-lg-4" style="display:block">
+                        @Html.TextBoxFor(model => model.ID, new { @class = "form-control", @style = "display: none; visibility: hidden;" })
+                    </div>
+                    <div class="col-md-12">
+                        CTY TNHH SX HIỆP PHƯỚC THÀNH QUY ĐỊNH NHẬP-XUẤT KHO và BẢO QUẢN SẢN PHẨM BM13/01
+                    </div>
+                    <div class="col-md-12">
+                        <h2 style="font-weight: bold;"> PHIẾU ĐỀ NGHỊ CẤP VẬT TƯ</h2>
+                    </div>
+                    <div class="col-md-12">
+                        Số phiếu: @detail.item.ID
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-xs-6">
+                        <p>Người Đề Nghị: <strong>@infoCreateBy.FullName</strong></p>
+                    </div>
+                    <div class="col-md-6 col-xs-6">
+                        <p>Bộ phận: <strong>@infoCreateBy.DepartmentName</strong></p>
+                    </div>
+
+                    <div class="col-md-12">
+                        <p>Lý do: @detail.item.Reason</p>
+                    </div>
+
+                    <div class='col-md-6 col-xs-6'>
+                        <p>Ngày yêu cầu: @detail.item.CreateDate.ToString("dd/MM/yyyy hh:MM")</p>
+
+                    </div>
+                    <div class='col-md-6 col-xs-6'>
+                        <p style="font-weight:bold;">Thời hạn đáp ứng: @detail.item.LimitedDate.ToString("dd/MM/yyyy hh:MM") </p>
+                    </div>
+                </div>
+                <div class="row" style="padding-top:5px;margin:20px;">
+                    <table class="table table-striped table-bordered table-hover" id="gvCustomers">
+                        <thead>
+                            <tr>
+                                <th style="width:40px;">STT</th>
+                                <th style="width:100px;">Mã vật tư</th>
+                                <th>Tên vật tư</th>
+                                <th>Ghi chú</th>
+                                <th style="width:40px;">ĐVT</th>
+                                <th style="width:80px;">SL theo BOM</th>
+                                <th style="width:80px;">SL tồn kho tại xưởng</th>
+                                <th style="width:80px;">SL quy cách</th>
+                                <th style="width:80px;">SL yêu cầu</th>
+                                <th style="width:80px;">SL thực nhận</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < lenght; i++)
+                            {
+                                <tr id="row">
+                                    <td style="text-align: center;">@detail.detail[i].No</td>
+                                    <td>@detail.detail[i].ItemID</td>
+                                    <td>@detail.detail[i].MaterialName</td>
+                                    <td>@detail.detail[i].Note</td>
+
+                                    <td>@detail.detail[i].Unit</td>
+                                    <td>@detail.detail[i].A1</td>
+                                    <td>@detail.detail[i].A2</td>
+                                    <td>@detail.detail[i].A3</td>
+                                    <td style="font-weight: bold; text-align: center; background: #fac2c7;">@detail.detail[i].Quantity</td>
+                                    <td> </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+
+                </div>
+
+               
+                <div class="row">
+                    <div class="col-md-12">
+                        <h2 style="font-weight: bold;"> DANH SÁCH KẾ HOẠCH SẢN XUẤT</h2>
+                    </div>
+                    <div class="table-responsive parent">
+                        <table class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th width="30px">BOM</th>
+                                    <th>Mã SP</th>
+                                    <th>Tên Sản Phẩm</th>
+                                    <th>Bắt đầu</th>
+                                    <th>Kết Thúc</th>
+                                    <th>Line</th>
+                                    <th>Số lượng</th>
+                                    <th>Xem</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach(var item in dsPlaning)
+                                {
+                                    <tr>                                                               
+                                        <td>
+                                            @if (item.BOMID > 0)
+                                            {
+                                                <a href="/BOMItem/Edit/@item.BOMID"><span class="fa fa-bitcoin" style="font-size: 22px;"></span></a>
+                                            }
+                                            else
+                                            {
+                                                <span class="fa fa-bitcoin" style="font-size: 22px;"></span>
+                                            }
+                                        </td>
+                                        <td>@item.ItemID</td>
+                                        <td>@item.ItemName</td>
+                                        <td>@item.StartDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                        <td>@item.EndDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                        <td>@item.Line</td>
+                                        <td style="font-weight:bold">@item.Quantity</td>
+                                       <td> <a href="/Planing/View/@item.ID"><span class='fa fa-eye' style="font-size: 22px;"></span></a></td>
+                                    </tr>
+                                }
+                            </tbody>                          
+                        </table>                       
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="col-md-6" style="width:50%;">TBP duyệt</th>
+                                    <th class="col-md-6" style="width:50%;">BGD duyệt</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr id="row_0">
+                                    <td style="background: #f2fbe9;">@Html.CheckBoxFor(model => model.HODApproval, new { @style = "height:60px; width:60px;" })</td>
+                                    <td style="background: #d7f5ba;">@Html.CheckBoxFor(model => model.BOSSApproval, new { @style = "height:60px; width:60px;" })</td>
+                                </tr>
+                                <tr id="row_0">
+                                    <td>
+                                        @if (Model.HODDate != null)
+                                        {<span> @Model.HODName duyệt @Model.HODDate.Value.ToString("dd/MM/yyyy")</span>}
+                                    </td>
+                                    <td>
+                                        @if (Model.BOSSDate != null)
+                                        {<span> @Model.BOSSName duyệt @Model.BOSSDate.Value.ToString("dd/MM/yyyy")</span>}
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="card-footer">
+
+             <button type="submit" id="luutt" class="btn btn-primary">Lưu thông tin</button>
+             <button type="button" class="btn btn-danger float-right" data-toggle="modal" data-target="#myModal">Xóa Phiếu Yêu Cầu </button>
+
+    </div>
+}
+</div>
+
+<form id="myForm" method="post">
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            Modal content
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="float-left"><h4 class="modal-title">Lý do xóa phiếu</h4></span>
+                    <span class="float-right"><button type="button" class="close" data-dismiss="modal" style="width:20px">&times;</button></span>
+                </div>
+                <div class="modal-body">
+                    <input class="form-control" data-val="true" id="lydo" name="lydo" placeholder="điền lý do hủy phiếu " type="text" value="">
+                </div>
+                <script>
+                    $(document).ready(function () {
+                        $("#lydo").keypress(function () {
+                            var lydos = $('#lydo').val();
+                            var abc = $('#huyphieu').attr("data-lydo", lydos);
+
+                        });
+                    });
+                </script>
+
+                <div class="modal-footer">
+                    <a href="#" id="huyphieu" class="btn-cancel" data-id="@detail.item.ID" style="background: red;    padding: 7px;  color: white;">Hủy Phiếu</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>

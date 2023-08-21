@@ -1,0 +1,205 @@
+﻿@model Model.View.FullRecPro
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme2.cshtml";
+    var temp = (List<Model.View.RecordPro4>)ViewBag.temp;
+    var ngmode = (List<Model.EF.NGMode>)ViewBag.ngmode;
+    string temp2 = "";
+}
+@section jsFooter
+        {
+    <script src="~/Scripts/CreateRecordProductionOuXi.js"></script>
+    <script src="/Assets/theme3/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+    <script>
+        $(function () {
+            $("#dates").datepicker();
+            $("#end").datepicker();
+            $("#StartDate").datepicker();
+            $("#EndDate").datepicker();
+            $('input[type="checkbox"].flat-green, input[type="radio"].flat-green').iCheck({
+                checkboxClass: 'icheckbox_flat-green',
+                radioClass: 'iradio_flat-green'
+            })
+            $('.select2').select2()
+        })
+    </script>
+}
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+
+<div class="row" style="padding:3px">
+    <div class="input-group" style="height: 50px;">
+        <div class="input-group-prepend">
+            <span class="input-group-text" style="font-size: 22px;"><i class="fa fa-credit-card" aria-hidden="true"></i></span>
+        </div>
+        <input class="form-control" id="idtag" placeholder="quét thẻ output" type="text" autofocus="autofocus" style="font-size: 22px;">
+        <div class="input-group-prepend">
+            <a class="input-group-text" id="inbaocao" style="font-size: 22px;"> <i class="fa fa-search" aria-hidden="true"></i>Tìm kiếm</a>
+        </div>
+    </div>
+    <script src="~/Scripts/jquery-1.9.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            $("#inbaocao").click(function () {
+                var idtag = $("#idtag").val();
+                if (idtag == "") {
+                    alert("hãy quét thẻ cầu");
+                    $('#inbaocao').attr("href", '#');
+                }
+                else { $('#inbaocao').attr("href", '/RecordProduction/Index2QcXi?idtag=' + idtag); }
+            });
+        });
+    </script>
+</div>
+@if (temp != null && temp.Count > 0)
+{
+    <div class="row" style="padding:3px">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th style="padding:3px">Thông tin thẻ</th>
+                        <th style="padding: 3px; width: 300px;">Cập Nhật</th>
+                    </tr>
+
+
+                </thead>
+                @using (Html.BeginForm("CreateQCXi", "RecordProduction", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <tbody>
+                        @foreach (var item in temp)
+                        {
+                            <tr>
+                                <td>
+                                    <img class="img-fluid pad" src="~/Assets/theme3/dist/img/sanxuat.jpg">
+                                    <p style="font-size: 18px; margin-bottom: 1px;">  @item.ItemName </p>
+                                    <p style="font-size: 16px; color: red; margin-bottom: 1px;"> @item.ItemID - SL:<strong> @item.SumOK</strong></p>
+                                    <p style="font-size: 16px; margin-bottom: 1px;">NV @item.CreateBy: @item.CreateDate.ToString("dd/MM/yyyy HH:mm")</p>
+                                    <p style="font-size: 16px; margin-bottom: 1px;">Line: @item.LineID - @item.Step</p>
+                                </td>
+                                <td>
+                                    <div class="input-group" style="height: 50px; margin-bottom: 20px;">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" style="font-size: 22px;" id="Titem_SLOK"><i class="fa fa-minus" aria-hidden="true"></i></span>
+                                        </div>
+                                        <input id="item.StepName" name="item.StepName" type="text" value="@ViewBag.idtags" style="display:none">
+                                        @Html.TextBoxFor(model => model.item.SLOK, new { @class = "form-control", @type = "number", @style = "font-size: 30px; color: green;" })
+                                        <div class="input-group-prepend">
+                                            <a class="input-group-text" style="font-size: 22px;" id="Citem_SLOK"> <i class="fa fa-plus" aria-hidden="true"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="input-group" style="height: 50px; margin-bottom: 20px;">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" style="font-size: 22px;" id="Titem_SLNG"><i class="fa fa-minus" aria-hidden="true"></i></span>
+                                        </div>
+                                        @Html.TextBoxFor(model => model.item.SLNG, new { @class = "form-control", @type = "number", @style = " font-size: 30px; color: red;", @placeholder = "0" })
+                                        <div class="input-group-prepend">
+                                            <a class="input-group-text" style="font-size: 22px;" id="Citem_SLNG"> <i class="fa fa-plus" aria-hidden="true"></i></a>
+                                        </div>
+                                    </div>
+
+                                    @if (item.Step != "output")
+                                    {<p style="font-size: 22px; font-weight: bold; color:red; margin-bottom: 1px;">Cảnh báo: Thẻ này không phải từ khâu Gỡ Hàng</p>}
+                                    else
+                                    { <button type="submit" class="btn btn-app" style="color: #dc3545; background: #c0daf7; font-weight: bold; height: 60px; width: 100%; margin-left: 0; padding-top: 10px;" onclick="openNav()"><i class="fa fa-save"></i>Lưu thông tin</button>}
+                                    @*</td>
+                                        <td>*@
+                                    <h4 style="background: #f5acb3; padding: 10px;">DANH SÁCH LỖI</h4>
+                                    <div class="row">
+                                        @if (ngmode != null)
+                                        {
+                                            for (int i = 0; i < ngmode.Count; i++)
+                                            {
+                                                { temp2 = "detail_" + i + "__IDMod"; }
+                                                <div class="col-4">
+                                                    <label class="control-label">@ngmode[i].Name</label>
+                                                </div>
+                                                <div class="col-8">
+
+                                                    @*@Html.TextBoxFor(model => model.detail[i].SLNG, new { @type = "number", @class = "form-control", @placeholder = "0" })*@
+                                                    <input id="@temp" name="detail[@i].IDMod" type="text" value="@ngmode[i].ID" style="display:none">
+                                                    <div class="input-group" style="height: 30px; margin-bottom: 10px;">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text" style="font-size: 16px;" id="Tdetail_@i"><i class="fa fa-minus" aria-hidden="true"></i></span>
+                                                        </div>
+                                                        @Html.TextBoxFor(model => model.detail[i].SLNG, new { @type = "number", @class = "form-control ng_"+@i, @placeholder = "0" })
+                                                        <div class="input-group-prepend">
+                                                            <a class="input-group-text" style="font-size: 16px;" id="Cdetail_@i"> <i class="fa fa-plus" aria-hidden="true"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <script>
+                                                    $(document).ready(function () {
+                                                        $('.ng_@i').val(0);
+                                                        $('#Cdetail_@i').click(function () {
+                                                            var slok = parseInt($('.ng_@i').val()) + 1;
+                                                            $('.ng_@i').val(slok);
+                                                            var slng = parseInt($('#item_SLNG').val()) + 1;
+                                                            $('#item_SLNG').val(slng);
+                                                            var slok = parseInt($('#item_SLOK').val()) - 1;
+                                                            $('#item_SLOK').val(slok);
+                                                        });
+                                                        $('#Tdetail_@i').click(function () {
+                                                            var slok = parseInt($('.ng_@i').val()) - 1;
+                                                            $('.ng_@i').val(slok);
+                                                            var slng = parseInt($('#item_SLNG').val()) - 1;
+                                                            $('#item_SLNG').val(slng);
+                                                            var slok = parseInt($('#item_SLOK').val()) + 1;
+                                                            $('#item_SLOK').val(slok);
+                                                        });
+
+                                                    });
+
+                                                </script>
+                                            }
+                                        }
+                                    </div>
+                                </td>
+
+                            </tr>
+                            <script>
+                                $(document).ready(function () {
+                                    $('#item_SLOK').val(@item.SumOK)
+                                    $('#item_SLNG').val(0)
+                                    $('#Citem_SLOK').click(function () {
+                                        var slok = parseInt($('#item_SLOK').val()) + 1;
+                                        $('#item_SLOK').val(slok);
+                                    });
+                                    $('#Titem_SLOK').click(function () {
+                                        var slok = parseInt($('#item_SLOK').val()) - 1;
+                                        $('#item_SLOK').val(slok);
+                                    });
+                                    $('#Citem_SLNG').click(function () {
+                                        var slng = parseInt($('#item_SLNG').val()) + 1;
+                                        $('#item_SLNG').val(slng);
+                                        var slok = parseInt($('#item_SLOK').val()) - 1;
+                                        $('#item_SLOK').val(slok);
+                                    });
+                                    $('#Titem_SLNG').click(function () {
+                                        var slng = parseInt($('#item_SLNG').val()) - 1;
+                                        $('#item_SLNG').val(slng);
+                                        var slok = parseInt($('#item_SLOK').val()) + 1;
+                                        $('#item_SLOK').val(slok);
+                                    });
+                                });
+
+                            </script>
+
+                        }
+                    </tbody>
+                }
+            </table>
+            <p style="padding-bottom:300px;"></p>
+        </div>
+    </div>
+
+}
+else
+{
+    <span style="font-size:28px; font-weight:bold; color:red;">Hãy lấy thẻ khác quét để tiếp tục</span>
+}

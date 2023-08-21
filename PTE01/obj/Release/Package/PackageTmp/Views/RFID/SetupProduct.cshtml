@@ -1,0 +1,319 @@
+﻿@{
+    ViewBag.Title = "SetupProduct";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+}
+@section jsFooter
+{
+    <script src="/Assets/plugin/ckfinder/ckfinder.js"></script>
+    <script src="/Assets/theme3/plugins/datepicker/js/bootstrap-datetimepicker.js"></script>
+    <script src="/Assets/theme3/plugins/datepicker/js/locales/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
+    <script src="/Assets/theme3/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+    <script>
+        $(function () {
+            $('.select2').select2()
+            $(".date").datepicker();
+        })
+    </script>
+
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Thông số sản phẩm</h3>
+        <div class="card-tools">
+            <div class="btn-group" style="height:40px">
+                <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                    More
+                </button>
+                <div class="dropdown-menu float-right" role="menu">
+                    <a class="dropdown-item" href="#" style="color:#000"></a>
+                    <a class="dropdown-item" href="#" style="color:#000"></a>
+                    <a class="dropdown-item" href="#" style="color:#000"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("Report2", "PTE_baocom", FormMethod.Get))
+        {
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label" style="color: #FF5722;">Tìm kiếm</label><br>
+                        <input type="text" class="form-control" id="searchString" name="searchString" placeholder="Tìm kiếm" />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="control-label">Line</label><br>
+                    <select class="form-control select2" id="dep" name="dep">
+                        <option value="">Hãy chọn line</option>
+                        <option value="">Line 1-1</option>
+                        <option value="">Line 2-1</option>
+
+                    </select>
+                </div>
+
+                <div class="col-md-3 text-center">
+                    <label></label>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i>Tìm kiếm</button>
+                    </div>
+                </div>
+            </div>
+        }
+        <script src="~/Scripts/jquery-1.9.1.min.js"></script>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-success card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fa fa-clipboard"></i> <span id="sokq" style="color:red;font-weight:bold;"></span> Kết quả</h3>
+                        <div class="card-tools">
+                            <div class="btn-group" style="height:40px; right: 0px;">
+                                <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                                    Tool
+                                </button>
+                                <div class="dropdown-menu float-right" role="menu">
+                                    <span class="dropdown-item" onclick="exportTableToExcel('baocom', '')">Export to Excel</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        function exportTableToExcel(tableID, filename) {
+                            var downloadLink;
+                            var dataType = 'application/vnd.ms-excel';
+                            var tableSelect = document.getElementById(tableID);
+                            var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+                            filename = filename ? filename + '.xls' : 'excel_data.xls';
+                            downloadLink = document.createElement("a");
+                            document.body.appendChild(downloadLink);
+                            if (navigator.msSaveOrOpenBlob) {
+                                var blob = new Blob(['\ufeff', tableHTML], {
+                                    type: dataType
+                                });
+                                navigator.msSaveOrOpenBlob(blob, filename);
+                            } else {
+                                downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+                                downloadLink.download = filename;
+                                downloadLink.click();
+                            }
+                        }
+                    </script>
+
+                    <table class="table table-striped table-bordered table-hover" id="baocom">
+                        <thead>
+                            <tr>
+                                <th>Các bước</th>
+                                <th style="width:105px;">Time Min</th>
+                                <th style="width:105px;">Time Std</th>
+                                <th style="width:105px;">Time Max</th>
+                                <th style="width:105px;">Timp Min</th>
+                                <th style="width:105px;">Timp Std</th>
+                                <th style="width:105px;">Timp Max</th>
+                                <th style="width:105px;">Current Min</th>
+                                <th style="width:105px;">Current Std</th>
+                                <th style="width:105px;">Current Max</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input style="background: none; color: red; border: none; width: auto" type="text" id="searchString" name="searchString" placeholder="Rack Strip" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="840" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="900" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="960" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="25" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="30" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="40" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+                            </tr>
+                            <tr>
+                                <td><input style="background: none; color: red; border: none; width: auto" type="text" id="searchString" name="searchString" placeholder="Water Cut Blow" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="15" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="30" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="300" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="25" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="30" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="40" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+                            </tr>
+                            <tr>
+                                <td><input style="background: none; color: red; border: none; width: auto" type="text" id="searchString" name="searchString" placeholder="Degreasing" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="120" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="280" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="420" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="45" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="50" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="55" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+                            </tr>
+                            <tr>
+                                <td><input style="background: none; color: red; border: none; width: auto" type="text" id="searchString" name="searchString" placeholder="Chromic Acid Recovery" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="1" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="5" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="120" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="40" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="50" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="60" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+
+                            </tr>
+                            <tr>
+                                <td><input style="background: none; color: red; border: none; width: auto" type="text" id="searchString" name="searchString" placeholder="Etching" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="500" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="600" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="900" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="66" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="68" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="70" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+                            </tr>
+                            <tr>
+                                <td><input style="background: none; color: red; border: none; width: auto" type="text" id="searchString" name="searchString" placeholder="Neutralizing-Etching" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="30" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="45" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="120" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="25" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="30" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="35" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+                            </tr>
+                            <tr>
+                                <td><input style="background: none; color: red; border: none; width: auto" type="text" id="searchString" name="searchString" placeholder="Predib HCL" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="30" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="45" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="120" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="25" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="30" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="45" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+                            </tr>
+                            <tr>
+                                <td><input style="background: none; color: red; border: none; width: auto" type="text" id="searchString" name="searchString" placeholder="Pailadium Activating" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="120" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="180" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="240" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="30" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="35" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="45" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+                            </tr>
+                            <tr>
+                                <td><input style="background: none; color: red; border: none; width: auto" type="text" id="searchString" name="searchString" placeholder="Accelerating" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="180" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="200" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="420" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="35" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="40" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="45" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+                            </tr>
+                            <tr>
+                                <td><input style="background: none; color: red; border: none; width: auto" type="text" id="searchString" name="searchString" placeholder="Electroless Nickel" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="440" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="500" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="560" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="30" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="35" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="40" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+                            </tr>
+                            <tr>
+                                <td><input style="background: none; color: red; border: none; width: auto" type="text" id="searchString" name="searchString" placeholder="Spray Rinsing" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="15" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="45" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="300" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="25" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="30" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="40" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+                            </tr>
+                            <tr>
+                                <td><input style="background: none; color: red; border: none; width: auto" type="text" id="searchString" name="searchString" placeholder="Copper Activating" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="15" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="30" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="45" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="25" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="30" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="40" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+
+                            </tr>
+                            <tr>
+                                <td><input style="background: none; color: red; border: none; width: auto" type="text" id="searchString" name="searchString" placeholder="Copper Strike" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="290" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="300" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="860" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="24" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="26" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="28" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="192" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="197" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="1120" /></td>
+
+                            </tr>
+                            <tr>
+                                <td><input style="background: none; color: red; border: none; width: auto" type="text" id="searchString" name="searchString" placeholder="Acid Copper" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="1331" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="1401" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="1471" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="24" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="26" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="28" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="1343" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="1413" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="1484" /></td>
+
+                            </tr>
+                            <tr>
+                                <td><input style="background: none; color: red; border: none; width: auto" type="text" id="searchString" name="searchString" placeholder="Nickel Activating" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="15" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="30" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="45" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="25" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="30" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="40" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+                                <td><input style="background: none; color: red; border: none; width: 100px; " type="text" id="searchString" name="searchString" placeholder="" /></td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-primary" onclick="openNav()">Lưu thông tin</button>
+            </div>
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,164 @@
+﻿@model Model.EF.ProcessRequestForm
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    var ListCustomer = (List<Model.View.Dropdownlist2>)ViewBag.Customer;
+    var ListUser = (List<Model.View.Dropdownlist2>)ViewBag.User;
+    var Customer = new List<SelectListItem>();
+    var User = new List<SelectListItem>();
+    User.Add(new SelectListItem
+    {
+        Value = "0",
+        Text = "Chọn người đại diện",
+    });
+    foreach (var item in ListUser)
+    {
+        User.Add(new SelectListItem
+        {
+            Text = item.Name,
+            Value = item.ID,
+        });
+    }
+    Customer.Add(new SelectListItem
+    {
+        Value = "0",
+        Text = "Chọn Khách hàng",
+    });
+    foreach (var item in ListCustomer)
+    {
+        Customer.Add(new SelectListItem
+        {
+            Text = item.ID + ": " + item.Name,
+            Value = item.ID,
+        });
+    }
+    var ListItem = (List<Model.View.Dropdownlist2>)ViewBag.Item;
+    var Item = new List<SelectListItem>();
+    Item.Add(new SelectListItem
+    {
+        Value = "0",
+        Text = "Chọn Item",
+    });
+    foreach (var item in ListItem)
+    {
+        Item.Add(new SelectListItem
+        {
+            Text = item.ID + ": " + item.Name,
+            Value = item.ID,
+        });
+    }
+    var Type = new List<SelectListItem>();
+    Type.Add(new SelectListItem
+    {
+        Value = "0",
+        Text = "Sản phẩm mới",
+    });
+    Type.Add(new SelectListItem
+    {
+        Value = "1",
+        Text = "Cải tiến",
+    });
+    Type.Add(new SelectListItem
+    {
+        Value = "2",
+        Text = "Sản xuất hàng loạt",
+    });
+
+}
+@section jsFooter
+{
+    <script src="/Assets/plugin/ckfinder/ckfinder.js"></script>
+    <script src="~/Scripts/ProcessRequest.js"></script>
+    <script>
+        $(function () {
+            $('.select2').select2()
+        })
+    </script>
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Tạo Phiếu yêu cầu mẫu</h3>
+    </div>
+    @using (Html.BeginForm("CreateRequest", "ProcessRequestForm", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>Thông tin</h3>
+                    <div class="row" style="background: #f6fcfd; padding-bottom: 15px;">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label col-md-12">Nhập tên Item</label>
+                                <div class="input-group">
+                                    <input placeholder="Nhập tên Item" class="form-control" id="NameItem" />
+                                    <div class="input-group-append btnFindItem" id="btnFindItem">
+                                        <span class="btn btn-default"><i class="fa fa-search"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="form-group">
+                                <label class="control-label col-md-12">Chọn Item (Chỉ hiển thị 50 kết quả)</label>
+                                @Html.DropDownListFor(model => model.Item, Item, new { @ID = "Item", @class = "form-control select2", @onChange = "ItemChange();" })
+                                @Html.TextBoxFor(model => model.ItemName, new { @ID = "ItemName", @style = "display: none;" })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="control-label col-md-12">Loại</label>
+                                @Html.DropDownListFor(model => model.Type, Type, new { @ID = "Type", @class = "form-control select2" })
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label class="control-label col-md-12">Nội dung</label>
+                                @Html.TextBoxFor(model => model.Name, new { @ID = "Name", @class = "form-control", @required = "required" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="control-label col-md-12">Khách hàng</label>
+                                @Html.DropDownListFor(model => model.CustomerID, Customer, new { @ID = "CustomerID", @class = "form-control select2", @onChange = "CusChange(this);" })
+                                @Html.TextBoxFor(model => model.CustomerName, new { @ID = "CustomerName", @style = "display: none;" })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="control-label col-md-12">Đại diện chi</label>
+                                @Html.DropDownListFor(model => model.deputyID, User, new { @ID = "deputyID", @class = "form-control select2", @onChange = "deputyChange(this);" })
+                                @Html.TextBoxFor(model => model.deputy, new { @ID = "deputy", @style = "display: none;" })
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label col-md-12">Diễn giải</label>
+                                @Html.TextAreaFor(model => model.Note, new { @ID = "Note", @class = "form-control", @rows = 3 })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-12">File đính kèm</label>
+                                @Html.TextBoxFor(model => model.Attached, new { @ID = "Note", @class = "form-control", @type = "file" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="col-md-4">
+                <input type="submit" value="Tạo mới" class="btn btn-primary" onclick="CheckCreate()" />
+            </div>
+        </div>
+    }
+</div>
+
+
+

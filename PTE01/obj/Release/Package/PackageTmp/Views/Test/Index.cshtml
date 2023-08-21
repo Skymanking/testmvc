@@ -1,0 +1,167 @@
+﻿@{
+    ViewBag.Title = "Test";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-2">
+        <a class="btn btn-primary btn-block mb-3" style="color:white">Todo List</a>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Menu</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-widget="collapse">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <ul class="nav nav-pills flex-column">
+                    <li class="nav-item active">
+                        <a href="#" class="nav-link">
+                            <i class="fa fa-inbox"></i> Inbox
+                            <span class="badge bg-primary float-right">12</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fa fa-envelope-o"></i> Done
+                            <span class="badge bg-primary float-right">1</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fa fa-file-text-o"></i> Important
+                            <span class="badge bg-primary float-right">2</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fa fa-trash-o"></i> Trash
+                            <span class="badge bg-primary float-right">12</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Tags</h3>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-widget="collapse">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <ul class="nav nav-pills flex-column">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fa fa-circle-o text-danger"></i>
+                            Team
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fa fa-circle-o text-warning"></i> Low
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fa fa-circle-o text-primary"></i>
+                            Medium
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fa fa-circle-o text-primary"></i>
+                            High
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fa fa-circle-o text-primary"></i>
+                            Update
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-10">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">List</h3>
+
+                <div class="card-tools">
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control" placeholder="Search Mail">
+                        <div class="input-group-append">
+                            <div class="btn btn-primary">
+                                <i class="fa fa-search"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="mailbox-controls">
+                    <button type="button" class="btn btn-default btn-sm checkbox-toggle">
+                        <i class="fa fa-square-o"></i>
+                    </button>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
+                    </div>
+                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-refresh"></i></button>
+                </div>
+                <div>
+                    <table class="table table-hover">
+                        <tbody>
+                            @for (var i = 1; i < 5; i++)
+                            {
+                                <tr>
+                                    <td style="width:30px" id="@i">
+                                        <input type="checkbox" value="" name="">
+                                    </td>
+                                    <td style="width:30px">
+                                        <i class="fa fa-star-o" style="color: #ffeb3b"></i>
+                                    </td>
+                                    <td>
+                                        <label class="text">Check </label><br />
+                                        <span class="text">Check </span>
+                                    </td>
+                                    <td style="width:150px">
+                                        <span class="badge badge-success">High</span>
+                                        <span class="badge badge-info">Low</span>
+                                        <span class="badge badge-danger">Team</span>
+                                    </td>
+                                    <td style="width:100px">
+                                        <span style="color:red">@DateTime.Today.ToShortDateString()</span>
+                                    </td>
+                                    <td style="width:70px">
+                                        <img src="~/Assets/theme3/dist/img/logo.png" class="brand-image img-circle elevation-3" />
+                                    </td>
+                                    <td style="width:70px">
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-block btn-outline-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu" style="max-width:10px; transform:none">
+                                                <li>1</li>
+                                                <li>2</li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

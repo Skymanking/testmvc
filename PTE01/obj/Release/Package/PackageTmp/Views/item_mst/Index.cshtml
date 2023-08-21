@@ -1,0 +1,52 @@
+﻿@model List<Model.EF.ItemTam>
+@{
+    ViewBag.Title = "Warehouse";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/APIERP.js"></script>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-success card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Update Item</h3>
+                <div class="card-tools">
+                </div>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped table-bordered table-hover" id="Warehouse">
+                    <thead>
+                        <tr>
+                            <th style="width:20px"><input type="checkbox" class="checkbox" onClick="toggle(this)"></th>
+                            <th>Item Code</th>
+                            <th>Tên</th>
+                            <th>ĐVT</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr id="row_@item.ItemCode">
+                                <td>
+                                    <input type="checkbox" id="@item.ItemCode" class="abc checkbox">
+                                </td>
+                                <td>@item.ItemCode</td>
+                                <td>@item.Name</td>
+                                <td>@item.UM</td>
+                                <td>@item.Type</td>
+                            </tr>
+
+
+                        }
+                    </tbody>
+                </table>
+                <div>
+                    <button class="btn btn-primary" id="luulai" onclick="checkallItem()">Cập nhật</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

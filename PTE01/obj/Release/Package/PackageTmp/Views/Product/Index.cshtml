@@ -1,0 +1,113 @@
+﻿@model PagedList.IPagedList<Model.View.ProductView1>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-success card-outline">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fa fa-clipboard"></i>Sản Phẩm</h3>
+                <div class="card-tools">
+                    @*<div class="btn-group" style="height:40px">
+                            <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-file-excel-o"></i>
+                            </button>
+                            <div class="dropdown-menu float-right" role="menu">
+                                <a class="dropdown-item" href="/Personal/BirthDay?month=@DateTime.Now.Month">DS Sinh Nhật Tháng</a>
+                            </div>
+                        </div>*@
+                    <a class="btn btn-warning float-right" href="/Product/Create"><i class="fa fa-plus" style="font-size:24px;"></i></a>
+                    <a class="btn btn-primary float-right" href="/Product/CreatePro"><i class="fa fa-th-list" style="font-size: 24px;"></i></a>
+                    <div style="float:left">
+                        @using (Html.BeginForm("Index", "Product", FormMethod.Get))
+                        {
+                            <div class="input-group " style="width: 300px;">
+                                <input type="text" value="@ViewBag.SearchString" name="searchString" class="form-control float-right" placeholder="tìm kiếm">
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Mã ERP</th>
+                                <th>Mã Cũ</th>
+                                <th>Tên SP</th>
+                                <th>Loại SP</th>
+                                <th>Xem</th>
+                                <th>Tạo BOM</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.ID</td>
+                                    <td>@item.Code1</td>
+                                    <td>@item.Name</td>
+                                    <td>@item.TypeName</td>
+                                    <td>
+                                        @if (@item.TypeID == 1)
+                                        {
+                                            <a href="/Product/Edit1/@item.ID"><span class='fa fa-eye' style="font-size: 22px;"></span></a>
+                                        }
+                                        else
+                                        {
+                                            if (@item.TypeID == 2)
+                                            {
+                                                <a href="/Product/Edit2/@item.ID"><span class='fa fa-eye' style="font-size: 22px;"></span></a>
+                                            }
+                                            else
+                                            {
+                                                if (@item.TypeID == 3)
+                                                {
+                                                    <a href="/Product/Edit3/@item.ID"><span class='fa fa-eye' style="font-size: 22px;"></span></a>
+                                                }
+                                                else
+                                                {
+                                                    if (@item.TypeID == 4)
+                                                    {
+                                                        <a href="/Product/Edit4/@item.ID"><span class='fa fa-eye' style="font-size: 22px;"></span></a>
+                                                    }
+                                                    else
+                                                    {
+                                                        if (@item.TypeID == 99)
+                                                        {
+                                                            <a href="/Product/Edit99/@item.ID"><span class='fa fa-eye' style="font-size: 22px;"></span></a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a href="/Product/Edit/@item.ID"><span class='fa fa-eye' style="font-size: 22px;"></span></a>
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        <a href="/BOMitem/Create/@item.ID" data-toggle="tooltip" title="Tạo BOM"><span class='fa fa-bitcoin' style="font-size: 22px;"></span></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer clearfix">
+                <a class="btn btn-sm btn-info float-left" href="/Product/Create"><i class="fa fa-plus"></i> Thêm mới</a>
+                <div class="dataTables_paginate paging_simple_numbers float-right" id="example2_paginate">
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, @searchString = @ViewBag.SearchString }))
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,89 @@
+﻿@{
+    Layout = "~/Views/Shared/_Theme1.cshtml";
+    var listTool = (List<Model.EF.PersonalTool>)ViewBag.listTool;
+    var infoPer = (Model.EF.Personal)ViewBag.infoPer;
+    int dong = 8 - listTool.Count;
+}
+
+@*<h2>@Model.ID</h2>*@
+<div class="row">
+    <table>
+        <tbody>
+            <tr id="rowt" style="background:none;">
+                <td class="text-center" style="border:none;"><img class="img-responsive" src="~/Assets/dist/css/logo2.jpg" /> </td>
+                <td class="text-center" style="border:none;"><h3>BIÊN BẢN BÀN GIAO CÔNG CỤ DỤNG CỤ</h3></td>
+            </tr>
+        </tbody>
+    </table>
+
+
+</div>
+
+<div class="row">
+    <div class='col-xs-6'>
+        <label class="control-label">Người nhận bàn giao:<span style="font-weight:normal">@infoPer.Name</span></label>
+    </div>
+    <div class='col-xs-6'>
+        <label class="control-label">Mã nhân viên: @infoPer.ID</label>
+    </div>
+</div>
+<div class="row">
+    <div class='col-xs-12'>
+        <label class="control-label">Lý do bàn giao:<span style="font-weight:normal"> Cung cấp công cụ dụng cụ cho nhân viên sử dụng vào mục đích công việc phục vụ cho hoạt động công ty. Nhân viên có trách nhiểm sử dụng công cụ đúng theo quy định của công ty.</span></label>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr style=" border: 2px solid #000;">
+                <th style=" border: 2px solid #000;">Tên Vật tư / Số lượng</th>
+                <th style=" border: 2px solid #000;">Ghi Chú</th>
+                <th style=" border: 2px solid #000;">ngày cấp - HSD</th>
+                <th style=" border: 2px solid #000;" width="200px">Ký nhận</th>
+
+                </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in listTool)
+            {
+                <tr style="height: 70px; border: 2px solid #000;">
+                    <td style=" border: 2px solid #000;">@item.ItemName <br /> @item.IDIte - (SL: @item.Quantity)</td>
+                    <td style=" border: 2px solid #000;">@item.Note</td>
+                    <td style=" border: 2px solid #000;">
+                        @item.StartDate.ToString("dd/MM/yyyy") -->
+                        @if (item.EndDate == null)
+                        {<span>không xác định </span> }
+                        else
+                        {@item.EndDate.Value.ToString("dd/MM/yyyy")}
+                    </td>
+                    <td style=" border: 2px solid #000;"> </td>
+                </tr>
+            }
+            @if (dong > 0)
+            {
+                for (int i = 0; i < dong; i++)
+                {
+                    <tr style="height: 70px; border: 2px solid #000;">
+                        <td style=" border: 2px solid #000;"></td>
+                        <td style=" border: 2px solid #000;"></td>
+                        <td style=" border: 2px solid #000;"></td>
+                        <td style=" border: 2px solid #000;"></td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+</div>
+<div class="row">
+    <div class='col-xs-6 text-center'>
+        <label class="control-label">Người lập biên bản</label>
+    </div>
+    <div class='col-xs-6 text-center'>
+        <label class="control-label"> .</label>
+    </div>
+    <div class='col-xs-6 text-center'>
+        <label class="control-label">Ký Tên</label>
+    </div>
+</div>

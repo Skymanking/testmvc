@@ -1,0 +1,355 @@
+﻿@model  Model.View.ListString
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    var listLine = (List<Model.EF.WorkCenter>)ViewBag.Linek;
+    var temp = (List<Model.View.PlaningView1>)ViewBag.temp;
+    var tongsocau = 0;
+    int dem = 0;
+    string ngaythangnam = "INPUTDATA" + DateTime.Now.ToUniversalTime();
+
+}
+@section jsFooter
+{
+
+    <script src="/Assets/theme3/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+    <script>
+        $(function () {
+            $("#start").datepicker();
+            $("#end").datepicker();
+            $("#StartDate").datepicker();
+            $("#EndDate").datepicker();
+            $('input[type="checkbox"].flat-green, input[type="radio"].flat-green').iCheck({
+                checkboxClass: 'icheckbox_flat-green',
+                radioClass: 'iradio_flat-green'
+            })
+            $('.select2').select2()
+            $('.time1').timepicker({
+                showInputs: false,
+                showMeridian: false
+            })
+            $('.time2').timepicker({
+                showInputs: false,
+                showMeridian: false
+            })
+        })
+    </script>
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Kế Hoạch SX</h3>
+        <div class="card-tools">
+            <div class="btn-group" style="height:40px">
+                <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                    More
+                </button>
+                <div class="dropdown-menu float-right" role="menu">
+                    <a class="dropdown-item" href="/Planing/Index4" style="color:#000">View Chart</a>
+                    <a class="dropdown-item" href="/Planing/Index3" style="color:#000">View Detail</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3">
+                <label class="control-label">Line</label><br>
+                <select class="form-control select2" id="lines" name="lines">
+                    <option value="">Hãy chọn Line</option>
+                    @foreach (var item in listLine)
+                    {
+                        if (ViewBag.lines == item.ID)
+                        {
+                            <option value="@item.ID" selected>@item.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@item.ID">@item.Name</option>}
+
+                    }
+
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <label class="control-label">Từ:</label>
+                <div class="bootstrap-timepicker">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input type="text" id="start" name="start" class="form-control" readonly="readonly" value='@if(ViewBag.start!=""){@ViewBag.start}else{@DateTime.Now.ToShortDateString()}'><br>
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <label class="control-label">Đến:</label>
+                <div class="bootstrap-timepicker">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input type="text" id="end" name="end" class="form-control" readonly="readonly" value='@if(ViewBag.end!=""){@ViewBag.end}else{@DateTime.Now.AddDays(7).ToShortDateString()}'><br>
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 text-center">
+                <label class="control-label"></label>
+                <div class="form-group">
+                    <a class="btn btn-primary" id="inbaocao">Tìm kiếm</a>
+                </div>
+            </div>
+        </div>
+        @*<script src="~/Scripts/jquery-1.9.1.min.js"></script>*@
+        <script>
+            $(document).ready(function () {
+
+                $("#inbaocao").click(function () {
+                    var lines = $("#lines").val();
+                    var start = $('#start').val();
+                    var end = $('#end').val();
+                    if (lines == "" || start == "" || end == "") {
+                        alert("chưa nhập đủ thông tin");
+                        $('#inbaocao').attr("href", '#');
+                    }
+                    else { $('#inbaocao').attr("href", '/Planing/Index3?lines=' + lines + '&start=' + start + '&end=' + end); }
+
+                });
+            });
+
+        </script>
+    </div>
+
+
+</div>
+<a href="/PTE_baocom/Create">Thêm kế hoạch mới<i class="fa fa-plus-circle" style="font-size: 20px; color: red"></i></a>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-success card-outline">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fa fa-clipboard"></i> <span id="sokq" style="color:red;font-weight:bold;"></span><span> Kết quả</span></h3>
+                <div class="card-tools">
+                    <div class="btn-group" style="height:40px">
+                        <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                            Tool
+                        </button>
+                        <div class="dropdown-menu float-right" role="menu">
+                            <span class="dropdown-item" onclick="exportTableToExcel('inputdata', '@ngaythangnam')">Export to Excel</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                function exportTableToExcel(tableID, filename) {
+                    var downloadLink;
+                    var dataType = 'application/vnd.ms-excel';
+                    var tableSelect = document.getElementById(tableID);
+                    var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+                    filename = filename ? filename + '.xls' : 'excel_data.xls';
+                    downloadLink = document.createElement("a");
+                    document.body.appendChild(downloadLink);
+                    if (navigator.msSaveOrOpenBlob) {
+                        var blob = new Blob(['\ufeff', tableHTML], {
+                            type: dataType
+                        });
+                        navigator.msSaveOrOpenBlob(blob, filename);
+                    } else {
+                        downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+                        downloadLink.download = filename;
+                        downloadLink.click();
+                    }
+                }
+            </script>
+            <table class="table table-bordered" id="inputdata" style="display:none;">
+                <thead>
+                    <tr>
+                        <th>Mã SP</th>
+                        <th>Tên Sản Phẩm</th>
+                        <th>Ngày Bắt đầu</th>
+                        <th>Giờ BĐ</th>
+                        <th>Ngày Kết Thúc</th>
+                        <th>Giờ KT</th>
+                        <th>Line</th>
+                        <th>Số lượng KH</th>
+                        <th>Số cầu KH</th>
+                        <th>Số cầu đã SX</th>
+                        <th>OK SX</th>
+                        <th>OK QC</th>
+                        <th>Tổng NG</th>
+                        <th>Tỉ lệ đạt</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in temp)
+                    {
+                        <tr>
+                            <td>@item.ItemID</td>
+                            <td>@item.ItemName</td>
+                            <td>@item.StartDate.ToString("dd/MM/yyyy")</td>
+                            <td>@item.StartDate.ToString("HH:mm")</td>
+                            <td>@item.EndDate.ToString("dd/MM/yyyy")</td>
+                            <td>@item.EndDate.ToString("HH:mm")</td>
+                            <td>@item.Line</td>
+                            <td>@item.Quantity</td>
+                            <td>@(item.Quantity / @item.InfoA9)</td>
+                            <td>@Math.Round(Convert.ToDecimal(item.SumOKOUT / @item.InfoA9), 0)</td>
+                            <td>@item.SumOKOUT</td>
+                            <td>@item.SumOKQC</td>
+                            <td>@item.SumNG</td>
+                            <td>@(item.SumOKQC * 100 / item.Quantity) %</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+
+
+                        <div class="card-body">
+                            @using (Html.BeginForm("CreateLSX2", "ProposalToMaterial", FormMethod.Post))
+                    {
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <div class="table-responsive parent">
+                                    <table class="table table-striped table-bordered table-hover" >
+                                        <thead>
+                                            <tr>
+                                                <th width="30px"><input type="checkbox" class="checkall"></th>
+                                                <th width="30px">VT</th>
+                                                <th width="30px">BOM</th>
+                                                <th>Mã SP</th>
+                                                <th>Tên Sản Phẩm</th>
+                                                <th>Bắt đầu</th>
+                                                <th>Kết Thúc</th>
+                                                <th>Line</th>
+                                                <th>SL/Số cầu KH</th>
+                                                <th>OK SX</th>
+                                                
+                                                <th>OK QC</th>
+                                                <th>Tổng NG</th>
+                                                <th>Status</th>
+                                                <th>Xem</th>
+                                                <th>Sửa</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in temp)
+                                    {
+                                                <tr>
+                                                    <td>
+                                                        @if (item.PTMID == 0 && item.BOMID > 0)
+                                                { <input type="checkbox" class="abc" name="@item.ID">}
+                                                else
+                                                {<span></span>}
+                                                    </td>
+                                                    <td>
+                                                        @if (item.PTMID > 0)
+                                                {
+                                                            <a href="/ProposalToMaterial/View/@item.PTMID"><span class="fa fa-shopping-cart" style="font-size: 22px;"></span></a>
+                                                }
+                                                else
+                                                {
+                                                            <span class="fa fa-shopping-cart" style="font-size: 22px;"></span>
+                                                }
+                                                    </td>
+                                                    <td>
+                                                        @if (item.BOMID > 0)
+                                                {
+                                                            <a href="/BOMItem/Edit/@item.BOMID"><span class="fa fa-bitcoin" style="font-size: 22px;"></span></a>
+                                                }
+                                                else
+                                                {
+                                                            <span class="fa fa-bitcoin" style="font-size: 22px;"></span>
+                                                }
+                                                    </td>
+                                                    <td>@item.ItemID</td>
+                                                    <td>@item.ItemName</td>
+                                                    <td>@item.StartDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                                    <td>@item.EndDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                                    <td>@item.Line</td>
+                                                    <td style="font-weight:bold">@item.Quantity / <span style="color:blue;"> @(item.Quantity / @item.InfoA9)</span></td>
+                                                    @{tongsocau = tongsocau + item.Quantity / Convert.ToInt32(item.InfoA9.Value);
+                                            dem = dem + 1;
+                                                    }
+                                                    <td style="font-weight:bold; color:#28a745;">@item.SumOKOUT /<span style="color:blue;"> @Math.Round(Convert.ToDecimal(item.SumOKOUT / @item.InfoA9), 0)</span></td>
+                                                    <td style="font-weight:bold; color:#28a745;">@item.SumOKQC</td>
+                                                    <td style="font-weight: bold; color: #dc3545;">@item.SumNG</td>
+                                                    @if (@item.SumOKQC / @item.Quantity >= 0.9)
+                                            {
+                                                        <td><i class="fa fa-circle fa-2x" style="color: #28a745;"></i></td> }
+                                            else
+                                            {
+                                                        <td><i class="fa fa-circle fa-2x" style="color: #dc3545;"></i></td> }
+
+                                                    <td>
+                                                        <a href="/Planing/View/@item.ID"><span class='fa fa-eye' style="font-size: 22px;"></span></a>
+                                                    </td>
+                                                    <td>
+                                                        <a href="/Planing/Edit/@item.ID"><span class='fa fa-edit' style="font-size: 22px;"></span></a>
+                                                    </td>
+                                                </tr>
+                                    }
+                                        </tbody>
+                                        <tr>
+                                            <td colspan="4">
+                                                <span style="font-size: 22px;">Tổng số cầu: @tongsocau</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                    <div class="muahang" style="display:none">
+                                        <button type="submit" class="btn btn-primary" id="luulai">Yêu cầu Vật Tư cho các Lệnh SX đã chọn</button>
+                                        <span id="fileinput" style="display:none"></span>
+
+                                    </div>
+                                </div>
+                    }
+                        </div>
+</div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".abc").change(function () {
+            GetValueModel();           
+        });
+        $(".checkall").change(function () {
+            
+            if ($('.checkall:checked').val() !== undefined) {
+                $('.abc').prop('checked', 'checked');
+            }
+            else {
+                $('.abc').prop('checked', false);
+            }
+            GetValueModel();
+        });
+        function GetValueModel() {
+
+            var names = $('.parent input:checked').map(function () { return this.name; }).get();
+            $(".ketqua").text(names);
+            $(".ketqua").val(names);
+            if (names.length > 0) {
+                $(".muahang").attr("style", "display:inherit");
+                var arr = names;
+                var i = 0
+                $('#fileinput').html('');
+                for (i = 0; i < names.length; i++) {
+                    $('#fileinput').html($('#fileinput').html() + '<input type="text" id="chuoi_' + i + '"  name="chuoi[' + i + ']" value="' + arr[i] + '"/>');
+                }
+            }
+            else {
+                $(".muahang").attr("style", "display:none");
+            }
+        };
+    });
+</script>

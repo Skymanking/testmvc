@@ -1,0 +1,110 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme1.cshtml";
+    List<Model.View.MMRate2> listM = ViewBag.listM;
+    var text = "";
+    foreach (var item in listM)
+    {
+        if (item.SumPoint > 0)
+        { text = text + "['" + @item.FullName + "'," + @item.SumPoint / item.CountRated + ",'color:#337ab7'],"; }
+    }
+    bool IsMM = ViewBag.IsMM;
+    string chucvu = ViewBag.chucvu;
+
+}
+@if (IsMM == true || chucvu == "Giám Đốc" || chucvu == "Quản Trị" || chucvu == "Phó Giám Đốc")
+{
+    <div class="row">
+
+        <div class="col-md-12">
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Report Đánh Giá MM Tháng @DateTime.Now.Month Năm @DateTime.Now.Year
+                </div>
+
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+
+                    <div class="row form-group">
+                        <div class="col-md-12">
+                            <a class="btn btn-primary" href="/MMRate/Create">Thêm mới</a>
+                            <a class="btn btn-danger" href="/MMRate/Index">Xem Danh Sách Mình Được Đánh Giá</a>
+                            <a class="btn btn-success" href="/MMRate/Index2">Xem Danh Sách Mình Đã Đánh Giá</a>
+                        </div>
+                    </div>
+
+
+                    <div class="table-responsive">
+                        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+                        <script type="text/javascript">
+                            google.charts.load('current', { 'packages': ['bar'] });
+                            google.charts.setOnLoadCallback(drawChart);
+
+                            function drawChart() {
+                                var data = google.visualization.arrayToDataTable([
+                                  ['Họ Tên', 'Điểm trung bình', { role: 'style' }],
+                                  @Html.Raw(text)
+                                    ['Điểm tối đa', 70, 'color: gray'],
+
+                                ]);
+
+                                var options = {
+                                    chart: {
+                                        title: 'MM Rate Chart',
+                                        subtitle: 'Điểm trung bình bằng tổng điểm / số lần được đánh giá',
+                                    },
+                                    bars: 'horizontal' // Required for Material Bar Charts.
+                                };
+
+                                var chart = new google.charts.Bar(document.getElementById('barchart_material'));
+
+                                chart.draw(data, google.charts.Bar.convertOptions(options));
+                            }
+                        </script>
+
+                        <div id="barchart_material" style="width:100%; height:auto;"></div>
+                        <table class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Tên</th>
+                                    <th>Số lần đã đánh giá</th>
+                                    <th>Số lần được đánh giá</th>
+                                    <th>Điểm trung bình</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in listM)
+                                {
+                                    <tr>
+                                        <td>@item.FullName</td>
+                                        <td>@item.CountRating</td>
+                                        <td>@item.CountRated</td>
+                                        <td>
+                                            @if (item.CountRated > 0)
+                                            {@(item.SumPoint / item.CountRated) }
+                                            else
+                                            { <span> chưa có </span>}
+                                        </td>
+                                    </tr>
+                                }
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.table-responsive -->
+                </div>
+                <!-- /.panel-body -->
+            </div>
+        </div>
+    </div>
+}
+else
+{
+
+    <div class="alert alert-danger" style="margin-top:50px;">
+        <strong>Cảnh báo!</strong>  Chức năng này chỉ dành cho chức vụ Trưởng Phòng trở lên
+    </div>
+}

@@ -1,0 +1,297 @@
+﻿@model List<Model.View.T5SView2>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    int count = 0;
+    var listZ = (IEnumerable<Model.EF.T5SZone>)ViewBag.listZone;
+    var listA = (IEnumerable<Model.EF.T5SArea>)ViewBag.listArea;
+    DateTime homnay = DateTime.Now;
+}
+
+@section jsFooter
+{
+
+    <script src="/Assets/theme3/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+    <script src="/Assets/theme3/plugins/knob/jquery.knob.js"></script>
+    @*<script src="/Assets/theme3/plugins/sparkline/jquery.sparkline.min.js"></script>*@
+    <script>
+        $(function () {
+            $("#ngay1").datepicker();
+            $("#ngay2").datepicker();
+            $('input[type="checkbox"].flat-green, input[type="radio"].flat-green').iCheck({
+                checkboxClass: 'icheckbox_flat-green',
+                radioClass: 'iradio_flat-green'
+            })
+        })
+    </script>
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+<div class="not-print card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Tìm kiếm nâng cao</h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="callout callout-info">
+                    <label class="control-label" style="color: #FF5722;">Bộ phận</label><br>
+                    <select class="form-control" id="zonename" name="zonename">
+                        <option value="null">Tất cả</option>
+                        @foreach (var item in listZ)
+                        {
+                            <option value="@item.Name">@item.Name</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="callout callout-info">
+                    <label class="control-label" style="color: #FF5722;">Khu vực</label><br>
+                    <select class="form-control" id="aeraname" name="aeraname">
+                        <option value="null">Tất cả</option>
+                        @foreach (var item in listA)
+                        {
+                            <option value="@item.Name">@item.Name</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="callout callout-info">
+                    <label class="control-label" style="color: #FF5722;">Tiến độ</label><br>
+                    <select class="form-control" id="progress" name="progress">
+                        <option value="null">Tất cả</option>
+                        <option value="1">Phát hiện vấn đề</option>
+                        <option value="2">Có giải pháp</option>
+                        <option value="3">Đã khắc phục</option>
+                        <option value="4">Accessor đã kiểm đạt</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="callout callout-info">
+                    <label class="control-label" style="color: #FF5722;">Ngày phát hiện</label>
+                    <div class="bootstrap-timepicker">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <label>Từ:</label><input type="text" id="ngay1" name="ngay1" class="time1 form-control" readonly="readonly" value="1/1/@DateTime.Now.Year"><br>
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bootstrap-timepicker">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <label>Đến:</label> <input type="text" id="ngay2" name="ngay2" class="time1 form-control" readonly="readonly"><br>
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="callout callout-info">
+                    <label class="control-label" style="color: #FF5722;">Từ khóa</label><br>
+                    <input type="text" class="form-control" id="searchString" name="searchString" placeholder="Tên vấn đề, khu vực, bộ phận" />
+
+                </div>
+            </div>
+            <div class="col-md-12 text-center">
+                <div class="form-group">
+                    <a class="btn btn-primary" id="inbaocao">Tìm kiếm</a>
+                </div>
+            </div>
+        </div>
+        <script src="~/Scripts/jquery-1.9.1.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                var zonename = $("#zonename").val();
+                var aeraname = $("#aeraname").val();
+                var progress = $("#progress").val();
+                var ngay1 = $('#ngay1').val();
+                var ngay2 = $('#ngay2').val();
+                var searchString = $('#searchString').val();
+                $('#inbaocao').attr("href", '/T5SDefect/SearchAdvance?zonename=' + zonename + '&aeraname=' + aeraname + '&progress=' + progress + '&ngay1=' + ngay1 + '&ngay2=' + ngay2 + '&searchString=' + searchString);
+
+                $("#inbaocao").focus(function () {
+                    var zonename = $("#zonename").val();
+                    var aeraname = $("#aeraname").val();
+                    var progress = $("#progress").val();
+                    var ngay1 = $('#ngay1').val();
+                    var ngay2 = $('#ngay2').val();
+                    var searchString = $('#searchString').val();
+                    $('#inbaocao').attr("href", '/T5SDefect/SearchAdvance?zonename=' + zonename + '&aeraname=' + aeraname + '&progress=' + progress + '&ngay1=' + ngay1 + '&ngay2=' + ngay2 + '&searchString=' + searchString);
+
+                });
+            });
+
+        </script>
+    </div>
+    <div class="card-footer">
+
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-success card-outline">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fa fa-clipboard"></i> <span id="sokq" style="color:red;font-weight:bold;"></span> Kết quả</h3>
+
+
+            </div>
+            <div class="card-body">
+                @if (Model != null)
+                {
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Bộ phận/ Loại</th>
+                                    <th>Vấn đề</th>
+                                    <th>Hình phát hiện</th>
+                                    <th>Hình khắc phục</th>
+                                    <th>Giải pháp/ Deadline</th>
+                                    <th width="90px">Tiến độ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+
+                                    <tr id="row_@item.ID">
+
+                                        <td>
+                                            <b> @item.ZoneName </b><br /> @item.AreaName <br />
+                                            @if (item.Type1)
+                                            {<span style="color:red">+5S</span>} @if (item.Type2)
+                                            {<span style="color:red">+An toàn</span>}@if (item.Type3)
+                                            {<span style="color:red">+Chất lượng</span>}@if (item.Type4)
+                                            {<span style="color:red">+Sản xuất</span>}
+
+                                        </td>
+                                        <td><a href="/T5SDefect/Edit/@item.ID">@item.DefectName </a> <br /> <span>Ngày phát hiện: @item.CreateDate.ToString("dd/MM/yyyy")</span>  </td>
+                                        <td>
+                                            <a href="@item.Image1" target="_blank"><img src="@item.Image1" class="img-thumbnail" style="width:160px"></a>
+                                            
+                                        </td>
+                                        <td><a href="@item.Image2" target="_blank"><img src="@item.Image2" class="img-thumbnail" style="width:160px"></a></td>
+
+                                        <td>
+                                            @item.Solution <br />
+                                            @if (item.Deadline != null)
+                                            {<b><span style="color:red">@item.Deadline.Value.ToString("dd/MM/yyyy")</span></b>}
+                                        </td>
+
+                                        <td>
+                                            @switch (@item.Progress)
+                                            {
+                                                case 1: <input type="text" class="knob" value="25" data-skin="tron" data-thickness="0.5" data-width="80" data-height="90" data-fgcolor="#3c8dbc" data-readonly="true"><span>Phát hiện vấn đề</span> break;
+                                                case 2: <input type="text" class="knob" value="50" data-skin="tron" data-thickness="0.5" data-width="80" data-height="90" data-fgcolor="#3c8dbc" data-readonly="true"><span>Có giải pháp</span> break;
+                                                case 3: <input type="text" class="knob" value="75" data-skin="tron" data-thickness="0.5" data-width="80" data-height="90" data-fgcolor="#3c8dbc" data-readonly="true"><span>Đã khắc phục</span> break;
+                                                case 4: <input type="text" class="knob" value="100" data-skin="tron" data-thickness="0.5" data-width="80" data-height="90" data-fgcolor="#3c8dbc" data-readonly="true"><span>Accessor đã kiểm đạt</span> break;
+                                            }
+
+                                        </td>
+
+
+                                    </tr>
+                                }
+
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                }
+                else
+                {
+                    <span>chưa có kết quả nào</span>
+                }
+            </div>
+            <div class="card-footer clearfix">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+
+        $('.knob').knob({
+            draw: function () {
+                if (this.$.data('skin') == 'tron') {
+
+                    var a = this.angle(this.cv)  // Angle
+                      ,
+                        sa = this.startAngle          // Previous start angle
+                      ,
+                        sat = this.startAngle         // Start angle
+                      ,
+                        ea                            // Previous end angle
+                      ,
+                        eat = sat + a                 // End angle
+                      ,
+                        r = true
+
+                    this.g.lineWidth = this.lineWidth
+
+                    this.o.cursor
+                    && (sat = eat - 0.3)
+                    && (eat = eat + 0.3)
+
+                    if (this.o.displayPrevious) {
+                        ea = this.startAngle + this.angle(this.value)
+                        this.o.cursor
+                        && (sa = ea - 0.3)
+                        && (ea = ea + 0.3)
+                        this.g.beginPath()
+                        this.g.strokeStyle = this.previousColor
+                        this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sa, ea, false)
+                        this.g.stroke()
+                    }
+
+                    this.g.beginPath()
+                    this.g.strokeStyle = r ? this.o.fgColor : this.fgColor
+                    this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sat, eat, false)
+                    this.g.stroke()
+
+                    this.g.lineWidth = 2
+                    this.g.beginPath()
+                    this.g.strokeStyle = this.o.fgColor
+                    this.g.arc(this.xy, this.xy, this.radius - this.lineWidth + 1 + this.lineWidth * 2 / 3, 0, 2 * Math.PI, false)
+                    this.g.stroke()
+
+                    return false
+                }
+            }
+        })
+        /* END JQUERY KNOB */
+
+        //INITIALIZE SPARKLINE CHARTS
+        $('.sparkline').each(function () {
+            var $this = $(this)
+            $this.sparkline('html', $this.data())
+        })
+
+        /* SPARKLINE DOCUMENTATION EXAMPLES http://omnipotent.net/jquery.sparkline/#s-about */
+        drawDocSparklines()
+        drawMouseSpeedDemo()
+
+    })
+
+
+</script>
+
+
+
+

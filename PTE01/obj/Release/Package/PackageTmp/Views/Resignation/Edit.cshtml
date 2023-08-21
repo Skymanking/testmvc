@@ -1,0 +1,198 @@
+﻿@model Model.EF.Resignation
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    List<SelectListItem> loai1 = new List<SelectListItem>();
+    loai1.Add(new SelectListItem
+         {
+             Text = "Đúng luật",
+             Value = "true",
+             Selected = true
+         });
+    loai1.Add(new SelectListItem
+    {
+        Text = "Sai luật",
+        Value = "false",
+    });
+    List<SelectListItem> loai2 = new List<SelectListItem>();
+    loai2.Add(new SelectListItem
+         {
+             Text = "Đúng Quy Trình",
+             Value = "true",
+             Selected = true
+         });
+    loai2.Add(new SelectListItem
+    {
+        Text = "Sai Quy Trình",
+        Value = "false",
+    });
+}
+@section jsFooter
+{
+<script src="/Scripts/CancelResignation.js"></script>
+    <script>
+        $(function () {
+
+            $('.select2').select2()
+            $(".date1").datepicker(
+                {
+                    dateFormat: 'mm/dd/yy',
+                    changeMonth: true,
+                    changeYear: true,
+                    numberOfYears: 1,
+                    numberOfMonths: 1,
+                    yearRange: "-90:+10",
+                    onSelect: function (selectedDate) {
+                        // we can write code here
+                    }
+                });
+            $(".date2").datepicker();
+            $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
+            //Money Euro
+            $('[data-mask]').inputmask()
+
+        })
+    </script>
+}
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Đơn Xin Nghỉ Việc @if (Model.Status == false) { <span style="color:red"> đã hủy phiếu</span>}</h3>
+            </div>
+            <div class="card-body">
+                <div class="tab-content">
+                    <div class="row">
+                        @using (Html.BeginForm("Edit", "Resignation", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class='col-md-4'>
+                                        <label class="control-label">Nhân viên</label>
+                                        @Html.DropDownListFor(model => model.PerID, null, new { @class = "form-control select2", @style = "width: 100%;" })
+                                    </div>
+                                    <div class='col-md-2'>
+                                        <label>Ngày xin được nghỉ</label>
+                                        <div class="input-group mb-3">
+                                            <input autocomplete="off" class="date1 form-control" id="EndDate" name="EndDate" type="text" value='@if (@Model.EndDate != null){@Model.EndDate.ToString("MM/dd/yyyy")}'>
+                                            <div class=" input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class='col-md-2'>
+                                        <label>Ngày viết đơn</label>
+                                        <div class="input-group mb-3">
+                                            <input autocomplete="off" class="date1 form-control" id="DateSign1" name="DateSign1" type="text" value='@if (@Model.DateSign1 != null){@Model.DateSign1.ToString("MM/dd/yyyy")}'>
+                                            <div class=" input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class='col-md-2'>
+                                        <label>Quản lý trực tiếp</label>
+                                        <div class="input-group mb-3">
+                                            <input autocomplete="off" class="date1 form-control" id="DateSign2" name="DateSign2" type="text" value='@if (@Model.DateSign2 != null){@Model.DateSign2.Value.ToString("MM/dd/yyyy")}'>
+                                            <div class=" input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class='col-md-2'>
+                                        <label>TBP/TP</label>
+                                        <div class="input-group mb-3">
+                                            <input autocomplete="off" class="date1 form-control" id="DateSign3" name="DateSign3" type="text" value='@if (@Model.DateSign3 != null){@Model.DateSign3.Value.ToString("MM/dd/yyyy")}'>
+                                            <div class=" input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class='col-md-12'>
+                                        <label class="control-label">Ghi chú của bộ phận</label>
+                                        @Html.TextAreaFor(model => model.Note1, new { @class = "form-control", @rows = "5" })
+                                    </div>
+                                    <div class='col-md-2'>
+                                        <label>HCNS</label>
+                                        <div class="input-group mb-3">
+                                            <input autocomplete="off" class="date1 form-control" id="DateSign4" name="DateSign4" type="text" value='@if (@Model.DateSign4 != null){@Model.DateSign4.ToString("MM/dd/yyyy")}'>
+                                            <div class=" input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class='col-md-2'>
+                                        <label>BOD</label>
+                                        <div class="input-group mb-3">
+                                            <input autocomplete="off" class="date1 form-control" id="DateSign5" name="DateSign5" type="text" value='@if (@Model.DateSign5 != null){@Model.DateSign5.Value.ToString("MM/dd/yyyy")}'>
+                                            <div class=" input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class='col-md-4'>
+                                        <label class="control-label">Theo Luật Lao động</label>
+                                        @Html.DropDownListFor(model => model.Compliance1, loai1, new { @class = "form-control select2", @style = "width: 100%;" })
+                                    </div>
+                                    <div class='col-md-4'>
+                                        <label class="control-label">Theo quy trình Công ty</label>
+                                        @Html.DropDownListFor(model => model.Compliance2, loai2, new { @class = "form-control select2", @style = "width: 100%;" })
+                                    </div>
+                                    <div class='col-md-12'>
+                                        <label class="control-label">Ghi chú của HCNS</label>
+                                        @Html.TextAreaFor(model => model.Note2, new { @class = "form-control", @rows = "5" })
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" class="nutsave btn btn-primary" onclick="openNav()">Lưu thông tin</button>
+                                <button type="button" class="btn btn-danger float-right" data-toggle="modal" data-target="#myModal">Xóa Phiếu </button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+<form id="myForm" method="post">
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="float-left"><h4 class="modal-title">Lý do xóa phiếu</h4></span>
+                    <span class="float-right"><button type="button" class="close" data-dismiss="modal" style="width:20px">&times;</button></span>
+                </div>
+                <div class="modal-body">
+                    <input class="form-control" data-val="true" id="lydo" name="lydo" placeholder="điền lý do hủy phiếu " type="text" value="">
+                </div>
+                <script>
+                    $(document).ready(function () {
+                        $("#lydo").keypress(function () {
+                            var lydos = $('#lydo').val();
+                            var abc = $('#huyphieu').attr("data-lydo", lydos);
+
+                        });
+                    });
+                </script>
+
+                <div class="modal-footer">
+                    <a href="#" id="huyphieu" class="btn-cancel" data-id="@Model.ID" style="background: red;    padding: 7px;  color: white;">Hủy Phiếu</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>

@@ -1,0 +1,20 @@
+﻿{
+  "Employees": [
+    {
+      "ID": "1",
+      "Name": "Employee 1",
+      "BirthDate": "01/01/1998",
+      "Address": "Address 1",
+      "Email": "Email 1",
+      "Phone": "0939123456"
+    },
+    {
+      "ID": "2",
+      "Name": "Employee 2",
+      "BirthDate": "12/31/1999",
+      "Address": "Address 1",
+      "Email": "Email 2",
+      "Phone": "0939876543"
+    }
+  ]
+}

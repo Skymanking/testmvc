@@ -1,0 +1,148 @@
+﻿@model List<Model.EF.User>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    var ListPer = (List<Model.EF.Permission>)ViewBag.ListPer;
+    var listUser = (List<Model.View.Dropdownlist2>)ViewBag.ListUser;
+    var Per = new List<SelectListItem>();
+    var Users = new List<SelectListItem>();
+    Per.Add(new SelectListItem
+    {
+        Text = "",
+        Value = "",
+    });
+    foreach (var item in ListPer)
+    {
+        Per.Add(new SelectListItem
+        {
+            Text = item.ID + ": " + item.Name,
+            Value = item.ID,
+        });
+    }
+    Users.Add(new SelectListItem
+    {
+        Text = "",
+        Value = "",
+    });
+    foreach (var item in listUser)
+    {
+        Users.Add(new SelectListItem
+        {
+            Text = item.Name + ": " + item.ID,
+            Value = item.ID,
+        });
+    }
+
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
+<link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet" />
+<script src="~/Scripts/Permission.js"></script>
+<script>
+    $(function () {
+        $('.select2').select2()
+    })
+</script>
+<div class="card card-primary">
+    <div class="card-header" style="height: 60px">
+        <h2 class="card-title">Quản lý phân quyền</h2>
+    </div>
+    <div class="card-header" style="padding:unset; background-color:aliceblue">
+        @using (Html.BeginForm("Index", "ChangePermission", FormMethod.Get))
+        {
+            <div class="row">
+                <div class="col-11">
+                    <label class="control-label" style="color: #FF5722;">Quyền</label><br>
+                    <select class="form-control select2" style="width: 100%;" id="status" name="permission">
+                        @foreach (var per in Per)
+                        {
+                            if (per.Value == ViewBag.permission)
+                            {
+                                <option value="@per.Value" selected>@per.Text</option>
+                            }
+                            else
+                            {
+                                <option value="@per.Value">@per.Text</option>
+                            }
+                        }
+
+                    </select>
+                </div>
+                <div class="col-1 text-center" style=" padding:5px">
+                    <label class="control-label" style="color: #FF5722;">Tìm</label><br>
+                    <div class="form-group">
+                        <button class="btn btn-primary" type="submit">Tìm</button>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+    <div class="card-body">
+        <div class="row">
+            @if (!string.IsNullOrEmpty(ViewBag.permission))
+            {
+                <div id="Grant" class="col-12">
+                    <h3>Cấp quyền</h3>
+                    @using (Html.BeginForm("Grant", "ChangePermission", FormMethod.Post))
+                    {
+                        <select style="max-width:200px; width:200px" data-placeholder="Nhân viên" multiple class="chosen-select form-control" id="staffSel">
+                            @foreach (var user in Users)
+                            {
+                                <option value="@user.Value">@user.Text</option>
+                            }
+                        </select>
+                        <input type="hidden" id="ListStaff" name="Users" />
+                        <input type="hidden" id="IDPer" name="IDPer" value="@ViewBag.permission" />
+                        <script type="text/javascript">
+
+                            $("#staffSel").chosen().change(function (event) {
+                                if (event.target == this) {
+                                    document.getElementById("ListStaff").value = $(this).val();
+                                }
+                            });
+                            $(".chosen-select").chosen({
+                                no_results_text: "Không tìm thấy:"
+                            });
+                            $(".chosen-drop").css({ minWidth: "100%", width: "auto" });
+                            $(".chosen-container").css({ minWidth: "100%", width: "auto" });
+                        </script>
+                        <div class="card-footer">
+                            <button class="btn btn-success">Cấp quyền</button>
+                        </div>
+                    }
+                </div>}
+            <div class="col-12">
+                <hr style="height:5px; color:red; margin:10px; border:5px" />
+            </div>
+
+            <div class="col-12">
+                <h3>Nhân viên đã phân quyền</h3>
+                @if (Model != null)
+                {
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th width="200px">Mã NV</th>
+                                <th>Tên NV</th>
+                                <th width="70px">Xoá</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var user in Model)
+                            {
+                                <tr>
+                                    <td>@user.CodeID</td>
+                                    <td>@user.FullName</td>
+                                    <td><i class="fa fa-times-circle-o" style="color:red" onclick="Revoke('@ViewBag.permission', '@user.Username')"></i></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+</div>

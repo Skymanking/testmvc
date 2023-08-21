@@ -1,0 +1,130 @@
+﻿@model Model.EF.Disciplined
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+
+    List<SelectListItem> loaikyluat = new List<SelectListItem>();
+    loaikyluat.Add(new SelectListItem
+         {
+             Text = "Khiển trách",
+             Value = "muc1",
+             Selected = true
+         });
+
+    loaikyluat.Add(new SelectListItem
+         {
+             Text = "Kéo dài thời hạn nâng lương",
+             Value = "muc2",
+
+         });
+    loaikyluat.Add(new SelectListItem
+    {
+        Text = "Sa thải",
+        Value = "muc3",
+    });
+    loaikyluat.Add(new SelectListItem
+    {
+        Text = "Khác",
+        Value = "muc4",
+    });
+
+}
+@section jsFooter
+{
+
+    <script>
+        $(function () {
+
+            $('.select2').select2()
+            $(".date1").datepicker(
+                {
+                    dateFormat: 'mm/dd/yy',
+                    changeMonth: true,
+                    changeYear: true,
+                    numberOfYears: 1,
+                    numberOfMonths: 1,
+                    yearRange: "-90:+10",
+                    onSelect: function (selectedDate) {
+                        // we can write code here
+                    }
+                });
+            $(".date2").datepicker();
+            $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
+            //Money Euro
+            $('[data-mask]').inputmask()
+
+        })
+    </script>
+}
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Biên Bản Vi Phạm</h3>
+            </div>
+            <div class="card-body">
+                <div class="tab-content">
+                    <div class="row">
+                        @using (Html.BeginForm("Edit", "Disciplined", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class='col-md-4'>
+                                        <label class="control-label">Nhân viên vi phạm</label>
+                                        @Html.DropDownListFor(model => model.PerID, null, new { @class = "form-control select2", @style = "width: 100%;" })
+                                    </div>
+                                    <div class='col-md-2'>
+                                        <label>Ngày vi phạm</label>
+                                        <div class="input-group mb-3">
+                                            <input autocomplete="off" class="date1 form-control" id="ViolationDate" name="ViolationDate" type="text" value='@if (@Model.ViolationDate != null){@Model.ViolationDate.ToString("MM/dd/yyyy")}'>
+                                            <div class=" input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class='col-md-12'>
+                                        <label class="control-label">Chi tiết vi phạm</label>
+                                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @rows = "5" })
+                                    </div>
+                                    <div class='col-md-12'>
+                                        <label class="control-label">TBP đề xuất hình thức kỷ luật</label>
+                                        @Html.TextAreaFor(model => model.Suggestions, new { @class = "form-control", @rows = "5" })
+                                    </div>
+                                    <div class='col-md-4'>
+                                        <label class="control-label">Quyết định hình thức kỷ luật</label>
+                                        @Html.DropDownListFor(model => model.Decision, loaikyluat, new { @class = "form-control select2", @style = "width: 100%;" })
+                                    </div>
+                                    <div class='col-md-2'>
+                                        <label>Ngày quyết định</label>
+                                        <div class="input-group mb-3">
+                                            <input autocomplete="off" class="date1 form-control" id="ApplyDate" name="ApplyDate" type="text" value='@if (@Model.ApplyDate != null){@Model.ApplyDate.ToString("MM/dd/yyyy")}'>
+                                            <div class=" input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class='col-md-12'>
+                                        <label class="control-label">Ghi chú thêm</label>
+                                        @Html.TextAreaFor(model => model.Note, new { @class = "form-control", @rows = "5" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" class="nutsave btn btn-primary" onclick="openNav()">Lưu thông tin</button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+

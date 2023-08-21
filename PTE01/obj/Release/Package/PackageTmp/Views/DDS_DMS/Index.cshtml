@@ -1,0 +1,70 @@
+﻿@model List<Model.EF.DDS_DMS>
+    @{
+        ViewBag.Title = "Index";
+        Layout = "~/Views/Shared/_Theme3.cshtml";
+
+    }
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-success card-outline">
+                <div class="card-header">
+                    <h3 class="card-title">DMS</h3>
+                    <div class="card-tools">
+                        <a href="/DDS_DMS/Create" data-toggle="tooltip" title="Thêm mới "><i class="fa fa-plus-circle" style="font-size: 40px; color: red"></i></a>
+
+                        <div style="float:left">
+                            @using (Html.BeginForm("Index", "DDS_DMS", FormMethod.Get))
+                            {
+                                <div class="input-group " style="width: 200px;">
+                                    <input type="text" value="@ViewBag.SearchString" name="searchString" class="form-control float-right" placeholder="tìm kiếm">
+                                    <div class="input-group-append">
+                                        <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped table-bordered table-hover" id="Warehouse">
+                        <thead>
+                            <tr>
+                                <th style="width:70px">ID</th>
+                                <th>Tên Line</th>
+                                <th style="width:200px">Xưởng</th>
+                                <th style="width:200px">Loại</th>
+                                <th style="width:100px">Trạng thái</th>
+                                <th style="width:50px">Edit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr id="row_@item.ID">
+                                    <td>@item.ID</td>
+                                    <td>@item.Name</td>
+                                    <td>@item.Factory</td>
+                                    @if (item.Type == 1)
+                                    {
+                                        <td>SC</td>
+                                    }
+                                    else
+                                    {
+                                        <td>Department</td>
+                                    }
+                                    <td>
+                                        @Html.Raw(item.Status ? "<span class='fa fa-check-circle-o fa-2x' style='color: #0cb583;font-size: 30px;'></span>" : "<span class='fa fa-times-circle-o fa-2x' style='color: #f90d0d;font-size: 30px;'></span>")
+                                    </td>
+                                    <td><a href="/DDS_DMS/Edit/@item.ID"><i class="fa fa-wrench"></i></a></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>

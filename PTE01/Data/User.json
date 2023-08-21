@@ -1,0 +1,16 @@
+﻿[
+  {
+    "Username": "admin",
+    "Password": "202cb962ac59075b964b07152d234b70",
+    "FullName": "Nguyễn Chí Tâm",
+    "Level": "Admin",
+    "Status": "true"
+  },
+  {
+    "Username": "user",
+    "Password": "202cb962ac59075b964b07152d234b70",
+    "FullName": "Guest",
+    "Level": "Guest",
+    "Status": "true"
+  }
+]

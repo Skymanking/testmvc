@@ -1,0 +1,70 @@
+﻿@model PagedList.IPagedList<Model.View.Checklist2>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-success card-outline">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fa fa-clipboard"></i> Checklist Item</h3>
+
+                <div class="card-tools">
+                    <div class="btn-group" style="height:40px">
+                        <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-file-excel-o"></i>
+                        </button>
+                        <div class="dropdown-menu float-right" role="menu">
+                            <a class="dropdown-item" href="/Checklist/Index">Checklist Form</a>
+                            <a class="dropdown-item" href="/Checklist/History">Checklist History</a>
+                        </div>
+                    </div>
+                    <div style="float:left">
+                        @using (Html.BeginForm("History", "Checklist", FormMethod.Get))
+                        {
+                            <div class="input-group " style="width: 200px;">
+                                <input type="text" value="@ViewBag.SearchString" name="searchString" class="form-control float-right" placeholder="tìm kiếm">
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    </div>
+            </div>
+            <div class="card-body">
+                <ul class="todo-list">
+                    @foreach (var item in Model)
+                    {
+
+                        <li>
+                            @if(item.Result==true)
+                            { <span class="badge badge-success"><i class="fa fa-check"></i> </span>  }
+                            else
+                            { <span class="badge badge-danger"><i class="fa fa-exclamation"></i> </span>  }
+                                                                                                 
+                            <a href="~/Checklist/History?searchString=@item.Equipment"> <span class="text">@item.Equipment</span></a> <span> ( @item.Request ) Ghi chú: @item.Note
+                            @if (item.Parameter != null) { <b>Thông số: @item.Parameter</b>}
+                            </span>
+                            
+                            <span class="badge badge-light float-right"><i class="fa fa-user"></i><a href="~/Checklist/History?searchString=@item.CreateBy"> @item.CreateBy </a></span>
+                            <span class="badge badge-info float-right"><i class="fa fa-clock-o"></i> @item.CreateDate </span>
+
+                        </li>
+
+                    }
+
+                </ul>
+            </div>
+            <div class="card-footer clearfix">
+                <a class="btn btn-sm btn-info float-left" href="/Checklist/Index"><i class="fa fa-plus"></i> Thêm mới</a>
+                <div class="dataTables_paginate paging_simple_numbers float-right" id="example2_paginate">
+                    @Html.PagedListPager(Model, page => Url.Action("History", new { page, @searchString = @ViewBag.SearchString }))
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

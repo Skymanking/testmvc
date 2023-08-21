@@ -1,0 +1,53 @@
+﻿@model List<Model.EF.BIOPermistion>
+@{
+    ViewBag.Title = "Permision";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-success card-outline">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fa fa-clipboard"></i>Permision</h3>
+
+                <div class="card-tools">
+                    @using (Html.BeginForm("Permision", "BioTime", FormMethod.Get))
+                    {
+                        <div class="input-group " style="width: 300px;">
+                            <input type="text" value="@ViewBag.SearchString" name="searchString" class="form-control float-right" placeholder="tìm kiếm">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                <a class="btn btn-default" href="/BioTime/CreatePermision" style="color: red; border-radius: 50%;"><i class="fa fa-plus" style="color:red"></i></a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <script src="~/Scripts/jquery-1.9.1.min.js"></script>
+            <div class="card-body">
+                <ul class="todo-list">
+                    @foreach (var item in Model)
+                    {
+                        <li>
+                            <span><i class="fa fa-star text-warning"></i> </span>
+                            <a href="/BioTime/EditPermision?Per=@item.Permistion"> <span class="text">@item.Permistion</span></a>
+
+                            <span class="badge badge-info float-right"><i class="fa fa-user-circle"></i> @item.EditeBy </span>
+                            @if (item.Status == false)
+                            {
+                                <span class="badge badge-dark float-right">not actived </span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-success float-right"> actived </span>
+                            }
+
+                        </li>
+
+                    }
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

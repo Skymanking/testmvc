@@ -1,0 +1,271 @@
+﻿@model List<Model.View.ERPPTB1>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    DateTime homnay = DateTime.Now;
+    int stt = 1;
+    string ngaythangnam = "ReportMH" + DateTime.Now.ToUniversalTime();
+
+    List<Model.View.Dropdownlist2> cVendor = ViewBag.cVendor;
+    List<Model.View.Dropdownlist2> cUser = ViewBag.cUser;
+
+    List<SelectListItem> listUser = new List<SelectListItem>();
+    listUser.Add(new SelectListItem
+    {
+        Text = "chưa chọn",
+        Value = "",
+    });
+    foreach (var item in cUser)
+    {
+        listUser.Add(new SelectListItem
+        {
+            Text = item.Name,
+            Value = item.ID,
+        });
+    }
+
+    List<SelectListItem> listVendor = new List<SelectListItem>();
+    listVendor.Add(new SelectListItem
+    {
+        Text = "chưa chọn",
+        Value = "",
+    });
+    foreach (var item in cVendor)
+    {
+        listVendor.Add(new SelectListItem
+        {
+            Text = item.Name + " - " + item.ID,
+            Value = item.ID,
+        });
+    }
+    
+}
+
+@section jsFooter
+{
+
+    <script src="/Assets/theme3/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+    <script>
+        $(function () {
+            $("#ngay1").datepicker();
+            $("#ngay2").datepicker();
+            $('input[type="checkbox"].flat-green, input[type="radio"].flat-green').iCheck({
+                checkboxClass: 'icheckbox_flat-green',
+                radioClass: 'iradio_flat-green'
+            })
+            $('.select2').select2()
+
+        })
+    </script>
+
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Tìm kiếm nâng cao</h3>
+        <div class="card-tools">
+            <div class="btn-group" style="height:37px">
+                <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                    More
+                </button>
+                <div class="dropdown-menu float-right" role="menu">
+                    <a href="/ProposalToBuy/" style="color:black;" class="dropdown-item">Normal</a>
+                    <a href="/ProposalToBuy/SearchAdvance1" style="color:black;" class="dropdown-item">Advance Search</a>
+                    <a href="/ProposalToBuy/ExportToPO" style="color:black;" class="dropdown-item">Export to PO</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="callout callout-info">
+                    <label class="control-label" style="color: #FF5722;">Người tạo</label><br>
+                    @Html.DropDownList("nguoitao", listUser, new { @class = "form-control select2" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="callout callout-info">                   
+                    <label class="control-label" style="color: #FF5722;">Nhà cung cấp</label><br>
+                    @Html.DropDownList("mancc", listVendor, new { @class = "form-control select2" })
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="callout callout-info">
+                    <label class="control-label" style="color: #FF5722;">Ngày tạo phiếu</label>
+                    <div class="bootstrap-timepicker">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <label>Từ:</label><input type="text" id="ngay1" name="ngay1" class="time1 form-control" readonly="readonly" value="@DateTime.Now.AddDays(-7).ToShortDateString()"><br>
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bootstrap-timepicker">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <label>Đến:</label> <input type="text" id="ngay2" name="ngay2" class="time1 form-control" readonly="readonly"><br>
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 text-center">
+                <div class="form-group">
+                    <a class="btn btn-primary" id="inbaocao">Tìm kiếm</a>
+                </div>
+            </div>
+        </div>
+        <script src="~/Scripts/jquery-1.9.1.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                var nguoitao = $("#nguoitao").val();
+                var mancc = $("#mancc").val();
+                var ngay1 = $('#ngay1').val();
+                var ngay2 = $('#ngay2').val();
+                $('#inbaocao').attr("href", '/ProposalToBuy/ExportToPO?nguoitao=' + nguoitao + '&mancc=' + mancc +  '&ngay1=' + ngay1 + '&ngay2=' + ngay2);
+                $("#inbaocao").focus(function () {
+                    var nguoitao = $("#nguoitao").val();
+                    var mancc = $("#mancc").val();
+                    var ngay1 = $('#ngay1').val();
+                    var ngay2 = $('#ngay2').val();
+                    $('#inbaocao').attr("href", '/ProposalToBuy/ExportToPO?nguoitao=' + nguoitao + '&mancc=' + mancc + '&ngay1=' + ngay1 + '&ngay2=' + ngay2);
+                });             
+            });
+
+        </script>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-success card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Kết quả</h3>
+                <div class="card-tools">
+                    <div class="btn-group" style="height:40px">
+                        <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                            Tool
+                        </button>
+                        <div class="dropdown-menu float-right" role="menu">
+                            <span class="dropdown-item" onclick="exportTableToExcel('inputdata', '@ngaythangnam')">Export to Excel</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="card-body">
+                @if (Model != null)
+                {
+                    <script>
+                        function exportTableToExcel(tableID, filename) {
+                            var downloadLink;
+                            var dataType = 'application/vnd.ms-excel';
+                            var tableSelect = document.getElementById(tableID);
+                            var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+                            filename = filename ? filename + '.xls' : 'excel_data.xls';
+                            downloadLink = document.createElement("a");
+                            document.body.appendChild(downloadLink);
+                            if (navigator.msSaveOrOpenBlob) {
+                                var blob = new Blob(['\ufeff', tableHTML], {
+                                    type: dataType
+                                });
+                                navigator.msSaveOrOpenBlob(blob, filename);
+                            } else {
+                                downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+                                downloadLink.download = filename;
+                                downloadLink.click();
+                            }
+                        }
+                    </script>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="inputdata">
+                            <thead>
+                                <tr>
+                                    <th>Create by</th>
+                                    <th>Create Date</th>
+                                    <th>Duyệt 1</th>
+                                    <th>Duyệt 2</th>
+                                    <th>Vendor ID</th>
+                                    <th>số PO</th>
+                                    <th>Warehouse</th>
+                                 
+                                    <th>PO Line Status</th>
+                                    <th>Due Date</th>
+                                    <th>Tax Code 1</th>
+                                    <th>Item</th>
+                                    <th>Item Description</th>
+                                    <th>Promise Date</th>
+                                    <th>Ordered</th>
+                                    <th>U/M</th>
+                                    <th>Price</th>
+                                    <th>Ref Type</th>
+                                    <th>Ref</th>
+                                    <th>Ref Line- Suffix</th>
+                                    <th>Ref Release</th>
+                                    <th>PTE PR Num</th>
+                                    <th>PTE PR Line</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+
+                                    <tr>
+                                        <td>@item.CreateBy</td>
+                                        <td>@item.CreateDate.Value.ToShortDateString()</td>
+                                        <td>@Html.Raw(item.Sep1 ? "V" : "X")</td>
+                                        <td>@Html.Raw(item.Sep2 ? "V" : "X")</td>
+                                        <td>@item.VendorID</td>
+                                        <td></td>
+                                        <td>MAIN</td>
+                                        
+                                        <td>Ordered</td>
+                                        <td>@DateTime.Now.ToShortDateString()</td>
+                                        <td>HH-10</td>
+                                        <td>@item.ItemID</td>
+                                        <td>@item.ItemName</td>
+                                        <td>@if (item.PromiseDate != null) { <span>@item.PromiseDate.Value.ToShortDateString()</span>}</td>
+                                        <td>@item.Quantity</td>
+                                        <td>@item.Unit</td>
+                                        <td>@if (item.Price != null)
+                                        { <span>@item.Price.Value.ToString("N0")</span>}
+                                        else
+                                        {<span>0 giá</span>}</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>@item.PRID</td>
+                                        <td>@item.PRLine</td>
+                                        @{stt = stt + 1;}
+                                    </tr>
+                                }
+
+
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                }
+                else
+                {
+                    <span>chưa có kết quả nào</span>
+                }
+            </div>
+            <div class="card-footer clearfix">
+
+            </div>
+        </div>
+    </div>
+</div>

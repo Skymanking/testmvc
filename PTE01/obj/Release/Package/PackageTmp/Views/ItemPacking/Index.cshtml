@@ -1,0 +1,238 @@
+﻿@model PagedList.IPagedList<Model.EF.ItemPacking>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    List<SelectListItem> listVT = new List<SelectListItem>();
+    bool quyen = ViewBag.quyen;
+}
+@section jsFooter
+{
+    <script src="/Scripts/CreateItemPacking.js"></script>
+    <script src="/Scripts/FindNameVT2.js"></script>
+    <script src="/Scripts/EditItemPacking.js"></script>
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+@if (quyen)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-success card-outline">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fa fa-clipboard"></i>Quy Cách Đóng Gói Vật Tư</h3>
+                    <div class="card-tools">
+                        <div class="btn-group" style="height:40px">
+                          @*  <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+        <i class="fa fa-file-excel-o"></i>
+    </button>
+    <div class="dropdown-menu float-right" role="menu">
+        <a class="dropdown-item" href="/ItemPacking/Report1?year=@DateTime.Now.Year">Report Giá Vật Tư XI MẠ</a>
+        <a class="dropdown-item" href="/ItemPacking/Report2?year=@DateTime.Now.Year">Report Giá Vật Tư ÉP NHỰA</a>
+    </div>*@
+                        </div>
+
+                        <div style="float:left">
+                            @using (Html.BeginForm("Index", "ItemPacking", FormMethod.Get))
+                            {
+                                <div class="input-group " style="width: 200px;">
+                                    <input type="text" value="@ViewBag.SearchString" name="searchString" class="form-control float-right" placeholder="tìm kiếm">
+                                    <div class="input-group-append">
+                                        <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <a data-toggle="modal" data-target="#myModal">Thêm mới<i class="fa fa-plus-circle" style="font-size: 20px; color: red"></i></a>
+
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th width="100px">Mã Vật Tư</th>
+                                    <th>Tên Vật Tư</th>
+                                    <th>Số lượng</th>
+                                    <th>Đơn vị tính</th>
+                                    <th>Quy cách</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+
+                                    <tr>
+                                        <td>@item.ItemID</td>
+                                        <td>@item.ItemName</td>
+                                        <td>@item.Quantity</td>
+                                        <td>@item.Unit1</td>
+                                        <td>@item.Unit2</td>
+                                        <td>
+                                            <a class="btn btn-primary suagia" data-iditem="@item.ItemID" data-quantity="@item.Quantity" data-unit2="@item.Unit2" data-toggle="modal" data-target="#myModalE">Sửa Quy Cách</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+                <div class="card-footer clearfix">
+                    <div class="dataTables_paginate paging_simple_numbers float-right" id="example2_paginate">
+                        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, @searchString = @ViewBag.SearchString }))
+                    </div>
+                </div>
+                <!-- /.panel-body -->
+            </div>
+
+        </div>
+    </div>
+
+
+    <form id="myForm" method="post">
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <span class="float-right">
+                            <button type="button" class="close" data-dismiss="modal" style="width:20px">&times;</button>
+                        </span>
+                        <h4 class="modal-title">Thêm quy cách đóng gói vật tư</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="control-label">Tìm tên vật tư</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control tenvt" id="tenvt" placeholder="chỉ hiện 20 kết quả gần giống nhất">
+                                    <div class="input-group-append btnFindVT" id="btnFindVT">
+                                        <span class="btn btn-default"><i class="fa fa-search"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class=" col-md-6">
+                                <label class="control-label">Chọn vật tư</label>
+                                <div class='input-group'>
+                                    @Html.DropDownList("itemid", listVT, new { @class = "form-control" })
+
+                                </div>
+                            </div>
+                            <div class='col-md-12'>
+                                <label class="control-label">Tên Vật Tư</label>
+                                <input class="form-control" data-val="true" id="itemname" name="itemname" disabled type="text" value="">
+                            </div>
+                            <div class='col-md-4'>
+                                <label class="control-label">Đóng gói =</label>
+                                <input class="form-control" data-val="true" id="unit2" name="unit2" type="text" value="">
+                            </div>
+                            <div class='col-md-4'>
+                                <label class="control-label">Số lượng</label>
+                                <input class="form-control" data-val="true" id="quantity" name="quantity"  type="number" value="1">
+                            </div>
+                            <div class='col-md-4'>
+                                <label class="control-label">ĐVT</label>
+                                <input class="form-control" data-val="true" id="unit1" name="unit1" disabled type="text" value="">
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <script>
+                        $(document).ready(function () {
+                            $("#itemid").blur(function () {
+                                var temp= $("#itemid option:selected").text();
+
+                                $('#itemname').val(temp.substring(0, temp.indexOf('(')));
+                                $('#unit1').val(temp.substring(temp.indexOf('(')+1, temp.indexOf(')')));
+                            });
+                            $("#createBB").hover(function () {
+                                $('#createBB').attr("data-itemid", $('#itemid').val());
+                                $('#createBB').attr("data-itemname", $('#itemname').val());
+                                $('#createBB').attr("data-quantity", $('#quantity').val());
+                                $('#createBB').attr("data-unit1", $('#unit1').val());
+                                $('#createBB').attr("data-unit2", $('#unit2').val());
+                            });
+                            $("#createBB").click(function () {
+                                $('#createBB').attr("data-itemid", $('#itemid').val());
+                                $('#createBB').attr("data-itemname", $('#itemname').val());
+                                $('#createBB').attr("data-quantity", $('#quantity').val());
+                                $('#createBB').attr("data-unit1", $('#unit1').val());
+                                $('#createBB').attr("data-unit2", $('#unit2').val());
+                            });
+                        });
+                    </script>
+
+
+                    <div class="modal-footer">
+                        <a href="#" id="createBB" class="btn-cancel" style="background: red;    padding: 7px;  color: white;">Lưu thông tin</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+
+    <form id="myFormE" method="post">
+        <div class="modal fade" id="myModalE" role="dialog">
+            <div class="modal-dialog">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" style="width:20px">&times;</button>
+                        <h4 class="modal-title">Sửa giá vật tư hiện tại</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+
+                            <div class='col-md-4'>
+                                <label class="control-label">Mã Vật Tư</label>
+                                <input class="form-control" data-val="true" id="itemids" name="itemids" type="text">
+                            </div>
+                            <div class='col-md-4'>
+                                <label class="control-label">Số lượng</label>
+                                <input class="form-control" data-val="true" id="quantitys" name="quantitys" type="number" >
+                            </div>
+                            <div class='col-md-4'>
+                                <label class="control-label">Quy cách</label>
+                                <input class="form-control" data-val="true" id="unit2s" name="unit2s" type="text" >
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        $(document).ready(function () {
+                            $(".suagia").click(function () {
+                                $('#itemids').val($('.suagia').attr("data-iditem"));
+                                $('#quantitys').val($('.suagia').attr("data-quantity"));
+                                $('#unit2s').val($('.suagia').attr("data-unit2"));
+                            });
+                            $(".editPrice").click(function () {
+                                $('.editPrice').attr("data-itemid", $('#itemids').val());
+                                $('.editPrice').attr("data-quantity", $('#quantitys').val());
+                                $('.editPrice').attr("data-unit2", $('#unit2s').val());
+                            });
+                            $(".editPrice").hover(function () {
+                                $('.editPrice').attr("data-itemid", $('#itemids').val());
+                                $('.editPrice').attr("data-quantity", $('#quantitys').val());
+                                $('.editPrice').attr("data-unit2", $('#unit2s').val());
+                            });
+
+                        });
+                    </script>
+
+
+                    <div class="modal-footer">
+                        <a href="#" id="editPrice" class="editPrice" style="background: red;    padding: 7px;  color: white;">Lưu thông tin</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+
+}
+else
+{
+    <p>bạn không có quyền xem chức năng này</p>
+}

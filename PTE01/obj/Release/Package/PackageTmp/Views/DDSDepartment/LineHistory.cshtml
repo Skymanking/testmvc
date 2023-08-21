@@ -1,0 +1,200 @@
+﻿@model List<Model.EF.DDS_Problem2>
+@{
+    ViewBag.Title = "LineHistory";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    var ListFac = (List<Model.EF.DDS_Factory>)ViewBag.ListFac;
+    var ListLine = (List<Model.EF.DDS_Line>)ViewBag.ListLine;
+    var ListMeasure = (List<Model.EF.DDS_Measurse>)ViewBag.ListMeasure;
+    var bagFactory = ViewBag.fac;
+    var bagLine = ViewBag.line;
+    var bagMea = ViewBag.Mea;
+    var Fac = new List<SelectListItem>();
+    var Line = new List<SelectListItem>();
+    var Measure = new List<SelectListItem>();
+    Fac.Add(new SelectListItem
+    {
+        Value = "",
+        Text = "Factory",
+    });
+    foreach (var item in ListFac)
+    {
+        Fac.Add(new SelectListItem
+        {
+            Text = item.Factory,
+            Value = item.Factory,
+        });
+    }
+    Line.Add(new SelectListItem
+    {
+        Value = "",
+        Text = "Line",
+    });
+    foreach (var item in ListLine)
+    {
+        Line.Add(new SelectListItem
+        {
+            Text = item.Name,
+            Value = item.Name,
+        });
+    }
+    Measure.Add(new SelectListItem
+    {
+        Value = "",
+        Text = "Measure",
+    });
+    foreach (var item in ListMeasure)
+    {
+        Measure.Add(new SelectListItem
+        {
+            Text = item.Name,
+            Value = item.Name,
+        });
+    }
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+@section jsFooter
+{
+    <script src="/Assets/plugin/ckfinder/ckfinder.js"></script>
+    <script>
+        $(".date").datepicker();
+        $('.select2').select2()
+    </script>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-success card-outline">
+            <div class="card-header">
+                <h3 class="card-title"><strong>DMS</strong></h3>
+                @using (Html.BeginForm("LineHistory", "DDSDepartment", FormMethod.Get))
+                {
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label>Factory</label>
+                            <select class="form-control select2" name="fac">
+                                @foreach (var item in Fac)
+                                {
+                                    if (item.Value == bagFactory)
+                                    {
+                                        <option selected value="@item.Value">@item.Text</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label>Line</label>
+                            <select class="form-control select2" name="line">
+                                @foreach (var item in Line)
+                                {
+                                    if (item.Value == bagLine)
+                                    {
+                                        <option selected value="@item.Value">@item.Text</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label>Measures</label>
+                            <select class="form-control select2" name="mea">
+                                @foreach (var item in Measure)
+                                {
+                                    if (item.Value == bagMea)
+                                    {
+                                        <option selected value="@item.Value">@item.Text</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="control-label">From</label>
+                            <div class="bootstrap-timepicker">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <input type="text" id="date1" name="date1" class="form-control date" readonly="readonly" value="@ViewBag.date1.ToShortDateString()"><br>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="control-label">To</label>
+                            <div class="bootstrap-timepicker">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <input type="text" id="date2" name="date2" class="form-control date" readonly="readonly" value="@ViewBag.date2.ToShortDateString()"><br>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <label>Search</label>
+                            <input class="form-control" name="searchString" value="@ViewBag.searchString" />
+                        </div>
+                        <div class="col-md-12" style="text-align:center">
+                            <button type="submit" class="btn btn-success">Search</button>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="card-body">
+                <table class="table table-striped table-bordered table-hover" id="Warehouse">
+                    <thead>
+                        <tr>
+                            <th>Line</th>
+                            <th>Problem</th>
+                            <th style="width:300px">Attach</th>
+                            <th>Action</th>
+                            <th style="width:200px">Owner</th>
+                            <th style="width:100px">DeadLine</th>
+                            <th style="width:100px">Status</th>
+                            <th style="width:50px">View</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr id="row_@item.ID">
+                                <td>@item.LineName</td>
+                                <td>@item.Problem</td>
+                                <td>@item.Attach</td>
+                                <td>@item.Action</td>
+                                <td>@item.Owner</td>
+                                <td>@item.Date</td>
+                                <td>
+                                    @Html.Raw(item.Status ? "<span class='fa fa-check-circle-o fa-2x' style='color: #0cb583;font-size: 30px;'></span>" : "<span class='fa fa-times-circle-o fa-2x' style='color: #f90d0d;font-size: 30px;'></span>")
+                                </td>
+                                <td>
+                                    @if (item.IDTask != 0)
+                                    {
+                                        <a href="/Task/Edit/@item.IDTask"><i class="fa fa-eye"></i></a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,187 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    var listbp = (List<Model.EF.PersonalGroup>)ViewBag.listbp;
+    var listdetail = (List<Model.View.Personal7>)ViewBag.listdetail;
+    int tongnghi = 0; int n2th = 0; int n12th = 0; int h12th = 0;
+    int atongnghi = 0; int an2th = 0; int an12th = 0; int ah12th = 0;
+    int btongnghi = 0; int bn2th = 0; int bn12th = 0; int bh12th = 0;
+
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-success card-outline">
+            <div class="card-header">
+                <h3 class="card-title" style="margin-bottom: 0;"><i class="fa fa-clipboard"></i>Thống Kê Nhân Viên Nghỉ Việc Tháng @ViewBag.month / @ViewBag.year</h3>
+                <p style="color:red"> Note: nếu muốn xem cả năm thì chọn tháng = 0</p>
+                <div class="card-tools">
+
+                    <div class="btn-group" style="height:40px">
+                        <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-file-excel-o"></i>
+                        </button>
+                        <div class="dropdown-menu float-right" role="menu">
+                            <a class="dropdown-item" href="/Personal/BirthDay?month=@DateTime.Now.Month">DS Sinh Nhật Tháng</a>
+                            <a class="dropdown-item" href="/Personal/HumanResource?month=@DateTime.Now.Month&year=@DateTime.Now.Year">Tăng Giảm Nhân Sự</a>
+                            <a class="dropdown-item" href="/Personal/Report1">Biến Động Nhân Sự</a>
+                            <a class="dropdown-item" href="/Personal/ReportLeave/?year=@DateTime.Now.Year&month=@DateTime.Now.AddMonths(-1).Month">Thống kê nhân sự nghỉ việc</a>
+                            <a class="dropdown-item" href="/Personal/AcademicLevel">Trình Độ Học Vấn</a>
+                            <a class="dropdown-item" href="/Personal/GroupID2">Thống Kê Phân Nhóm</a>
+                            <a class="dropdown-item" href="/Personal/GroupID">Thống Kê Bộ Phận</a>
+                            <a class="dropdown-item" href="/Personal/ReportCompetence">Thống Kê Năng Lực</a>
+                            <a class="dropdown-item" href="/Personal/ExportInputData" target="_blank">InputData</a>
+                            <a class="dropdown-item" href="/Personal/ReportToolUseToBe">Công Cụ Dụng Cụ</a>
+                        </div>
+                    </div>
+                    <div style="float:left">
+                        @using (Html.BeginForm("ReportLeave", "Personal", FormMethod.Get))
+                        {
+                            <div class="input-group " style="width: 300px;">
+                                <input type="number" value="@ViewBag.month" name="month" max="12" min="0" step="1" class="form-control float-right" style="background: #e6c5c8; font-weight: bold;">
+                                <input type="number" value="@ViewBag.year" name="year" max="@DateTime.Now.Year" min="2017" step="1" class="form-control float-right" style="background: #e6c5c8; font-weight: bold;">
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Bộ phận</th>
+                                <th>Tổng số NV nghỉ</th>
+                                <th> < 60 day </th>
+                                <th> < 365 day</th>
+                                <th> > 365 day</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var bp in listbp)
+                            {
+                                { btongnghi = 0; bn2th = 0; bn12th = 0; bh12th = 0; }
+                                if (bp.ParentID == null)
+                                {
+                                    { tongnghi = 0; n2th = 0; n12th = 0; h12th = 0; }
+                                    <tr style="background: #3dd5ed">
+                                        <td>@bp.Name</td>
+                                        @foreach (var item in listdetail)
+                                        {
+                                            if (item.GroupID == bp.ID)
+                                            {
+                                                tongnghi = tongnghi + 1;
+                                                atongnghi = atongnghi + 1;
+                                                btongnghi = btongnghi + 1;
+                                                TimeSpan time = item.EndDate.Value - item.StartDate.Value;
+                                                int songaydalam = time.Days;
+                                                if (songaydalam < 60)
+                                                {
+                                                    n2th = n2th + 1;
+                                                    an2th = an2th + 1;
+                                                    bn2th = bn2th + 1;
+                                                }
+                                                else
+                                                {
+                                                    if (songaydalam < 365)
+                                                    {
+                                                        n12th = n12th + 1;
+                                                        an12th = an12th + 1;
+                                                        bn12th = bn12th + 1;
+                                                    }
+                                                    else
+                                                    {
+                                                        h12th = h12th + 1;
+                                                        ah12th = ah12th + 1;
+                                                        bh12th = bh12th + 1;
+                                                    }
+                                                }
+
+                                            }
+
+
+                                        }
+                                        <td>@tongnghi</td>
+                                        <td>@n2th</td>
+                                        <td>@n12th</td>
+                                        <td>@h12th</td>
+                                    </tr>
+                                    foreach (var bpc in listbp)
+                                    {
+                                        if (bpc.ParentID == bp.ID)
+                                        {
+                                            { tongnghi = 0; n2th = 0; n12th = 0; h12th = 0; }
+                                            <tr>
+                                                <td>+ + + @bpc.Name</td>
+                                                @foreach (var item in listdetail)
+                                                {
+                                                    if (item.GroupID == bpc.ID)
+                                                    {
+                                                        tongnghi = tongnghi + 1;
+                                                        atongnghi = atongnghi + 1;
+                                                        btongnghi = btongnghi + 1;
+                                                        TimeSpan time = item.EndDate.Value - item.StartDate.Value;
+                                                        int songaydalam = time.Days;
+                                                        if (songaydalam < 60)
+                                                        {
+                                                            n2th = n2th + 1;
+                                                            an2th = an2th + 1;
+                                                            bn2th = bn2th + 1;
+                                                        }
+                                                        else
+                                                        {
+                                                            if (songaydalam < 365)
+                                                            {
+                                                                n12th = n12th + 1;
+                                                                an12th = an12th + 1;
+                                                                bn12th = bn12th + 1;
+                                                            }
+                                                            else
+                                                            {
+                                                                h12th = h12th + 1;
+                                                                ah12th = ah12th + 1;
+                                                                bh12th = bh12th + 1;
+                                                            }
+                                                        }
+
+                                                    }
+
+
+                                                }
+                                                <td>@tongnghi</td>
+                                                <td>@n2th</td>
+                                                <td>@n12th</td>
+                                                <td>@h12th</td>
+                                            </tr>
+                                        }
+
+                                    }
+                                     <tr style="background: #fbdee1;">
+                                        <th>SUM: @bp.Name</th>
+                                         <td>@btongnghi</td>
+                                         <td>@bn2th</td>
+                                         <td>@bn12th</td>
+                                         <td>@bh12th</td>
+                                    </tr>
+                                }
+
+                            }
+                            <tr>
+                                <td>Tổng</td>
+                                <td>@atongnghi</td>
+                                <td>@an2th</td>
+                                <td>@an12th</td>
+                                <td>@ah12th</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+

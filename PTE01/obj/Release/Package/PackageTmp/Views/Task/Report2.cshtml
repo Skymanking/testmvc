@@ -1,0 +1,374 @@
+﻿@{
+    ViewBag.Title = "Report";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+
+    Model.View.TaskFullBPView1 detail = ViewBag.detail;
+    DateTime dauthang = DateTime.Now.AddDays(-DateTime.Now.Day + 1);
+    List<Model.View.Dropdownlist2> lDept = ViewBag.lDept;
+    string ngaythangnam = "ReportMH" + DateTime.Now.ToUniversalTime();
+    string tenbp = ViewBag.tenbp;
+    string ngay1 = ViewBag.ngay1;
+    string ngay2 = ViewBag.ngay2;
+    int svalue1 = 0;
+    int svalue2 = 0;
+    int svalue3 = 0;
+    int svalue4 = 0;
+    int svalue5 = 0;
+    int svalue6 = 0;
+    int tongdiem = 0;
+    int tongtytrong = 0;
+    double diemtrungbinh = 0;
+    int tongnhiemvu = 0;
+
+}
+@section jsFooter
+{
+
+    <script src="/Assets/theme3/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+    <script>
+        $(function () {
+            $("#ngay1").datepicker();
+            $("#ngay2").datepicker();
+            $('input[type="checkbox"].flat-green, input[type="radio"].flat-green').iCheck({
+                checkboxClass: 'icheckbox_flat-green',
+                radioClass: 'iradio_flat-green'
+            })
+            $('.select2').select2()
+        })
+    </script>
+}
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<div class="card card-primary not-print">
+    <div class="card-header">
+        <h3 class="card-title">Tìm kiếm nâng cao</h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="callout callout-info">
+                    <label class="control-label" style="color: #FF5722;">Chọn Bộ Phận / Nhóm</label><br>
+                    <select class="form-control select2" style="width: 100%;" id="mabp">
+                        @foreach (var item in lDept)
+                        {
+                        <option value="@item.ID">@item.Name ( @item.ID )</option>
+                        }
+
+                    </select>
+
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="callout callout-info">
+                    <label class="control-label" style="color: #FF5722;">Tình trạng</label><br>
+                    <select class="form-control" style="width: 100%;" id="status">
+                        <option value="null">Tất cả</option>
+                        <option value="0">Chưa xong + trễ Deadline</option>
+                        <option value="1">Chưa xong + chưa đến Deadline</option>
+                        <option value="2">Đã xong + trễ Deadline</option>
+                        <option value="3">Đã xong + đúng Deadline</option>
+                        <option value="-1">Nhiện vụ bị hủy</option>
+                        <option value="-2">Nhiện vụ bị từ chối</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="callout callout-info">
+                    <label class="control-label" style="color: #FF5722;">Thời gian deadline</label>
+                    <div class="bootstrap-timepicker">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <label>Từ:</label><input type="text" id="ngay1" name="ngay1" class="time1 form-control" readonly="readonly" value="@dauthang.ToShortDateString()"><br>
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bootstrap-timepicker">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <label>Đến:</label> <input type="text" id="ngay2" name="ngay2" class="time1 form-control" readonly="readonly"><br>
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 text-center">
+                <div class="form-group">
+                    <a class="btn btn-primary" id="inbaocao">Tìm kiếm</a>
+                </div>
+            </div>
+        </div>
+        <script src="~/Scripts/jquery-1.9.1.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                var mabp = $("#mabp").val();
+                var status = $("#status").val();
+                var ngay1 = $('#ngay1').val();
+                var ngay2 = $('#ngay2').val();
+                $('#inbaocao').attr("href", '/Task/Report2?mabp=' + mabp + '&status=' + status + '&ngay1=' + ngay1 + '&ngay2=' + ngay2);
+
+
+                $("#inbaocao").click(function () {
+                    var mabp = $("#mabp").val();
+                    var status = $("#status").val();
+                    var ngay1 = $('#ngay1').val();
+                    var ngay2 = $('#ngay2').val();
+                    $('#inbaocao').attr("href", '/Task/Report2?mabp=' + mabp + '&status=' + status + '&ngay1=' + ngay1 + '&ngay2=' + ngay2);
+
+                });
+
+
+            });
+
+        </script>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-success card-outline">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fa fa-clipboard"></i> <span id="sokq" style="color:red;font-weight:bold;"></span> REPORT NHIỆM VỤ BỘ PHẬN - @tenbp (Deadline Từ @ngay1 đến @ngay2)</h3>
+                <div class="card-tools">
+                    <i class="fa fa-print" onclick="window.print()" style="font-size: 40px; color: blue"></i>   
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6">
+                        <div id="barchart"></div>
+                    </div>
+                    <div class="col-4">
+                        <div id="piechart"></div>
+                    </div>                   
+                </div>
+                <div class="table-responsive">
+                    @foreach (var nv in detail.listPer)
+                    {
+                        { tongdiem = 0; tongtytrong = 0; diemtrungbinh = 0; tongnhiemvu = 0; }
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="card card-primary card-outline">
+                                    <div class="card-header">
+                                        <center><h3 class="card-title "><b>@nv.FullName</b></h3></center>
+                                    </div>
+
+                                    <div class="card-body box-profile">
+                                        <div class="text-center">
+                                            @if (nv.Image != null)
+                                            {<img class="profile-user-img img-fluid img-circle" src="@nv.Image" alt="link hình bị lỗi" style="width: 200px; height: 260px; border-radius: 0%;border:none">}
+                                            else
+                                            { <img class="profile-user-img img-fluid img-circle" src="/Assets/theme3/dist/img/user.png" alt="User profile picture">}
+                                        </div>
+                                        <h3 class="profile-username text-center">Mã NV: @nv.UserID</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.col -->
+                            <div class="col-md-9">
+                                <div class="card card-primary card-outline">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Tình trạng công việc</h3>
+                                        <div class="card-body p-0">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div id="infor_@nv.UserID" style="width: 100%; "></div>
+                                                    <div id="barchart_@nv.UserID" style="width: 100%; height: 300px;"></div>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card card-info card-outline">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Chi tiết công việc</h3>
+                                        <div class="card-tools"><button type="button" class="btn btn-tool" data-widget="collapse"><i class="fa fa-level-down"></i></button></div>
+                                    </div>
+                                    <div class="card-body" style="display: block;">
+                                        <table class="table table-bordered" id="inputdata">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width:120px">Create by</th>
+                                                    @*<th style="width:90px">Start date</th>*@
+                                                    <th style="width:120px">Owner</th>
+                                                    <th style="width:90px">Deadline</th>
+                                                    <th>Task Name</th>                                                    
+                                                    <th style="width:90px">Status</th>
+                                                    <th style="width:90px">% Complete</th>                                                   
+                                                    <th>Đánh giá KQ</th>
+                                                    <th>Tỉ trọng</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                @foreach (var item in detail.listTask)
+                                                {
+                                                    if (nv.UserName == item.Owner)
+                                                    {
+                                                        <tr id="row_@item.ID">
+                                                            <td>@item.CreateBy</td>
+                                                            @*<td>@if (@item.CreateDate != null){<span> @item.CreateDate.Value.ToString("dd/MM/yyyy")</span>}</td>*@
+                                                            <td>@item.Owner</td>
+                                                            <td>@item.Deadline.ToString("dd/MM/yyyy")</td>
+                                                            <td><a href="~/Task/Edit/@item.ID" target="_blank"> @item.Subject</a></td>
+                                                            
+                                                            <td>
+                                                                @if (item.Status < -2 || item.Status > 3)
+                                                                {
+                                                                    <span>Error</span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    switch (item.Status)
+                                                                    {
+                                                                        case 0: <span>Delay</span> { nv.value1 = nv.value1 + 1; svalue1 = svalue1 + 1; }; break;
+                                                                        case 1: <span>Open</span>{ nv.value2 = nv.value2 + 1; svalue2 = svalue2 + 1; }; break;
+                                                                        case 2: <span>Completed-Delay</span>{ nv.value3 = nv.value3 + 1; svalue3 = svalue3 + 1; }; break;
+                                                                        case 3: <span>Completed</span>{ nv.value4 = nv.value4 + 1; svalue4 = svalue4 + 1; }; break;
+                                                                        case -1: <span>Cancel</span>{ nv.value5 = nv.value5 + 1; svalue5 = svalue5 + 1; }; break;
+                                                                        case -2: <span>Refused </span>{ nv.value6 = nv.value6 + 1; svalue6 = svalue6 + 1; }; break;
+                                                                    }
+                                                                }
+                                                            </td>
+                                                            <td>@item.Rate</td>                                                            
+                                                            <td>
+                                                                @if (item.Imqualified < 1|| item.Status > 4)
+                                                                {
+                                                                    <span>0</span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    switch (item.Imqualified)
+                                                                    {
+                                                                        case 1: <span>(<span style="color:red">1đ</span>)Không đạt</span>; break;
+                                                                        case 2: <span>(<span style="color:red">2đ</span>)Cần cố gắng</span>; break;
+                                                                        case 3: <span>(<span style="color:red">3đ</span>)Đạt yêu cầu</span>; break;
+                                                                        case 4: <span>(<span style="color:red">4đ</span>)Vượt yêu cầu</span>; break;                                                                      
+                                                                    }
+                                                                }
+                                                            </td>
+                                                            <td><span style="color:red">x @item.Proportion</span></td>
+                                                            
+                                                        </tr>
+                                                        if(item.Imqualified>0)
+                                                        { tongtytrong = tongtytrong + item.Proportion; tongdiem = tongdiem + item.Proportion * item.Imqualified; tongnhiemvu = tongnhiemvu + 1; }
+                                                    }
+                                                }
+                                                @if(tongtytrong!=0)
+                                                {diemtrungbinh = tongdiem / tongtytrong;}
+                                                else
+                                                { diemtrungbinh = 0; }
+                                                <script type="text/javascript">
+                                                    google.charts.load("current", { packages: ["corechart"] });
+                                                    google.charts.setOnLoadCallback(drawChart);
+                                                    function drawChart() {
+                                                        var data = google.visualization.arrayToDataTable([
+                                                          ["Element", "Density", { role: "style" }],
+                                                            @{<text>['Delay', @(nv.value1), "#fdb49d"],</text>}
+                                                            @{<text>['Open', @nv.value2, "#fbf6cb"],</text>}
+                                                            @{<text>['Completed-Delay', @nv.value3, "#ceeefd"],</text>}
+                                                            @{<text>['Completed', @nv.value4, "#d6f7b1"],</text>}
+                                                            @{<text>['Cancel', @nv.value5, "#9E9E9E"],</text>}
+                                                            @{<text>['Refused', @nv.value6, "#795548"],</text>}
+                                                        ]);
+
+                                                        var view = new google.visualization.DataView(data);
+                                                        view.setColumns([0, 1,
+                                                                         {
+                                                                             calc: "stringify",
+                                                                             sourceColumn: 1,
+                                                                             type: "string",
+                                                                             role: "annotation"
+                                                                         },
+                                                                         2]);
+                                                        var options = {
+                                                            title: "",
+                                                            bar: { groupWidth: "95%" },
+                                                            legend: { position: "none" },
+                                                        };
+                                                        var chart = new google.visualization.BarChart(document.getElementById("barchart_@nv.UserID"));
+                                                        chart.draw(view, options);
+                                                    }
+                                                    document.getElementById("infor_@nv.UserID").innerHTML = "<span style='font-size: 22px;color: red;'>TỔNG NHIỆM VỤ ĐÃ HOÀN THÀNH:</span> @tongnhiemvu  <span style='font-size: 22px;color: red;'>TỔNG ĐIỂM:</span> @tongdiem <span style='font-size: 22px;color: red;'> ĐIỂM TRUNG BÌNH:</span> @diemtrungbinh";
+                                                </script>
+
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Task Status', 'Rate'],
+
+               @{<text>['Delay', @svalue1],</text>}
+                @{<text>['Open', @svalue2],</text>}
+                 @{<text>['Completed-Delay', @svalue3],</text>}
+                 @{<text>['Completed', @svalue4],</text>}
+                  @{<text>['Cancel', @svalue5],</text>}
+                   @{<text>['Refused', @svalue6],</text>}
+        ]);
+        var options = {
+            title: ''
+        };
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+        chart.draw(data, options);
+    }
+</script>
+<script type="text/javascript">
+    google.charts.load('current', { 'packages': ['bar'] });
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Nhân viên', 'Delay', 'Open', 'Completed-Delay', 'Completed'],
+          @foreach(var nv in detail.listPer)
+          {
+              <text>
+                         ['@nv.FullName.Replace("â", "a").Replace("á", "a").Replace("à", "a").Replace("ý", "y").Replace("ô", "o").Replace("ó", "o").Replace("ò", "o").Replace("í", "i").Replace("ì", "i").Replace("ê", "e").Replace("é", "e").Replace("É", "E").Replace("è", "e")', @nv.value1, @nv.value2, @nv.value3,@nv.value4],
+             </text>
+          }
+
+        ]);
+
+        var options = {
+            chart: {
+                title: 'Tình trạng nhiệm vụ theo nhân viên',
+                subtitle: '',
+            },
+            bars: 'horizontal'
+        };
+
+        var chart = new google.charts.Bar(document.getElementById('barchart'));
+
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+    }
+</script>

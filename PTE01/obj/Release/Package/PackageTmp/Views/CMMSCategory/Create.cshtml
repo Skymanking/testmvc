@@ -1,0 +1,159 @@
+﻿@model Model.EF.FullCategory
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    var i = 0;
+    List<SelectListItem> listVT = new List<SelectListItem>();
+    List<SelectListItem> listTB = new List<SelectListItem>();
+
+}
+@section jsFooter
+{
+    <script src="/Assets/theme3/plugins/datepicker/js/bootstrap-datetimepicker.js"></script>
+    <script src="/Assets/theme3/plugins/datepicker/js/locales/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
+    <script>
+        $(function () {
+            $('.form_datetime').datetimepicker({
+                format: 'mm/dd/yyyy hh:ii',
+                todayBtn: 1,
+                autoclose: 1,
+                todayHighlight: 1,
+            });
+            $('.select2').select2()
+
+        })
+    </script>
+
+    <script src="~/Scripts/FindNameItem.js"></script>
+    <script src="~/Scripts/CMMSCategory.js"></script>
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Tạo Mới Hạng mục Bảo trì</h3>
+    </div>
+    @using (Html.BeginForm("Create", "CMMSCategory", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="control-label">Tìm tên thiết bị</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control tentb" id="tentb" placeholder="chỉ hiện 20 kết quả gần giống nhất">
+                        <div class="input-group-append btnFindTB" id="btnFindTB">
+                            <span class="btn btn-default"><i class="fa fa-search"></i></span>
+                        </div>
+                    </div>
+                </div>
+                <div class=" col-md-6">
+                    <label class="control-label">Chọn thiết bị</label>
+                    <div class='input-group'>
+                        @Html.DropDownListFor(model => model.item.IDDevice, listTB, new { @class = "form-control", ID = "abcd" })
+                    </div>
+                    <input type="hidden" id="nametb" name="item.NameDevice" />
+                </div>
+            </div>
+            <div class="row">
+                <div class=" col-md-6">
+                    <label class="form-control">
+                        Hạng mục bảo trì:
+                    </label>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover" id="gvCustomers1">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Tên
+                                        <button type="button" data-toggle="modal" data-target="#toolModal" style="color: red; width: 30px; height: 30px; border-radius: 50%;"><span class="fa fa-plus"></span></button>
+                                    </th>
+                                    <th width="160px">Chu kỳ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+                <div class=" col-md-6">
+
+                    <label class="form-control">
+                        Vật tư:
+                    </label>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover" id="gvCustomers2">
+                            <thead>
+                                <tr>
+                                    <th width="150px">Mã vật tư</th>
+                                    <th>Tên vật tư</th>
+                                    <th width="50px">Số lượng</th>
+                                    <th width="50px">ĐVT</th>
+                                    <th>Ghi chí</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+
+                    </div>
+                    </div>
+                    </div>
+
+                    <script>
+                        $(document).ready(function () {
+                            $(window).keydown(function (event) {
+                                if (event.keyCode == 13) {
+                                    event.preventDefault();
+                                    return false;
+                                }
+                            });
+                        });
+                    </script>
+
+                </div>
+            }
+</div>
+<div id="myForm">
+    <div class="modal fade" id="toolModal" role="dialog">
+        <div class="modal-dialog" style="max-width: 900px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" style="width: 50px; font-size: 20px;">&times;</button>
+                    <h4 class="modal-title" style="position: absolute;">Thêm Key milestone</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <label class="control-label col-md-12">Lý do</label>
+                            <input type="text" class="form-control" id="reason" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="control-label col-md-12">Chu kỳ (Ngày)</label>
+                            <input type="number" min="1" max="365" class="form-control" id="cycle" />
+                        </div>
+                        <div class="col-md-12">
+                            <label class="control-label col-md-12">Ghi chú</label>
+                            <input type="text" class="form-control" id="note" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" id="createP" class="btn-createCat" style="background: red; padding: 7px;  color: white;">Lưu thông tin</a>
+                </div>
+                <script>
+                    $(document).ready(function () {
+                        $("#createP").mouseenter(function () {
+                            $('#createP').attr("data-reason", $('#reason').val());
+                            $('#createP').attr("data-cycle", $('#cycle').val());
+                            $('#createP').attr("data-note", $('#note').val());
+                        });
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+

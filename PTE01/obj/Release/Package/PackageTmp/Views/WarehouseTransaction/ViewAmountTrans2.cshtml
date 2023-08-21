@@ -1,0 +1,103 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    DateTime homnay = DateTime.Now;
+    List<Model.EF.WarehouseDetail3> full = ViewBag.full;
+    string ngaythangnam = "ReportXN" + DateTime.Now.ToUniversalTime();
+    List<Model.EF.Warehouse> cWare = ViewBag.cWarehouse;
+    List<Model.EF.WHLocation> ListinWWH = ViewBag.loca;
+
+    List<SelectListItem> listWH = new List<SelectListItem>();
+
+    foreach (var item in cWare)
+    {
+        listWH.Add(new SelectListItem
+        {
+            Text = item.Name,
+            Value = item.ID,
+        });
+    }
+}
+
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+<div class="card card-primary">
+    <div class="card-header">
+        <a href="~/Warehouse/WMS"><img src="~/Assets/theme3/dist/img/home6.png" style="width: 48px; float: left; margin: -10px 10px -10px -10px; " /></a>   <h3 class="card-title">Current Inventory by Location</h3>
+        <div class="card-tools">
+
+            <div class="btn-group" style="height:40px">
+                <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                    <i class="fa fa-file-excel-o"></i>
+                </button>
+                <div class="dropdown-menu float-right" role="menu">
+                    <a class="dropdown-item" href="/WarehouseTransaction/ViewListTrans" style="color:#000">Danh sách phiếu nhập xuất</a>
+                    <a class="dropdown-item" href="/WarehouseTransaction/ViewDetailTrans" style="color:#000">Bảng kê nhập xuất kho</a>
+                    <a class="dropdown-item" href="/WarehouseTransaction/ViewAmountTrans" style="color:#000">Check tồn kho hiện tại</a>
+                    <a class="dropdown-item" href="/WarehouseTransaction/ViewAmountTrans2" style="color:#000">View tồn kho hiện tại</a>
+                </div>
+            </div>
+            <div style="float:left">
+                @using (Html.BeginForm("ViewAmountTrans2", "WarehouseTransaction", FormMethod.Get))
+                {
+                    <div class="input-group " style="width: 200px;">
+                        @Html.DropDownList("wh", listWH, new { @class = "form-control" })
+                        @*<input type="number" value="@ViewBag.wh" name="month" max="12" min="1" step="1" class="form-control float-right" style="background: #e6c5c8; font-weight: bold;">*@
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+    <div class="card-body">
+        <div class="row">
+            @if (ListinWWH != null)
+            {
+                foreach (var item in ListinWWH)
+                {
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fa fa-object-group"></i>
+                                    @item.Name
+                                </h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="inputdata">
+                                        <thead>
+                                            <tr>
+                                                <th>Item</th>
+                                                <th>Tồn</th>
+                                                <th>ĐVT</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item1 in full)
+                                            {
+                                                if (item1.IDLocation == item.Name && item1.Amount>0)
+                                                {
+                                                    <tr>
+                                                        <td>@item1.MaterialCode @item1.MaterialName</td>
+                                                        <td>@item1.Amount</td>
+                                                        <td>@item1.MaterialUnit</td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+            }
+        </div>
+    </div>
+</div>

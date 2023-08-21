@@ -1,0 +1,424 @@
+﻿@model Model.View.LPlaningC
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    var lItemID = (List<Model.View.Dropdownlist2>)ViewBag.LItemID;
+    List<SelectListItem> slItemID = new List<SelectListItem>();
+    slItemID.Add(new SelectListItem
+    {
+        Text = "Chưa chọn Sản Phẩm",
+        Value = "none",
+        Selected = true,
+    });
+    foreach (var item in lItemID)
+    {
+        slItemID.Add(new SelectListItem
+       {
+           Text = item.Name,
+           Value = item.ID,
+       });
+    }
+    //var listU = (IEnumerable<Model.View.UserView2>)ViewBag.listUser;
+    //string nguoitao = ViewBag.nguoitao;
+    //var nguoinhan = new List<SelectListItem>();
+    //nguoinhan.Add(new SelectListItem
+    //{
+    //    Text = "Chọn Người Thực Hiện",
+    //    Value = "none",
+    //    Selected = true
+    //});
+    //foreach (var item in listU)
+    //{
+    //    if (item.FullName == nguoitao)
+    //    {
+    //        nguoinhan.Add(new SelectListItem
+    //        {
+    //            Text = item.FullName,
+    //            Value = item.UserName,
+    //            Selected = true,
+    //        });
+    //    }
+    //    else
+    //    {
+    //        nguoinhan.Add(new SelectListItem
+    //        {
+    //            Text = item.FullName,
+    //            Value = item.UserName,
+    //        });
+    //    }
+    //}
+}
+@section jsFooter
+{
+
+    <script src="/Assets/theme3/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+    <script>
+        $(function () {
+            $("#start").datepicker();
+            $("#end").datepicker();
+            $("#StartDate").datepicker();
+            $("#EndDate").datepicker();
+            $('input[type="checkbox"].flat-green, input[type="radio"].flat-green').iCheck({
+                checkboxClass: 'icheckbox_flat-green',
+                radioClass: 'iradio_flat-green'
+            })
+            $('.select2').select2()
+            $('.time1').timepicker({
+                showInputs: false,
+                showMeridian: false
+            })
+            $('.time2').timepicker({
+                showInputs: false,
+                showMeridian: false
+            })
+        })
+    </script>
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Tạo Kế Hoạch SX Mới</h3>
+        <div class="card-tools">
+            <div class="btn-group" style="height:40px">
+                <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                    More
+                </button>
+                <div class="dropdown-menu float-right" role="menu">
+                    <a class="dropdown-item" href="/Planing/Index4" style="color:#000">View Chart</a>
+                    <a class="dropdown-item" href="/Planing/Index3" style="color:#000">View Detail</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @using (Html.BeginForm("CreateLTask", "Planing", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+        <div class="card-body">
+            <div class="row">
+
+                <div class="col-md-3">
+                    <label class="control-label">Line</label>
+                    @Html.DropDownListFor(model => model.Line, null, new { @class = "form-control select2", @style = "width: 100%;" })
+                </div>
+                <div class="col-md-9">
+                    <label class="control-label col-md-12">Ghi chú</label>
+                    @Html.TextBoxFor(model => model.Note, new { @class = "form-control" })
+                </div>
+                <div class='col-md-4'>
+                    <label>Bắt đầu:</label>
+                    <div class="input-group mb-3">
+                        @Html.TextBoxFor(model => model.StartDate, new { @class = "date form-control", @autocomplete = "off" })
+                        <div class=" input-group-append">
+                            <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-md-2'>
+                    <div class="bootstrap-timepicker">
+                        <div class="form-group">
+                            <label>giờ:phút</label>
+                            <div class="input-group">
+                                @Html.TextBoxFor(model => model.time1, new { @class = "time1 form-control", @value = "06:00" })
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fa fa-clock-o"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class='col-md-4'>
+                    <label>Kết thúc:</label>
+                    <div class="input-group mb-3">
+                        @Html.TextBoxFor(model => model.EndDate, new { @class = "date form-control", @autocomplete = "off" })
+                        <div class=" input-group-append">
+                            <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-md-2'>
+                    <div class="bootstrap-timepicker">
+                        <div class="form-group">
+                            <label>giờ:phút</label>
+                            <div class="input-group">
+                                @Html.TextBoxFor(model => model.time2, new { @class = "time2 form-control", @autocomplete = "off" })
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fa fa-clock-o"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    $(document).ready(function () {
+
+                        $('.time1').val('06:00');
+                        $('.time2').val('06:00');
+
+                    });
+                </script>
+
+                <div class="col-md-6" style="border-right: 3px solid;">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label class="control-label">Sản Phẩm</label>
+                            @Html.DropDownListFor(model => model.ItemID[0], slItemID, new { @class = "form-control select2", @style = "width: 99%;" })
+                        </div>
+                        <div class="col-md-2">
+                            <label class="control-label">Số cầu</label>
+                            <input type="number" id="socau0" name="dates" class="form-control">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="control-label">Số lượng</label>
+                            @Html.TextBoxFor(model => model.Quantity[0], new { @class = "form-control", @type = "number", @style = "background: #bbe6c4; font-weight: bold;" })
+                        </div>
+                        <script>
+                            $(document).ready(function () {
+                                $('#socau0').change(function () {
+                                    var tendachon0 = $("#ItemID_0_ option:selected").text();
+                                    var slsp = parseInt(tendachon0.substring((tendachon0.indexOf('#') + 1), 999));
+                                    var socau = parseInt($('#socau0').val());
+                                    $('#Quantity_0_').val(slsp * socau);
+                                });
+                            });
+                        </script>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label class="control-label">Sản Phẩm</label>
+                            @Html.DropDownListFor(model => model.ItemID[1], slItemID, new { @class = "form-control select2", @style = "width: 99%;" })
+                        </div>
+                        <div class="col-md-2">
+                            <label class="control-label">Số cầu</label>
+                            <input type="number" id="socau1" name="dates" class="form-control">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="control-label">Số lượng</label>
+                            @Html.TextBoxFor(model => model.Quantity[1], new { @class = "form-control", @type = "number", @style = "background: #bbe6c4; font-weight: bold;" })
+                        </div>
+                        <script>
+                            $(document).ready(function () {
+                                $('#socau1').change(function () {
+                                    var tendachon1 = $("#ItemID_1_ option:selected").text();
+                                    var slsp = parseInt(tendachon1.substring((tendachon1.indexOf('#') + 1), 999));
+                                    var socau = parseInt($('#socau1').val());
+                                    $('#Quantity_1_').val(slsp * socau);
+                                });
+                            });
+                        </script>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label class="control-label">Sản Phẩm</label>
+                            @Html.DropDownListFor(model => model.ItemID[2], slItemID, new { @class = "form-control select2", @style = "width: 99%;" })
+                        </div>
+                        <div class="col-md-2">
+                            <label class="control-label">Số cầu</label>
+                            <input type="number" id="socau2" name="dates" class="form-control">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="control-label">Số lượng</label>
+                            @Html.TextBoxFor(model => model.Quantity[2], new { @class = "form-control", @type = "number", @style = "background: #bbe6c4; font-weight: bold;" })
+                        </div>
+                        <script>
+                            $(document).ready(function () {
+                                $('#socau2').change(function () {
+                                    var tendachon2 = $("#ItemID_2_ option:selected").text();
+                                    var slsp = parseInt(tendachon2.substring((tendachon2.indexOf('#') + 1), 999));
+                                    var socau = parseInt($('#socau2').val());
+                                    $('#Quantity_2_').val(slsp * socau);
+                                });
+                            });
+                        </script>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label class="control-label">Sản Phẩm</label>
+                            @Html.DropDownListFor(model => model.ItemID[3], slItemID, new { @class = "form-control select2", @style = "width: 99%;" })
+                        </div>
+                        <div class="col-md-2">
+                            <label class="control-label">Số cầu</label>
+                            <input type="number" id="socau3" name="dates" class="form-control">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="control-label">Số lượng</label>
+                            @Html.TextBoxFor(model => model.Quantity[3], new { @class = "form-control", @type = "number", @style = "background: #bbe6c4; font-weight: bold;" })
+                        </div>
+                        <script>
+                            $(document).ready(function () {
+                                $('#socau3').change(function () {
+                                    var tendachon3 = $("#ItemID_3_ option:selected").text();
+                                    var slsp = parseInt(tendachon3.substring((tendachon3.indexOf('#') + 1), 999));
+                                    var socau = parseInt($('#socau3').val());
+                                    $('#Quantity_3_').val(slsp * socau);
+                                });
+                            });
+                        </script>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label class="control-label">Sản Phẩm</label>
+                            @Html.DropDownListFor(model => model.ItemID[4], slItemID, new { @class = "form-control select2", @style = "width: 99%;" })
+                        </div>
+                        <div class="col-md-2">
+                            <label class="control-label">Số cầu</label>
+                            <input type="number" id="socau4" name="dates" class="form-control">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="control-label">Số lượng</label>
+                            @Html.TextBoxFor(model => model.Quantity[4], new { @class = "form-control", @type = "number", @style = "background: #bbe6c4; font-weight: bold;" })
+                        </div>
+                        <script>
+                            $(document).ready(function () {
+                                $('#socau4').change(function () {
+                                    var tendachon4 = $("#ItemID_4_ option:selected").text();
+                                    var slsp = parseInt(tendachon4.substring((tendachon4.indexOf('#') + 1), 999));
+                                    var socau = parseInt($('#socau4').val());
+                                    $('#Quantity_4_').val(slsp * socau);
+                                });
+                            });
+                        </script>
+                    </div>
+
+                   
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label class="control-label">Sản Phẩm</label>
+                            @Html.DropDownListFor(model => model.ItemID[5], slItemID, new { @class = "form-control select2", @style = "width: 99%;" })
+                        </div>
+                        <div class="col-md-2">
+                            <label class="control-label">Số cầu</label>
+                            <input type="number" id="socau5" name="dates" class="form-control">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="control-label">Số lượng</label>
+                            @Html.TextBoxFor(model => model.Quantity[5], new { @class = "form-control", @type = "number", @style = "background: #bbe6c4; font-weight: bold;" })
+                        </div>
+                        <script>
+                            $(document).ready(function () {
+                                $('#socau5').change(function () {
+                                    var tendachon5 = $("#ItemID_5_ option:selected").text();
+                                    var slsp = parseInt(tendachon5.substring((tendachon5.indexOf('#') + 1), 999));
+                                    var socau = parseInt($('#socau5').val());
+                                    $('#Quantity_5_').val(slsp * socau);
+                                });
+                            });
+                        </script>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label class="control-label">Sản Phẩm</label>
+                            @Html.DropDownListFor(model => model.ItemID[6], slItemID, new { @class = "form-control select2", @style = "width: 99%;" })
+                        </div>
+                        <div class="col-md-2">
+                            <label class="control-label">Số cầu</label>
+                            <input type="number" id="socau6" name="dates" class="form-control">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="control-label">Số lượng</label>
+                            @Html.TextBoxFor(model => model.Quantity[6], new { @class = "form-control", @type = "number", @style = "background: #bbe6c4; font-weight: bold;" })
+                        </div>
+                        <script>
+                            $(document).ready(function () {
+                                $('#socau6').change(function () {
+                                    var tendachon6 = $("#ItemID_6_ option:selected").text();
+                                    var slsp = parseInt(tendachon6.substring((tendachon6.indexOf('#') + 1), 999));
+                                    var socau = parseInt($('#socau6').val());
+                                    $('#Quantity_6_').val(slsp * socau);
+                                });
+                            });
+                        </script>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label class="control-label">Sản Phẩm</label>
+                            @Html.DropDownListFor(model => model.ItemID[7], slItemID, new { @class = "form-control select2", @style = "width: 99%;" })
+                        </div>
+                        <div class="col-md-2">
+                            <label class="control-label">Số cầu</label>
+                            <input type="number" id="socau7" name="dates" class="form-control">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="control-label">Số lượng</label>
+                            @Html.TextBoxFor(model => model.Quantity[7], new { @class = "form-control", @type = "number", @style = "background: #bbe6c4; font-weight: bold;" })
+                        </div>
+                        <script>
+                            $(document).ready(function () {
+                                $('#socau7').change(function () {
+                                    var tendachon7 = $("#ItemID_7_ option:selected").text();
+                                    var slsp = parseInt(tendachon7.substring((tendachon7.indexOf('#') + 1), 999));
+                                    var socau = parseInt($('#socau7').val());
+                                    $('#Quantity_7_').val(slsp * socau);
+                                });
+                            });
+                        </script>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label class="control-label">Sản Phẩm</label>
+                            @Html.DropDownListFor(model => model.ItemID[8], slItemID, new { @class = "form-control select2", @style = "width: 99%;" })
+                        </div>
+                        <div class="col-md-2">
+                            <label class="control-label">Số cầu</label>
+                            <input type="number" id="socau8" name="dates" class="form-control">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="control-label">Số lượng</label>
+                            @Html.TextBoxFor(model => model.Quantity[8], new { @class = "form-control", @type = "number", @style = "background: #bbe6c4; font-weight: bold;" })
+                        </div>
+                        <script>
+                            $(document).ready(function () {
+                                $('#socau8').change(function () {
+                                    var tendachon8 = $("#ItemID_8_ option:selected").text();
+                                    var slsp = parseInt(tendachon8.substring((tendachon8.indexOf('#') + 1), 999));
+                                    var socau = parseInt($('#socau8').val());
+                                    $('#Quantity_8_').val(slsp * socau);
+                                });
+                            });
+                        </script>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label class="control-label">Sản Phẩm</label>
+                            @Html.DropDownListFor(model => model.ItemID[9], slItemID, new { @class = "form-control select2", @style = "width: 99%;" })
+                        </div>
+                        <div class="col-md-2">
+                            <label class="control-label">Số cầu</label>
+                            <input type="number" id="socau9" name="dates" class="form-control">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="control-label">Số lượng</label>
+                            @Html.TextBoxFor(model => model.Quantity[9], new { @class = "form-control", @type = "number", @style = "background: #bbe6c4; font-weight: bold;" })
+                        </div>
+                        <script>
+                            $(document).ready(function () {
+                                $('#socau9').change(function () {
+                                    var tendachon9 = $("#ItemID_9_ option:selected").text();
+                                    var slsp = parseInt(tendachon9.substring((tendachon9.indexOf('#') + 1), 999));
+                                    var socau = parseInt($('#socau9').val());
+                                    $('#Quantity_9_').val(slsp * socau);
+                                });
+                            });
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary" onclick="openNav()">Lưu thông tin</button>
+        </div>
+
+    }
+
+
+
+
+</div>

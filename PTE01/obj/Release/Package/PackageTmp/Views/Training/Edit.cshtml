@@ -1,0 +1,309 @@
+﻿@model Model.View.FullTraining
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    var listP = (IEnumerable<Model.View.TrainingPlanView2>)ViewBag.listPlan;
+    var kehoach = new List<SelectListItem>();
+    kehoach.Add(new SelectListItem
+    {
+        Text = "Không theo kế hoạch",
+        Value = "NULL",
+        Selected = true
+    });
+    foreach (var item in listP)
+    {
+        kehoach.Add(new SelectListItem
+        {
+            Text = item.ID + "-" + item.NameSub + "-" + item.TeacherName + "-" + item.TimeFrom.ToString("dd/MM/yyyy") + "-" + item.TimeTo.ToString("dd/MM/yyyy"),
+            Value = item.ID.ToString(),
+        });
+    }
+    var listU = (IEnumerable<Model.View.UserView2>)ViewBag.listUser;
+    var nguoinhan = new List<SelectListItem>();
+    nguoinhan.Add(new SelectListItem
+    {
+        Text = "Chọn Người Tham Gia",
+        Value = "none",
+        Selected = true
+    });
+    foreach (var item in listU)
+    {
+        nguoinhan.Add(new SelectListItem
+        {
+            Text = item.FullName,
+            Value = item.UserName,
+        });
+    }
+    var nguoidaotao = new List<SelectListItem>();
+    nguoidaotao.Add(new SelectListItem
+    {
+        Text = "Chọn người đào tạo",
+        Value = "none",
+        Selected = true
+    });
+    foreach (var item in listU)
+    {
+        nguoidaotao.Add(new SelectListItem
+        {
+            Text = item.FullName,
+            Value = item.UserName,
+        });
+    }
+
+    List<SelectListItem> loaidaotao = new List<SelectListItem>();
+    loaidaotao.Add(new SelectListItem
+         {
+             Text = "Nội Bộ",
+             Value = "1",
+             Selected = true
+         });
+    loaidaotao.Add(new SelectListItem
+         {
+             Text = "Bên Ngoài",
+             Value = "2",
+         });
+
+
+}
+@section jsFooter
+{
+<script src="/Scripts/CancelTraining.js"></script>
+<script src="/Scripts/AddUserTraining.js"></script>
+<script src="/Scripts/RemoveUserTraining.js"></script>
+    <script>
+        $(function () {
+
+            $('.select2').select2()
+            $(".date1").datepicker();
+            $(".date2").datepicker();
+        })
+    </script>
+    <script>
+        $(document).ready(function () {
+            if ($('.phonghop').find(":selected").val() == "1")
+            { $(".noidung1").show(); $(".noidung2").hide(); }
+            else
+            { $(".noidung2").show(); $(".noidung1").hide(); }
+            $('.phonghop').on('change', function () {
+                if ($(this).find(":selected").val() == "1")
+                { $(".noidung1").show(); $(".noidung2").hide(); }
+                else
+                { $(".noidung2").show(); $(".noidung1").hide(); $(".noidung1 select").val("none"); }
+            });
+            $('.nguoidaotao').on('change', function () {
+                var temp = $(this).children("option:selected").text();
+                temp = temp.substr(temp.indexOf("-") + 2, 50);
+                $(".teachername").val(temp);
+            });
+        });
+    </script>
+
+
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+
+
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Phiếu Xác Nhận Đào Tạo</h3>
+    </div>
+    @using (Html.BeginForm("Edit", "Training", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="card-body">
+
+            <div class="form-group" style="display:none">
+                <div class='col-md-4'>
+                    <label class="control-label">ID</label>
+                    @Html.TextAreaFor(model => model.item.ID, new { @class = "form-control", })
+                </div>
+            </div>
+            <div class="row">
+                <div class='col-md-2'>
+                    <label class="control-label">Loại đào tạo</label>
+                    @Html.DropDownListFor(model => model.item.Type, loaidaotao, new { @class = "phonghop form-control", })
+                </div>
+                <div class='col-md-4 noidung1'>
+                    <label class="control-label">Người Đào Tạo</label>
+                    @Html.DropDownListFor(model => model.item.TeacherID, nguoidaotao, new { @class = "nguoidaotao form-control select2", @style = "width: 100%;" })
+                </div>
+                <div class='col-md-4 noidung2'>
+                    <label class="control-label">Tên Đơn Vị</label>
+                    @Html.TextBoxFor(model => model.item.TeacherName, new { @class = "teachername form-control", })
+                </div>
+                <div class='col-md-2'>
+                    <label>Ngày bắt đầu:</label>
+                    @*<div class="input-group mb-3">                       
+                        @Html.TextBoxFor(model => model.item.StartDate, new { @class = "date1 form-control", @autocomplete = "off" })
+                        <div class=" input-group-append">
+                            <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                        </div>
+                    </div>*@
+                    <div class="input-group mb-3">
+                        <input autocomplete="off" class="date1 form-control" id="item.StartDate" name="item.StartDate" type="text" value="@if (@Model.item.StartDate != null) {@Model.item.StartDate.Value.ToString("MM/dd/yyyy")}">
+                        <div class=" input-group-append">
+                            <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-md-2'>
+                    <label>Ngày kết thúc:</label>
+                    @*<div class="input-group mb-3">                     
+                        @Html.TextBoxFor(model => model.item.EndDate, new { @class = "date2 form-control", @autocomplete = "off" })
+                        <div class=" input-group-append">
+                            <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                        </div>
+                    </div>*@
+                    <div class="input-group mb-3">
+                        <input autocomplete="off" class="date1 form-control" id="item.EndDate" name="item.EndDate" type="text" value="@if (@Model.item.EndDate != null) {@Model.item.EndDate.Value.ToString("MM/dd/yyyy")}">
+                        <div class=" input-group-append">
+                            <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class='col-md-2'>
+                    <label class="control-label">Số tiếng đào tạo</label>
+                    @Html.TextBoxFor(model => model.item.Time, new { @class = "form-control", @type = "number" })
+                </div>
+            </div>
+            <div class="row">
+                <div class='col-md-6'>
+                    <label class="control-label">Nội dung đào tạo</label>
+                    @Html.TextBoxFor(model => model.item.Name, new { @class = "form-control", @rows = "2", })
+                </div>
+                <div class='col-md-6'>
+                    <label class="control-label">Kế hoạch</label>
+                    @Html.DropDownListFor(model => model.item.PlanID, kehoach, new { @class = "form-control select2", @style = "width: 100%;" })
+                </div>
+            </div>    
+            <div class="row">
+                <div class='col-md-12'>
+                    <label class="control-label">Ghi chú</label>
+                    @Html.TextAreaFor(model => model.item.Note, new { @class = "form-control", @rows = "2", })
+                </div>
+            </div>
+
+            <div class="row" style="padding-top:20px;">
+                <label class="form-control">
+                    Thêm nhân viên được đào tạo:
+                    <button type="button" data-toggle="modal" data-target="#myModaladdU" style="color: red; width: 30px; height: 30px; border-radius: 50%;"><span class="fa fa-plus"></span></button>
+                </label>
+                <table class="table table-striped table-bordered table-hover" id="gvCustomers">
+                    <thead>
+
+                    </thead>
+                    <tbody>
+                        @for (var i = 0; i < Model.detail.Count; i++)
+                        {
+                            foreach (var item in nguoinhan)
+                            {
+                                if (item.Value == Model.detail[@i].IDPer)
+                                {
+                                    item.Selected = true;
+                                }       
+                                else
+                                { item.Selected = false; }                        
+                            }
+                            <tr id="@Model.detail[@i].IDPer" class="clonedInput">
+                                <td width="40px"> <span class="input-group-text btn-removeU" data-id="@Model.item.ID" data-nguoimoi="@Model.detail[i].IDPer" style="border-radius: 50%; border-width: 2px; border-style: outset;"><i class="fa fa-trash" style="color: #F44336;"></i></span></td>
+                                <td> @Html.DropDownListFor(model => model.detail[@i].IDPer, nguoinhan, new { @class = "form-control" })</td>
+                                
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="nutsave btn btn-primary">Lưu thông tin</button>
+            <button type="button" class="btn btn-danger float-right" data-toggle="modal" data-target="#myModalD">Xóa Phiếu </button>
+        </div>
+    }
+</div>
+<form id="myFormAddU" method="post">
+    <div class="modal fade" id="myModaladdU" role="dialog">
+        <div class="modal-dialog" style="max-width: 450px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" style="width: 50px; font-size: 20px;">&times;</button>
+                    <h4 class="modal-title" style="position: absolute;">Thêm nhân viên</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class='col-md-12'>
+                            <select class='form-control select2' id="nguoimoi" name="nguoimoi" style="width:100%">
+                                @foreach (var item in nguoinhan)
+                                {
+                                    <option value="@item.Value">   @item.Text    </option>
+                                }
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+                <script>
+                    $(document).ready(function () {
+
+                        $("#createU").mouseenter(function () {
+                            $('#createU').attr("data-nguoimoi", $('#nguoimoi').val());                        
+                        });
+                        
+                    });
+                </script>
+                <div class="modal-footer">
+                    <a href="#" id="createU" class="btn-createU" data-id="@Model.item.ID" style="background: red;    padding: 7px;  color: white;">Lưu thông tin</a>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</form>
+<form id="myFormD" method="post">
+    <div class="modal fade" id="myModalD" role="dialog">
+        <div class="modal-dialog">
+
+            Modal content
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="float-left"><h4 class="modal-title">Lý do xóa phiếu</h4></span>
+                    <span class="float-right"><button type="button" class="close" data-dismiss="modal" style="width:20px">&times;</button></span>
+                </div>
+                <div class="modal-body">
+                    <input class="form-control" data-val="true" id="lydo" name="lydo" placeholder="điền lý do hủy phiếu " type="text" value="">
+                </div>
+                <script>
+                    $(document).ready(function () {
+                        $("#huyphieu").mouseenter(function () {
+                            var lydos = $('#lydo').val();
+                            var abc = $('#huyphieu').attr("data-lydo", lydos);
+
+                        });
+                    });
+                </script>
+
+                <div class="modal-footer">
+                    <a href="#" id="huyphieu" class="btn-cancel" data-id="@Model.item.ID" style="background: red;    padding: 7px;  color: white;">Hủy Phiếu</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+
+
+
+
+
+
+
+
+
+
+

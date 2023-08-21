@@ -1,0 +1,237 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    DateTime homnay = DateTime.Now;
+    List<Model.EF.WarehouseDetail2> full = ViewBag.full;
+    string ngaythangnam = "ReportXN" + DateTime.Now.ToUniversalTime();
+    List<Model.EF.Warehouse> cWare = ViewBag.cWarehouse;
+
+    List<SelectListItem> listWH = new List<SelectListItem>();
+
+    foreach (var item in cWare)
+    {
+        listWH.Add(new SelectListItem
+        {
+            Text = item.Name,
+            Value = item.ID,
+        });
+    }
+}
+
+@section jsFooter
+{
+
+    <script src="/Assets/theme3/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+    <script>
+        $(function () {
+            $("#ngay1").datepicker();
+            $("#ngay2").datepicker();
+        })
+    </script>
+
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+<div class="card card-primary">
+    <div class="card-header">
+        <a href="~/Warehouse/WMS"><img src="~/Assets/theme3/dist/img/home6.png" style="width: 48px; float: left; margin: -10px 10px -10px -10px; " /></a>     <h3 class="card-title">Bảng kê chi tiết phiếu Nhập Xuất Kho</h3>
+        <div class="card-tools">
+            <div class="btn-group" style="height:37px">
+                <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                    More
+                </button>
+                <div class="dropdown-menu float-right" role="menu">
+                    <a class="dropdown-item" href="/WarehouseTransaction/ViewListTrans" style="color:#000">Danh sách phiếu nhập xuất</a>
+                    <a class="dropdown-item" href="/WarehouseTransaction/ViewDetailTrans" style="color:#000">Bảng kê nhập xuất kho</a>
+                    <a class="dropdown-item" href="/WarehouseTransaction/ViewAmountTrans" style="color:#000">Check tồn kho hiện tại</a>
+                    <a class="dropdown-item" href="/WarehouseTransaction/ViewAmountTrans2" style="color:#000">View tồn kho hiện tại</a>
+                </div>
+               
+            </div>
+
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="callout callout-info">
+                    <label class="control-label" style="color: #FF5722;">Vật tư</label><br>
+                    <input type="text" class="form-control" id="vattu" name="vattu" placeholder="Mã, tên vật tư" />
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="callout callout-info">
+                    <label class="control-label" style="color: #FF5722;">Kho</label><br>
+                    @Html.DropDownList("wh", listWH, new { @class = "form-control select2" })
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="callout callout-info">
+                    <label class="control-label" style="color: #FF5722;">từ ngày</label>
+                    <div class="bootstrap-timepicker">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input type="text" id="ngay1" name="ngay1" class="time1 form-control" readonly="readonly" value="@DateTime.Now.AddDays(-7).ToShortDateString()"><br>
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                  
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="callout callout-info">
+                    <label class="control-label" style="color: #FF5722;">đến ngày</label>                   
+                    <div class="bootstrap-timepicker">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input type="text" id="ngay2" name="ngay2" class="time1 form-control" readonly="readonly" value="@DateTime.Now.ToShortDateString()"><br>
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2 text-center">
+                <div class="form-group">
+                    <a class="btn btn-primary" id="inbaocao">Tìm kiếm</a>
+                </div>
+            </div>
+        </div>
+        <script src="~/Scripts/jquery-1.9.1.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                var vattu = $("#vattu").val();
+                var wh = $("#wh").val();
+                var ngay1 = $('#ngay1').val();
+                var ngay2 = $('#ngay2').val();
+                
+                    $('#inbaocao').attr("href", '/WarehouseTransaction/ViewDetailTrans?wh=' + wh + '&vattu=' + vattu + '&ngay1=' + ngay1 + '&ngay2=' + ngay2);
+             
+
+                $("#inbaocao").focus(function () {
+                    var vattu = $("#vattu").val();
+                    var wh = $("#wh").val();
+                    var ngay1 = $('#ngay1').val();
+                    var ngay2 = $('#ngay2').val();
+                 
+                        $('#inbaocao').attr("href", '/WarehouseTransaction/ViewDetailTrans?wh=' + wh + '&vattu=' + vattu + '&ngay1=' + ngay1 + '&ngay2=' + ngay2);
+                  
+                });              
+
+            });
+
+        </script>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-success card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Kết quả</h3>
+                <div class="card-tools">
+                    <div class="btn-group" style="height:40px">
+                        <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                            Tool
+                        </button>
+                        <div class="dropdown-menu float-right" role="menu">
+                            <span class="dropdown-item" onclick="exportTableToExcel('inputdata', '@ngaythangnam')">Export to Excel</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="card-body">
+                @if (full != null)
+                {
+                    <script>
+                        function exportTableToExcel(tableID, filename) {
+                            var downloadLink;
+                            var dataType = 'application/vnd.ms-excel';
+                            var tableSelect = document.getElementById(tableID);
+                            var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+                            filename = filename ? filename + '.xls' : 'excel_data.xls';
+                            downloadLink = document.createElement("a");
+                            document.body.appendChild(downloadLink);
+                            if (navigator.msSaveOrOpenBlob) {
+                                var blob = new Blob(['\ufeff', tableHTML], {
+                                    type: dataType
+                                });
+                                navigator.msSaveOrOpenBlob(blob, filename);
+                            } else {
+                                downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+                                downloadLink.download = filename;
+                                downloadLink.click();
+                            }
+                        }
+                    </script>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="inputdata">
+                            <thead>
+                                <tr>
+                                    <th>Phiếu</th>
+                                    <th>Loại</th>
+                                    <th>Vị trí</th>
+                                    <th>Mã Item</th>
+                                    <th>Tên Item</th>
+                                    <th>SL</th>
+                                    <th>ĐVT</th>
+                                    <th>Ghi chú</th>
+                                    <th>Người tạo</th>
+                                    <th>Ngày tạo</th>
+                                    <th>Người nhận</th>
+                                    <th>Số Lot</th>
+                                    <th>Số PR</th>
+                                    <th>Số PO</th>
+                                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in full)
+                                {
+
+                                    <tr>
+                                        <td>@item.IDTrans</td>
+                                        <td>
+                                            @if(item.Type==1)
+                                            { <span>Nhập</span>}
+                                            else { <span>Xuất</span>}
+                                        </td>
+                                        <td>@item.IDLocation</td>
+                                        <td>@item.MaterialCode</td>
+                                        <td>@item.MaterialName</td>
+                                        <td>@item.Amount</td>
+                                        <td>@item.MaterialUnit</td>
+                                        <td>@item.Note</td>
+                                        <td>@item.EditBy</td>
+                                        <td>@item.EditDate.ToString("dd/MM/yyyy")</td>
+                                        <td>@item.Reciever</td>
+                                        <td>@item.IDLot</td>
+                                        <td>@item.RelatedNum</td>
+                                        <td>@item.PoNum</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                }
+                else
+                {
+                    <span>chưa có kết quả nào</span>
+                }
+            </div>
+        </div>
+    </div>
+</div>

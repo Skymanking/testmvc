@@ -1,0 +1,238 @@
+﻿@{
+    ViewBag.Title = "ViewAmountTrans";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    DateTime homnay = DateTime.Now;
+    List<Model.EF.WarehouseDetail3> full = ViewBag.full;
+    string ngaythangnam = "ReportXN" + DateTime.Now.ToUniversalTime();
+    List<Model.EF.Warehouse> cWare = ViewBag.cWarehouse;
+
+    List<SelectListItem> listWH = new List<SelectListItem>();
+    List<SelectListItem> Type = new List<SelectListItem>();
+    Type.Add(new SelectListItem
+    {
+        Text = "Tất cả",
+        Value = "0",
+    });
+    Type.Add(new SelectListItem
+    {
+        Text = "Còn hạn",
+        Value = "1",
+    });
+    foreach (var item in cWare)
+    {
+        listWH.Add(new SelectListItem
+        {
+            Text = item.Name,
+            Value = item.ID,
+        });
+    }
+}
+
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+<div class="card card-primary">
+    <div class="card-header">
+        <a href="~/Warehouse/WMS"><img src="~/Assets/theme3/dist/img/home6.png" style="width: 48px; float: left; margin: -10px 10px -10px -10px; " /></a>   <h3 class="card-title">Current Inventory by Location</h3>
+        <div class="card-tools">
+            <div class="btn-group" style="height:37px">
+                <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                    More
+                </button>
+                <div class="dropdown-menu float-right" role="menu">
+                    <a class="dropdown-item" href="/WarehouseTransaction/ViewListTrans" style="color:#000">Danh sách phiếu nhập xuất</a>
+                    <a class="dropdown-item" href="/WarehouseTransaction/ViewDetailTrans" style="color:#000">Bảng kê nhập xuất kho</a>
+                    <a class="dropdown-item" href="/WarehouseTransaction/ViewAmountTrans" style="color:#000">Check tồn kho hiện tại</a>
+                    <a class="dropdown-item" href="/WarehouseTransaction/ViewAmountTrans2" style="color:#000">View tồn kho hiện tại</a>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="callout callout-info">
+                    <label class="control-label" style="color: #FF5722;">Vật tư</label><br>
+                    <input type="text" class="form-control" id="vattu" name="vattu" placeholder="Mã, tên vật tư" />
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="callout callout-info">
+                    <label class="control-label" style="color: #FF5722;">Kho</label><br>
+                    @Html.DropDownList("wh", listWH, new { @class = "form-control select2" })
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="callout callout-info">
+                    <label class="control-label" style="color: #FF5722;">Loại</label><br>
+                    @Html.DropDownList("type", Type, new { @class = "form-control select2" })
+                </div>
+            </div>
+
+            <div class="col-md-2 text-center">
+                <div class="form-group">
+                    <a class="btn btn-primary" id="inbaocao">Tìm kiếm</a>
+                </div>
+            </div>
+        </div>
+        <script src="~/Scripts/jquery-1.9.1.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                var vattu = $("#vattu").val();
+                var wh = $("#wh").val();
+                var type = $(".type option:selected").val();
+                $('#inbaocao').attr("href", '/WarehouseTransaction/ViewAmountTrans?wh=' + wh + '&vattu=' + vattu + '&type=' + type);
+                $("#inbaocao").focus(function () {
+                    var vattu = $("#vattu").val();
+                    var wh = $("#wh").val();
+                    var type = $("#type").val();
+                    $('#inbaocao').attr("href", '/WarehouseTransaction/ViewAmountTrans?wh=' + wh + '&vattu=' + vattu + '&type=' + type);
+                });
+            });
+
+        </script>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-success card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Kết quả</h3>
+                <div class="card-tools">
+                    <div class="btn-group" style="height:40px">
+                        <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                            Tool
+                        </button>
+                        <div class="dropdown-menu float-right" role="menu">
+                            <span class="dropdown-item" onclick="exportTableToExcel('inputdata', '@ngaythangnam')">Export to Excel</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="card-body">
+                @if (full != null)
+                {
+                    <script>
+                        function exportTableToExcel(tableID, filename) {
+                            var downloadLink;
+                            var dataType = 'application/vnd.ms-excel';
+                            var tableSelect = document.getElementById(tableID);
+                            var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+                            filename = filename ? filename + '.xls' : 'excel_data.xls';
+                            downloadLink = document.createElement("a");
+                            document.body.appendChild(downloadLink);
+                            if (navigator.msSaveOrOpenBlob) {
+                                var blob = new Blob(['\ufeff', tableHTML], {
+                                    type: dataType
+                                });
+                                navigator.msSaveOrOpenBlob(blob, filename);
+                            } else {
+                                downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+                                downloadLink.download = filename;
+                                downloadLink.click();
+                            }
+                        }
+                    </script>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Vị trí</th>
+                                    <th>Hình Item</th>
+                                    <th>Mã Item</th>
+                                    <th>Tên Item</th>
+                                    <th>Tồn Kho</th>
+                                    <th>ĐVT</th>
+                                    <th>Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in full)
+                                {
+                                    if (item.Amount > 0)
+                                    {
+                                        <tr>
+                                            <td>@item.IDLocation</td>
+                                            <td>
+                                                @if (item.Img != null && item.Img.Length > 2)
+                                                {
+                                                    <div class="tooltipImage" style="background: url('@item.Img');background-size: 80px;height: 60px;width:80px;border-radius:0;">
+                                                        <span style="width:280px !important; height:210px">
+                                                            <img src="@item.Img" style="width: 250px;">
+                                                        </span>
+                                                    </div>
+                                                }
+                                            </td>
+                                            <td>@item.MaterialCode</td>
+                                            <td>@item.MaterialName</td>
+                                            <td>@item.Amount</td>
+                                            <td>@item.MaterialUnit</td>
+                                            @if (item.Status == "True")
+                                            {
+                                                <td style="background: #a3f9a3;">đang sử dụng</td>
+                                            }
+                                            else
+                                            {
+                                                <td style="background: #f0aeb5;">ngưng sử dụng </td>
+                                            }
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                        <table class="table table-bordered" id="inputdata" style="display:none;">
+                            <thead>
+                                <tr>
+                                    <th>Vị trí</th>
+                                    <th>Mã Item</th>
+                                    <th>Tên Item</th>
+                                    <th>Tồn Kho</th>
+                                    <th>ĐVT</th>
+                                    <th>Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in full)
+                                {
+                                    if (item.Amount > 0)
+                                    {
+                                        <tr>
+                                            <td>@item.IDLocation</td>
+                                            <td>@item.MaterialCode</td>
+                                            <td>@item.MaterialName</td>
+                                            <td>@item.Amount</td>
+                                            <td>@item.MaterialUnit</td>
+                                            @if (item.Status == "True")
+                                            {
+                                                <td> đang sử dụng</td>
+                                            }
+                                            else
+                                            {
+                                                <td>ngưng sử dụng </td>
+                                            }
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                }
+                else
+                {
+                    <span>chưa có kết quả nào</span>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

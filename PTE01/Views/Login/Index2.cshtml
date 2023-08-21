@@ -1,0 +1,69 @@
+﻿
+@{
+    Layout = null;
+}
+@model Model.Code.LoginModels
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>PTE SYSTEM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="/Assets/theme3/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="/Assets/theme3/plugins/iCheck/square/blue.css">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+</head>
+<body class="hold-transition login-page" style="background: rgba(185,0,255,0.5) url('/Assets/theme3/dist/img/bg-01.jpg'); display: flex; flex-wrap: wrap; justify-content: center; align-items: center; padding: 15px; background-repeat: no-repeat; background-size: cover; background-position: center;">
+    <div style=" ">
+        <div class="login-box">
+
+            <div class="card">
+                <div class="card-body login-card-body">
+                    <div class="text-center">
+                        <img src="/Assets/dist/css/logo2.jpg">
+                    </div>
+                    
+                    @using (Html.BeginForm("LoginSX", "Login", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, null, new { @class = "alert alert-danger" })
+
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-credit-card" aria-hidden="true"></i></span>
+                            </div>
+                            @Html.TextBoxFor(model => model.Password, new { @class = "form-control", @placeholder = "quét thẻ nhân viên", @type = "password", @autofocus = "autofocus" })
+                        </div>
+                        <div class="row text-center">
+
+
+                            <button type="submit" class="btn btn-block btn-danger">
+                                Đăng nhập
+                            </button>
+
+
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <script src="/Assets/theme3/plugins/jquery/jquery.min.js"></script>
+        <script src="/Assets/theme3/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="/Assets/theme3/plugins/iCheck/icheck.min.js"></script>
+        <script>
+            $(function () {
+                $('input').iCheck({
+                    checkboxClass: 'icheckbox_square-blue',
+                    radioClass: 'iradio_square-blue',
+                    increaseArea: '20%' // optional
+                })
+            })
+        </script>
+    </div>
+</body>
+</html>
+
+

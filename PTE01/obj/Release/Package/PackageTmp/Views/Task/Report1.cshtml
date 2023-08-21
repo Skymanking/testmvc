@@ -1,0 +1,187 @@
+﻿@model List<Model.View.TaskView1>
+@{
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    int stt = 0;
+    int dunghan = 0; int chuaden = 0; int trehan = 0;
+    string infoUser = ViewBag.infoUser;
+    string ngay1 = ViewBag.ngay1;
+    string ngay2 = ViewBag.ngay2;
+    string status = ViewBag.status;
+    int s0=0,s1=0,s2=0,s3=0,st1=0,st2=0;
+    long temp=0;
+
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
+@*<h2>@Model.ID</h2>*@
+<div class="row">
+    <table>
+        <tbody>
+            <tr id="rowt" style="background:none;">
+                <td class="text-center" style="border:none;"><img class="img-responsive" src="~/Assets/dist/css/logo2.jpg" /> </td>
+                <td class="text-center" style="border:none;"><h3>BÁO CÁO CÔNG VIỆC </h3></td>
+            </tr>
+        </tbody>
+    </table>
+
+
+</div>
+
+<div class="row">
+    <div class='col-md-12'>
+        <label class="control-label">Tên Nhân Viên:<span style="font-weight:normal">@infoUser</span></label>
+        <br>
+        <label class="control-label">Thời gian từ:<span style="font-weight:normal">@ngay1 đến @if(ngay2 != "") {<span>@ngay2</span> }else{<span>deadline xa nhất</span> }</span></label>
+    </div>
+
+</div>
+<div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr style="border: 2px solid #000;">
+                <th style=" border: 2px solid #000;">STT</th>
+                <th style=" border: 2px solid #000;">Nội dung công việc</th>
+                <th style=" border: 2px solid #000;">Deadline</th>
+                <th style=" border: 2px solid #000;">Hoàn thành</th>
+                <th style=" border: 2px solid #000;" width="200px">Tình trạng</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                { stt = stt + 1; }
+                <tr style="height: 70px; border: 2px solid #000;" id="dong_@item.ID">
+                    <td style=" border: 2px solid #000;">@stt</td>
+                    <td style=" border: 2px solid #000;"><b>@item.Subject </b>(người tạo: @item.CreateBy) <br /> @item.Description</td>
+                    <td style=" border: 2px solid #000;">@item.Deadline.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td style=" border: 2px solid #000;">
+
+                        @if (item.FinishDate == null)
+                        {<span>chưa xong</span> }
+                        else
+                        {@item.FinishDate.Value.ToString("dd/MM/yyyy HH:mm")}
+                    </td>
+                    <td style=" border: 2px solid #000;">
+                        @switch (@item.Status)
+                        {
+                            case 0:
+                                <span>Chưa xong + trễ Deadline</span> { s0= s0 + 1; }
+                                break;
+                            case 1:
+                            <span>Chưa xong + chưa đến Deadline</span>{ s1 = s1 + 1; }
+                                break;
+                            case 2:
+                            <span>Đã xong + trễ Deadline</span>{ s2 = s2 + 1; }
+                                break;
+                            case 3:
+                            <span>Đã xong + đúng Deadline</span>{ s3 = s3+ 1; }
+                                break;
+                            case -1:
+                            <span>Nhiện vụ bị hủy</span>{ st1 = st1 + 1; }
+                                break;
+                            case -2:
+                            <span>Nhiện vụ bị từ chối</span>{ st2 = st2 + 1; }
+                                break;
+
+                        }
+                    </td>
+                    <script>
+                    $(document).ready(function () {
+                        switch (@item.Status) {
+                            case 0:
+                                $('#dong_@item.ID').css({ "background-color": "#fdb49d" ,});
+
+                                break;
+                            case 1:
+                                $('#dong_@item.ID').css({ "background-color": "#fbf6cb" });
+                                break;
+                            case 2:
+                                $('#dong_@item.ID').css({ "background-color": "#ceeefd" });
+                                break;
+                            case 3:
+                                $('#dong_@item.ID').css({ "background-color": "#d6f7b1" });
+                                break;
+                            case -1:
+                                $('#dong_@item.ID').css({ "background-color": "#9E9E9E" });
+                                break;
+                            case -2:
+                                $('#dong_@item.ID').css({ "background-color": "#795548" });
+                                break;
+                        }
+                    });
+                    </script>
+                </tr>
+                
+                        
+                        
+                        
+            }
+
+        </tbody>
+    </table>
+
+</div>
+<div class="row">
+    <div class="col-sm-4 col-md-4">
+        @{ temp = 100*s0 / stt; }
+        <div class="info-box">
+            <span class="info-box-icon elevation-1" style="background-color: #fdb49d"><i class="fa fa-gear"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">@s0 / @stt = <strong style="color:red">@temp % </strong></span>
+                <span class="info-box-number">Chưa xong + trễ Deadline</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4 col-md-4">
+        @{ temp = 100 * s1 / stt; }
+        <div class="info-box">
+            <span class="info-box-icon elevation-1" style="background-color: #fbf6cb"><i class="fa fa-gear"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">@s1 / @stt = <strong style="color:red">@temp % </strong></span>
+                <span class="info-box-number">Chưa xong + chưa đến Deadline</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4 col-md-4">
+        @{ temp = 100 * s2 / stt; }
+        <div class="info-box">
+            <span class="info-box-icon elevation-1" style="background-color: #ceeefd"><i class="fa fa-gear"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">@s2 / @stt = <strong style="color:red">@temp % </strong></span>
+                <span class="info-box-number">Đã xong + trễ Deadline</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4 col-md-4">
+        @{ temp = 100 * s3 / stt; }
+        <div class="info-box">
+            <span class="info-box-icon elevation-1" style="background-color: #d6f7b1"><i class="fa fa-gear"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">@s3 / @stt = <strong style="color:red">@temp % </strong></span>
+                <span class="info-box-number">Đã xong + đúng Deadline</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4 col-md-4">
+        @{ temp = 100 * st1 / stt; }
+        <div class="info-box">
+            <span class="info-box-icon elevation-1" style="background-color: #9E9E9E"><i class="fa fa-gear"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">@st1 / @stt = <strong style="color:red">@temp % </strong></span>
+                <span class="info-box-number">Nhiện vụ bị hủy</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4 col-md-4">
+        @{ temp = 100 * st2 / stt; }
+        <div class="info-box">
+            <span class="info-box-icon elevation-1" style="background-color: #795548"><i class="fa fa-gear"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">@st2 / @stt = <strong style="color:red">@temp % </strong></span>
+                <span class="info-box-number">Nhiện vụ bị từ chối</span>
+            </div>
+        </div>
+    </div>
+    
+</div>

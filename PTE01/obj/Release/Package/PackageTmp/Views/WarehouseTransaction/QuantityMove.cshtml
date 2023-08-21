@@ -1,0 +1,261 @@
+﻿@model Model.EF.FullWareHouse
+@{
+    ViewBag.Title = "QuantityMove";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    var listW = (List<Model.EF.Warehouse>)ViewBag.ListW;
+    var i = 0;
+    List<SelectListItem> listVT = new List<SelectListItem>();
+    List<SelectListItem> listLocation = new List<SelectListItem>();
+    var kho = new List<SelectListItem>();
+    listLocation.Add(new SelectListItem
+    {
+        Text = "Chưa chọn",
+        Value = "Null",
+    }); ;
+    foreach (var item in listW)
+    {
+
+        kho.Add(new SelectListItem
+        {
+            Text = item.Name,
+            Value = item.ID.ToString(),
+        });
+    }
+    List<Model.View.Dropdownlist2> cUser = ViewBag.cUser;
+    List<SelectListItem> listUser = new List<SelectListItem>();
+    listUser.Add(new SelectListItem
+    {
+        Text = "chưa chọn",
+        Value = "",
+    });
+    foreach (var item in cUser)
+    {
+        listUser.Add(new SelectListItem
+        {
+            Text = item.Name,
+            Value = item.ID,
+        });
+    }
+}
+@section jsFooter
+{
+    <script src="/Assets/theme3/plugins/ionslider/ion.rangeSlider.min.js"></script>
+    <script src="/Assets/plugin/ckfinder/ckfinder.js"></script>
+    <script src="/Assets/theme3/plugins/datepicker/js/bootstrap-datetimepicker.js"></script>
+    <script src="/Assets/theme3/plugins/datepicker/js/locales/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
+    <!-- Bootstrap slider -->
+    <script src="/Assets/theme3/plugins/bootstrap-slider/bootstrap-slider.js"></script>
+    <script>
+        $(function () {
+            $('.form_datetime').datetimepicker({
+                format: 'mm/dd/yyyy hh:ii',
+                todayBtn: 1,
+                autoclose: 1,
+                todayHighlight: 1,
+                startDate: new Date,
+            });
+            $('.select2').select2()
+        })
+    </script>
+    <script src="~/Scripts/CreateChecklistItem.js"></script>
+    <script>
+        $(function () {
+            $('input[type="checkbox"].flat-green, input[type="radio"].flat-green').iCheck({
+                checkboxClass: 'icheckbox_flat-green',
+                radioClass: 'iradio_flat-green'
+            })
+            $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+                checkboxClass: 'icheckbox_flat-red',
+                radioClass: 'iradio_flat-red'
+            })
+        })
+    </script>
+    <style>
+        input, label {
+            vertical-align: middle;
+        }
+
+        .qrcode-text {
+            padding-right: 1.7em;
+            margin-right: 0;
+            width: 95%;
+        }
+
+        .qrcode-text-btn {
+            display: inline-block;
+            background: url(/Assets/theme3/dist/img/qr_icon.svg) 50% 50% no-repeat;
+            height: 30px;
+            width: 30px;
+            margin-left: -40px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+            .qrcode-text-btn > input[type=file] {
+                position: absolute;
+                overflow: hidden;
+                width: 1px;
+                height: 1px;
+                opacity: 0;
+            }
+    </style>
+    @*<script src="/Scripts/FindNameQRCode.js"></script>*@
+    <script src="~/Scripts/QuantityMove.js"></script>
+    @*<script src="/Scripts/FindNameLocation.js"></script>*@
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/instascan.min.js"></script>
+<div class="card card-primary">
+    <div class="card-header">
+        <a href="~/Warehouse/WMS"><img src="~/Assets/theme3/dist/img/home6.png" style="width: 48px; float: left; margin: -10px 10px -10px -10px; " /></a>    <h3 class="card-title">Tạo Mới Phiếu Nhập/Xuất Vật Tư</h3>
+    </div>
+    @using (Html.BeginForm("QuantityMove", "WarehouseTransaction", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <label class="control-label col-md-12">Reason</label>
+                    @Html.TextBoxFor(model => model.item.Name, new { @class = "form-control", @ID = "name" })
+                </div>
+                <div class="col-md-3 col-6">
+                    <label>Date</label>
+                    <div class="input-group date form_datetime" data-link-field="item.LimitedDate">
+                        <input class="form-control" id="item_LimitedDate" name="item.LimitedDate" type="text" value="@DateTime.Now.Date" readonly>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                        </div>
+                    </div>
+                    <input type="hidden" id="item_LimitedDate" name="item.LimitedDate" value="@DateTime.Now" /><br />
+                </div>
+                <div class="col-md-3 col-6">
+                    <label class="control-label col-md-12">Warehouse<span style="font-weight:bold;color:red">*</span></label>
+                    <div class="form-group">
+                        @Html.DropDownListFor(model => model.item.IDWH, kho, new { @class = "form-control select2", @style = "width: 100%;", @ID = "kho" })
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="form-group">
+                        <label class="control-label col-md-12">Từ<span style="font-weight:bold;color:red">*</span></label>
+                        <select class="form-control" id="Location1" name="Location1">
+                            <option value="">Chưa chọn</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="form-group">
+                        <label class="control-label col-md-12">Đến<span style="font-weight:bold;color:red">*</span></label>
+                        <select class="form-control" id="Location2" name="Location2">
+                            <option value="">Chưa chọn</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-6">
+                    <div class="form-group">
+                        <label class="control-label" style="color: #FF5722;">Receiver</label><br>
+                        @Html.DropDownListFor(model => model.item.Receiver, listUser, new { @class = "form-control select2" })
+                    </div>
+                </div>
+                <div class="col-md-6 col-12">
+                    <div class="row" style="padding-left:10px;">
+                        <label class="control-label">Scan QR code</label>
+                        <input id="tenvt" style="background: #f798c4" type=text size=16 class="qrcode-text form-control change" \\>
+                        <label class=qrcode-text-btn>
+                            <input type=file accept=" image />*" capture=environment onchange="openQRCamera2(this);" tabindex=-1 class="form-control">
+                        </label>
+                    </div>
+                </div>
+                <div class=" col-md-12 col-12" @*style="display: none;"*@>
+                    <div class='input-group'>
+                        <div class="input-group-append btnFindVT" id="btnFindVT" style="display:none">
+                            <span class="btn btn-default" style="color:red"><i class="fa fa-search" style="font-size:28px"></i></span>
+                        </div>
+                        <textarea id="abc" class="form-control" rows="2" readonly></textarea>
+                        @*@Html.DropDownList("abc", listVT, new { @class = "form-control" })*@
+                        <div class="input-group-append" id="btnAddVT" style="display:none">
+                            <span class="btn btn-default" style="color:blue"><i class="fa fa-cart-plus" style="font-size:28px"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            $(document).ready(function () {
+                $(window).keydown(function (event) {
+                    if (event.keyCode == 13) {
+                        event.preventDefault();
+                        return false;
+                    }
+                });
+            });
+        </script>
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover" id="gvCustomers">
+                    <thead>
+                        <tr>
+                            <th>Delete</th>
+                            <th style="">
+                                Info <i id="refresh" class="fa fa-refresh" style="font-size: 28px; float: right; color: #28a745;"></i>
+                            </th>
+                            <th style="min-width: 400px; width: 400px;">Note</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody></tbody>
+                </table>
+                <script>
+                    var count = $('#gvCustomers tr').length - 1;
+                    var Namelocation = "";
+                    $(document).ready(function () {
+                        function addRowVT() {
+                            const myArray = $("#abc").val().split(":");
+                            var location = $("#location").val();
+                            var max = parseInt(myArray[1]);
+                            if ($("#abc").val() != null && (location != "" && $("#abc").val().length > 4)) {
+
+                                var html =
+                                    '<tr id="dong_' + (count + 1) + '">' +
+                                    '<td> <button type="button" data-sodong="' + (count + 1) + '" class="xoadongR"style="color: red; width: 30px; height: 30px; border-radius: 50%;"><span class="fa fa-trash"></span></button></td>' +
+                                    '<td> <input class="form-control" data-val="true" style="width:130px;float:left;" readonly = "true" id="detail_' + count + '__MaterialCode" name="detail[' + count + '].MaterialCode" type="text" value="' + myArray[0] + '">' +
+                                    '<input class="form-control" data-val="true" style="width:100px;float:left; background:#f798c4"type="number" id="detail_' + count + '__Amount" name="detail[' + count + '].Amount" placeholder="số lượng" type="number" value="1" min ="1">' +
+                                    '<input class="form-control" data-val="true" style="width:70px;float:left;" readonly = "true" id="detail_' + count + '__MaterialUnit" name="detail[' + count + '].MaterialUnit" type="text" value="' + myArray[2] + '">' +
+                                    '<input class="form-control" data-val="true"  style="width:300px;float:left;" readonly = "true" id="detail_' + count + '__MaterialName" name="detail[' + count + '].MaterialName"  type="text" value="' + myArray[1] + '">' +
+                                    ' <div style=" width: 300px; float: left;">' +
+                                    ' <div class ="row" style="padding-left: 10px;">' +
+                                    '  <input id="detail_' + count + ' _IDLocation" name="detail[' + count + '].IDLocation" style="background:#f798c4" type=text size=16 placeholder="quét QR vị trí" class="qrcode-text qrcode2 form-control change" \\>' +
+                                    ' <label class=qrcode-text-btn><input type=file accept=" image />*" capture=environment onchange="openQRCamera(this);" tabindex=-1 class="form-control"></label>' +
+                                    '</div>' +
+                                    ' </div>' +
+                                    '<td><input class="form-control style="width:300px;float:left;" id="detail_' + count + '__Note" name="detail[' + count + '].Note"  placeholder="ghi chú" type="text" ></td>' +
+                                    '</tr>'
+                                count = count + 1;
+                                $(html).appendTo($("#gvCustomers"))
+                            }
+                        };
+                        $("#btnAddVT").click(addRowVT);
+
+                        $('.table tbody').on('click', '.xoadongR', function () {
+
+                            var sodong = $(this).attr("data-sodong") - 1;
+                            $('#detail_' + sodong + '__ItemID').attr("value", "");
+                            $(this).closest('tr').hide();
+                        });
+                    });
+                </script>
+            </div>
+
+        </div>
+        <div class="datcom d-flex justify-content-center" @*style="display:none"*@>
+            <button type="submit" class="btn btn-primary" id="luulai">Lưu thông tin</button>
+            <span id="fileinput" style="display:none"></span>
+        </div>
+    }
+</div>
+<script src="~/Scripts/qr_packed.js"></script>
+

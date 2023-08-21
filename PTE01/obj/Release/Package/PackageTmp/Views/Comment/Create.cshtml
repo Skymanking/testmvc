@@ -1,0 +1,66 @@
+﻿@model Model.EF.Comment
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Theme1.cshtml";
+}
+<div class="row">
+    @using (Html.BeginForm("Create", "Comment", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <!-- Cot ben trai -->
+        <div class="col-md-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    Thông Tin Phản Ánh / Góp Ý Lên Ban Giám Đốc
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class='col-md-12'>
+                                    <label class="control-label">Thông tin liên hệ</label>
+                                    @Html.TextBoxFor(model => model.Subject, new { @class = "form-control", @placeholder = "họ tên + số điện thoại" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class='col-md-12'>
+                                    <label class="control-label">Nội Dung</label>
+                                    @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @placeholder = "chi tiết nội dung cần phản ánh / góp ý", @rows="9" })
+                                </div>
+                            </div>                          
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!--------------------------fd-------End------------------------------------>
+
+        <div class="form-group">
+            <div class="col-md-4">
+                <input type="submit" value="Lưu Lại" class="btn btn-primary" />
+            </div>
+        </div>
+        <br>
+        <br>
+
+    }
+</div>
+
+
+
+<p></p>
+<p></p>
+<p></p>
+
+
+
+
+<div>
+    @Html.ActionLink("Quay về danh sách", "Index")
+</div>
+
+

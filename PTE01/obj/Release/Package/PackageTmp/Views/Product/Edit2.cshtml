@@ -1,0 +1,209 @@
+﻿@model Model.EF.Product
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+}
+@section jsFooter
+{
+    <script src="/Assets/plugin/ckfinder/ckfinder.js"></script>
+    <script>
+        $(function () {
+            $('.select2').select2()
+        })
+    </script>
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+@using (Html.BeginForm("Edit2", "Product", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="row">
+
+        <div class="col-md-6">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title"> Hình Sản Phẩm</h3>
+                </div>
+                <div class="card-body">
+                    @if (Model.InfoB9 != null && Model.InfoB9.Count() > 5)
+                    {  <img src="@Model.InfoB9" class="img-rounded" alt="Cinque Terre" width="100%" height="auto">}
+                    else
+                    {
+                        <img src="../../../Assets/dist/css/no_image.jpg" class="img-rounded" alt="Cinque Terre" width="100%" height="auto">
+                    }
+                </div>
+            </div>
+
+        </div>
+        <!-- Cot ben trai -->
+        <div class="col-md-6">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title"> Thông Tin Sản Phẩm Cơ Bản - Kế Toán</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+
+                        <div class='col-md-4'>
+                            <label class="control-label">Mã ERP 2019</label>
+                            @Html.TextBoxFor(model => model.ID, new { @class = "form-control", @readonly = "true" })
+                        </div>
+                        <div class='col-md-8'>
+                            <label class="control-label">Tên Sản Phẩm</label>
+                            @Html.TextBoxFor(model => model.Name, new { @class = "form-control", @placeholder = "bắt buộc điền", @style = "background: #f9d7d4;" })
+                        </div>
+                        <div class='col-md-6'>
+                            <label class="control-label" data-toggle="tooltip" title="modify by: @Model.ModifyBy - @Model.ModifyDate.ToString()">Mã Cũ Sản Phẩm</label>
+                            @Html.TextBoxFor(model => model.Code1, null, new { @class = "form-control" })
+                        </div>
+                        <div class='col-md-6'>
+                            <label class="control-label">Mã SP của Khách</label>
+                            @Html.TextBoxFor(model => model.Code2, new { @class = "form-control" })
+                        </div>
+                        <div class='col-md-4'>
+                            <label class="control-label">Loại Sản Phẩm</label>
+                            @Html.DropDownListFor(model => model.IDType, null, new { @class = "form-control" })
+                        </div>
+
+                        <div class='col-md-8'>
+                            <label class="control-label">Khách Hàng</label>
+                            @Html.DropDownListFor(model => model.IDCus, null, new { @class = "form-control select2" })
+                        </div>
+                        <div class='col-md-12'>
+                            <label class="control-label">Ghi chú</label>
+                            @Html.TextAreaFor(model => model.Note, new { @class = "form-control", @rows = "5" })
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Lưu thông tin</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card card-danger">
+                <div class="card-header">
+                    Thông Tin Kỹ Thuật Ép Nhựa
+                </div>
+                <div class="card-body">
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class='col-md-6'>
+                                    <label class="control-label" data-toggle="tooltip" title="modify by: @Model.InfoAC1 - @if(@Model.InfoAD1!= null) {@Model.InfoAD1.Value.ToString()}">Trọng lượng đuôi keo(gram)</label>
+                                    @Html.TextBoxFor(model => model.InfoA1, new { @class = "form-control", @type = "number", @step = "0.000001", @min = "0", @max = "1000000" })
+                                </div>
+                                <div class='col-md-6'>
+                                    <label class="control-label" data-toggle="tooltip" title="modify by: @Model.InfoAC2 - @if(@Model.InfoAD2!= null) {@Model.InfoAD2.Value.ToString()}">Trọng lượng Sản phẩm(gram)</label>
+                                    @Html.TextBoxFor(model => model.InfoA2, null, new { @class = "form-control", @type = "number", @step = "0.000001", @min = "0", @max = "1000000" })
+                                </div>
+                                <div class='col-md-6'>
+                                    <label class="control-label" data-toggle="tooltip" title="modify by: @Model.InfoAC3 - @if(@Model.InfoAD3!= null) {@Model.InfoAD3.Value.ToString()}">Thời gian xử lý nguội</label>
+                                    @Html.TextBoxFor(model => model.InfoA3, null, new { @class = "form-control", @type = "number", @step = "0.000001", @min = "0", @max = "1000000" })
+                                </div>
+                                <div class='col-md-6'>
+                                    <label class="control-label" data-toggle="tooltip" title="modify by: @Model.InfoAC4 - @if(@Model.InfoAD4!= null) {@Model.InfoAD4.Value.ToString()}">Tỉ lệ % đạt khi xử lý nguội</label>
+                                    @Html.TextBoxFor(model => model.InfoA4, null, new { @class = "form-control", @type = "number", @step = "0.000001", @min = "0", @max = "100" })
+                                </div>
+                                <div class='col-md-6'>
+                                    <label class="control-label" data-toggle="tooltip" title="modify by: @Model.InfoAC5 - @if(@Model.InfoAD5!= null) {@Model.InfoAD5.Value.ToString()}">Thời gian thay khuôn</label>
+                                    @Html.TextBoxFor(model => model.InfoA5, null, new { @class = "form-control", @type = "number", @step = "0.000001", @min = "0", @max = "100" })
+                                </div>
+                                <div class='col-md-6'>
+                                    <label class="control-label" data-toggle="tooltip" title="modify by: @Model.InfoBC1 - @if(@Model.InfoBD1!= null) {@Model.InfoBD1.Value.ToString()}">Loại nhựa có thể ép</label>
+                                    @Html.TextBoxFor(model => model.InfoB1, null, new { @class = "form-control" })
+                                </div>
+                                <div class='col-md-12'>
+                                    <label class="control-label" data-toggle="tooltip" title="modify by: @Model.InfoBC2 - @if(@Model.InfoBD2!= null) {@Model.InfoBD2.Value.ToString()}">Loại máy có thể ép</label>
+                                    @Html.TextBoxFor(model => model.InfoB2, null, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class='col-md-12'>
+                                    <label class="control-label" data-toggle="tooltip" title="modify by: @Model.InfoBC3 - @if(@Model.InfoBD3!= null) {@Model.InfoBD3.Value.ToString()}">Ghi chú</label>
+                                    @Html.TextAreaFor(model => model.InfoB3, new { @class = "form-control", @rows = "5" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Lưu thông tin</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card card-success">
+                <div class="card-header">
+                    Thông Tin Kiểm, Đóng thùng - QA / QC
+                </div>
+                <div class="card-body">
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class='col-md-6'>
+                                    <label class="control-label" data-toggle="tooltip" title="modify by: @Model.InfoAC11 - @if(@Model.InfoAD11!= null) {@Model.InfoAD11.Value.ToString()}">Tỉ lệ % SP Đạt</label>
+                                    @Html.TextBoxFor(model => model.InfoA11, new { @class = "form-control", @type = "number", @step = "0.000001", @min = "0", @max = "100" })
+                                </div>
+                                <div class='col-md-6'>
+                                    <label class="control-label" data-toggle="tooltip" title="modify by: @Model.InfoAC12 - @if(@Model.InfoAD12!= null) {@Model.InfoAD12.Value.ToString()}">Hệ Số quy đổi</label>
+                                    @Html.TextBoxFor(model => model.InfoA12, new { @class = "form-control", @type = "number", @step = "0.000001", @min = "0", @max = "1000000" })
+                                </div>
+                                <div class='col-md-6'>
+                                    <label class="control-label" data-toggle="tooltip" title="modify by: @Model.InfoAC13 - @if(@Model.InfoAD13!= null) {@Model.InfoAD13.Value.ToString()}">SL SP /1 thùng</label>
+                                    @Html.TextBoxFor(model => model.InfoA13, null, new { @class = "form-control", @type = "number", @step = "1", @min = "1", @max = "1000000" })
+                                </div>
+                                <div class='col-md-6'>
+                                    <label class="control-label" data-toggle="tooltip" title="modify by: @Model.InfoAC14 - @if(@Model.InfoAD14!= null) {@Model.InfoAD14.Value.ToString()}">Thời gian QC/QA 1SP </label>
+                                    @Html.TextBoxFor(model => model.InfoA14, new { @class = "form-control", @type = "number", @step = "0.000001", @min = "0", @max = "1000000" })
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class='col-md-12'>
+                                    <label class="control-label" data-toggle="tooltip" title="modify by: @Model.InfoBC9 - @if(@Model.InfoBD9!= null) {@Model.InfoBD9.Value.ToString()}">Hình SP</label>
+                                    <div class='input-group'>
+                                        @Html.TextBoxFor(model => model.InfoB9, new { @class = "form-control", @style = "background: #f9d7d4;", @placeholder = "kích thước hình tối đa 1000px x 1000px" })
+                                        <div class=" input-group-append">
+                                            <span class="input-group-text">
+                                                <a id="btnSelectImage" href="#"><span class="fa fa-image"></span></a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <script>
+                                    $('#btnSelectImage').on('click', function (e) {
+                                        e.preventDefault();
+                                        var finder = new CKFinder();
+                                        finder.selectActionFunction = function (url) {
+                                            $('#InfoB9').val(url);
+                                            $('#btnViewFile').attr("href", $('#InfoB9').val());
+                                        };
+                                        finder.popup();
+                                    })
+                                </script>
+                                <div class='col-md-12'>
+                                    <label class="control-label" data-toggle="tooltip" title="modify by: @Model.InfoBC10 - @if(@Model.InfoBD10!= null) {@Model.InfoBD10.Value.ToString()}">Ghi chú</label>
+                                    @Html.TextAreaFor(model => model.InfoB10, new { @class = "form-control", @rows = "5" })
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Lưu thông tin</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+}
+

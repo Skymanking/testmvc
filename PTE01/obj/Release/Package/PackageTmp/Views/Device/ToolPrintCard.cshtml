@@ -1,0 +1,142 @@
+﻿@model Model.View.FullPTB
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    var i = 0;
+    List<Model.EF3.SI_Items> listT = ViewBag.listtemp;
+    List<SelectListItem> listVT = new List<SelectListItem>();
+    //listVT.Add(new SelectListItem
+    //{
+    //    Text = "tên vật tư",
+    //    Value = "chưa có mã",
+    //    Selected = true
+    //});
+
+
+}
+@section jsFooter
+{
+
+    <script>
+        $(function () {
+            $('.select2').select2()
+
+        })
+    </script>
+
+    <script src="/Scripts/FindNameDevice.js"></script>
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
+<div class="row">
+    <div class="col-6">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Tìm Thiết bị</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <label class="control-label">Tìm Thiết bị</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control tenvt" id="tenvt" placeholder="tìm theo id, tên, model, code">
+                            <div class="input-group-append btnFindNV" id="btnFindNV">
+                                <span class="btn btn-default"><i class="fa fa-search"></i></span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class=" col-12">
+                        <label class="control-label">Chọn thiết bị cần in thẻ</label>
+                        <div class='input-group'>
+                            @Html.DropDownList("abc", listVT, new { @class = "form-control" })
+                            <div class="input-group-append" id="btnAddVT">
+                                <span class="btn btn-default"><i class="fa fa-cart-plus"></i></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        $(document).ready(function () {
+                            $(window).keydown(function (event) {
+                                if (event.keyCode == 13) {
+                                    event.preventDefault();
+                                    return false;
+                                }
+                            });
+                        });
+                    </script>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="card card-success">
+            <div class="card-header">
+                <h3 class="card-title">In Thẻ Thiết bị</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="table-responsive">
+                        @using (Html.BeginForm("PrintCard", "Device", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <table class="table table-striped table-bordered table-hover" id="gvCustomers">
+                                <thead>
+                                    <tr>
+                                        <th style="min-width: 60px;width: 60px;">Xóa </th>
+                                        <th style="width: 100px;">Mã TB</th>
+                                        <th>Thông tin</th>
+
+                                    </tr>
+                                </thead>
+
+                                <tbody></tbody>
+                            </table>
+
+                            <button type="submit" class="btn btn-primary" id="luulai">View Card</button>
+                        }
+
+                        <script>
+                            var count = $('#gvCustomers tr').length - 1;
+                            $(document).ready(function () {
+
+
+                                function addRowVT() {
+                                    if ($("#abc").val() != null) {
+                                        var html =
+                                        '<tr id="dong_' + (count + 1) + '">' +
+                                        '<td> <button type="button" data-sodong="' + (count + 1) + '" class="xoadongR"style="color: red; width: 30px; height: 30px; border-radius: 50%;"><span class="fa fa-trash"></span></button></td>' +
+                                        '<td> <input class="form-control"  readonly = "true" id="chuoi_' + count + '" name="chuoi[' + count + ']"  type="text" value="' + $("#abc").val() + '">' +
+                                        '<td><input class="form-control"  readonly = "true" type="text" value="' + $("#abc option:selected").text() + '"></td>' +
+
+                                         '</tr>'
+                                        count = count + 1;
+                                        $(html).appendTo($("#gvCustomers"))
+                                    }
+                                };
+                                $("#btnAddVT").click(addRowVT);
+
+                                $('.table tbody').on('click', '.xoadongR', function () {
+
+                                    var sodong = $(this).attr("data-sodong");
+                                    $('#detail_' + sodong + '__ItemID').attr("value", "");
+                                    $(this).closest('tr').hide();
+                                });
+                            });
+                        </script>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+
+

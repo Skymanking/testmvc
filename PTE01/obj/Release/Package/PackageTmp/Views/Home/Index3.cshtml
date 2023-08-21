@@ -1,0 +1,348 @@
+﻿@{
+    ViewBag.Title = "Index3";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    Model.View.PerProfile profile= ViewBag.perProfile;
+    List<Model.View.Personal2> listPerBir = ViewBag.perBirthday;
+    List<Model.View.ProposalLeave1> listPerOff = ViewBag.perOffline;
+}
+@section jsFooter
+{
+    <script src="/Scripts/ChangePasswordUser.js"></script>
+}
+<script src="~/Scripts/jquery-1.9.1.min.js"></script>
+<div  style="min-height: 831px;">
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                @*<div class="col-md-3">
+
+                    <!-- Profile Image -->
+                    <div class="card card-primary card-outline">
+                        <div class="card-body box-profile">
+                            <div class="text-center">
+                                <img class="profile-user-img img-fluid img-circle" src="/Assets/theme3/dist/img/user.png" alt="User profile picture">
+                            </div>
+
+                            <h3 class="profile-username text-center">@profile.Name</h3>
+
+                            <p class="text-muted text-center">@profile.Position <span style="color:blue;font-weight:bold;">(Nhóm PL @profile.GroupID2)</span></p>
+
+                            <ul class="list-group list-group-unbordered mb-3">
+                                <li class="list-group-item">
+                                    <b>Mã nhân viên</b> <a class="float-right">@profile.MaNV</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Phép năm đầu tháng</b> <a class="float-right">@profile.AllowedYear</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Ngày sinh</b> <a class="float-right">@profile.Birthday</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Số CMND</b> <a class="float-right">@profile.CMND</a>
+                                </li>
+                            </ul>
+                            <a href="#" class="btn btn-primary btn-block" data-toggle="modal" data-target="#myModalCancel"><b>Change Password</b></a>
+                           
+                           
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                    <!-- About Me Box -->
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">About Me</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <strong><i class="fa fa-book mr-1"></i> Học Vấn</strong>
+                            <p class="text-muted">@profile.AcademicLevel</p>
+                            <hr>   
+                            <strong><i class="fa fa-book mr-1"></i> Chuyên ngành</strong>
+                            <p class="text-muted">@profile.Specialize</p>
+                            <hr>   
+                            <strong><i class="fa fa-book mr-1"></i> Ngày vào làm</strong>
+                            <p class="text-muted">@profile.StartDate</p>
+                            <hr>  
+                            <strong><i class="fa fa-book mr-1"></i> Mã số thuế</strong>
+                            <p class="text-muted">@profile.TaxCode</p>
+                            <hr>  
+                            <strong><i class="fa fa-book mr-1"></i> Số sổ BHXH</strong>
+                            <p class="text-muted">@profile.BHXHCode</p>
+                            <hr>  
+
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>*@
+                <!-- /.col -->
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header p-2">
+                            <ul class="nav nav-pills">
+                                <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Quick Action</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Quick Info</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Setting</a></li>
+                            </ul>
+                        </div><!-- /.card-header -->
+                        <div class="card-body">
+                            <div class="tab-content">
+                                <div class="active tab-pane" id="activity">
+                                    <!-- Post -->
+                                    <div class="row">
+                                        <div class="col-6 col-sm-4 col-md-2">
+                                            <a href="/ProposalToBuy/Create1">
+                                                <span class="mailbox-attachment-icon has-img"><img src="~/Assets/theme3/dist/img/muavattu.jpg" alt="Attachment"></span>
+                                                <div class="mailbox-attachment-info" style="background:#fff">
+                                                    <span class="mailbox-attachment-name"><i class="fa fa-plus" style="color:red"></i> Tạo yêu cầu mua vật tư</span>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col-6 col-sm-4 col-md-2">
+                                            <a href="/Meeting/Create">
+                                                <span class="mailbox-attachment-icon has-img"><img src="~/Assets/theme3/dist/img/phonghop.jpg" alt="Attachment"></span>
+                                                <div class="mailbox-attachment-info" style="background:#fff">
+                                                    <span class="mailbox-attachment-name"><i class="fa fa-plus" style="color:red"></i> Đặt lịch phòng họp</span>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col-6 col-sm-4 col-md-2">
+                                            <a href="/Task/Create">
+                                                <span class="mailbox-attachment-icon has-img"><img src="~/Assets/theme3/dist/img/nhiemvu.jpg" alt="Attachment"></span>
+                                                <div class="mailbox-attachment-info" style="background:#fff">
+                                                    <span class="mailbox-attachment-name"><i class="fa fa-plus" style="color:red"></i> Tạo nhiệm vụ - công việc</span>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col-6 col-sm-4 col-md-2">
+                                            <a href="/ProposalLeave/Create">
+                                                <span class="mailbox-attachment-icon has-img"><img src="~/Assets/theme3/dist/img/nghiphep.jpg" alt="Attachment"></span>
+                                                <div class="mailbox-attachment-info" style="background:#fff">
+                                                    <span class="mailbox-attachment-name"><i class="fa fa-plus" style="color:red"></i> Tạo xin nghỉ phép</span>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col-6 col-sm-4 col-md-2">
+                                            <a href="/FixRequest/Create">
+                                                <span class="mailbox-attachment-icon has-img"><img src="~/Assets/theme3/dist/img/suachua.jpg" alt="Attachment"></span>
+                                                <div class="mailbox-attachment-info" style="background:#fff">
+                                                    <span class="mailbox-attachment-name"><i class="fa fa-plus" style="color:red"></i> Tạo yêu cầu sửa chữa</span>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col-6 col-sm-4 col-md-2">
+                                            <a href="/Comment/Create">
+                                                <span class="mailbox-attachment-icon has-img"><img src="~/Assets/theme3/dist/img/gopy.jpg" alt="Attachment"></span>
+                                                <div class="mailbox-attachment-info" style="background:#fff">
+                                                    <span class="mailbox-attachment-name"><i class="fa fa-plus" style="color:red"></i> Phản ánh - góp ý</span>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        
+                                        <div class="col-6 col-sm-4 col-md-2">
+                                            <a href="/ProposalToBuy/index">
+                                                <span class="mailbox-attachment-icon has-img"><img src="~/Assets/theme3/dist/img/vattu1.jpg" alt="Attachment"></span>
+                                                <div class="mailbox-attachment-info" style="background:#fff">
+                                                    <span class="mailbox-attachment-name"><i class="fa fa-shopping-cart" style="color:red"></i>Vật tư đang chờ duyệt</span>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col-6 col-sm-4 col-md-2">
+                                            <a href="/ProposalToBuy/buy">
+                                                <span class="mailbox-attachment-icon has-img"><img src="~/Assets/theme3/dist/img/vattu2.png" alt="Attachment"></span>
+                                                <div class="mailbox-attachment-info" style="background:#fff">
+                                                    <span class="mailbox-attachment-name"><i class="fa fa-shopping-cart" style="color:red"></i> Vật tư đã duyệt</span>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col-6 col-sm-4 col-md-2">
+                                            <a href="/Document/Index">
+                                                <span class="mailbox-attachment-icon has-img"><img src="~/Assets/theme3/dist/img/tailieu.jpg" alt="Attachment"></span>
+                                                <div class="mailbox-attachment-info" style="background:#fff">
+                                                    <span class="mailbox-attachment-name"><i class="fa fa-graduation-cap" style="color:red"></i> Tài liệu</span>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col-6 col-sm-4 col-md-2">
+                                            <a href="/TestQuestion/Index">
+                                                <span class="mailbox-attachment-icon has-img"><img src="~/Assets/theme3/dist/img/tracnghiem.jpg" alt="Attachment"></span>
+                                                <div class="mailbox-attachment-info" style="background:#fff">
+                                                    <span class="mailbox-attachment-name"><i class="fa fa-graduation-cap" style="color:red"></i> Trắc nghiệm</span>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col-6 col-sm-4 col-md-2">
+                                            <a href="/Dictionary/Index2">
+                                                <span class="mailbox-attachment-icon has-img"><img src="~/Assets/theme3/dist/img/tuvung.jpg" alt="Attachment"></span>
+                                                <div class="mailbox-attachment-info" style="background:#fff">
+                                                    <span class="mailbox-attachment-name"><i class="fa fa-graduation-cap" style="color:red"></i> Từ điển kiến thức</span>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col-6 col-sm-4 col-md-2">
+                                            <a href="/Dictionary/Index">
+                                                <span class="mailbox-attachment-icon has-img"><img src="~/Assets/theme3/dist/img/kienthuc.jpg" alt="Attachment"></span>
+                                                <div class="mailbox-attachment-info" style="background:#fff">
+                                                    <span class="mailbox-attachment-name"><i class="fa fa-graduation-cap" style="color:red"></i> Từ điển kinh nghiệm</span>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col-6 col-sm-4 col-md-2">
+                                            <a href="/Product/index">
+                                                <span class="mailbox-attachment-icon has-img"><img src="~/Assets/theme3/dist/img/sanpham.jpg" alt="Attachment"></span>
+                                                <div class="mailbox-attachment-info" style="background:#fff">
+                                                    <span class="mailbox-attachment-name"><i class="fa fa-industry" style="color:red"></i> Thông tin sản phẩm</span>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col-6 col-sm-4 col-md-2">
+                                            <a href="/BOMItem/index">
+                                                <span class="mailbox-attachment-icon has-img"><img src="~/Assets/theme3/dist/img/bomsanpham.jpg" alt="Attachment"></span>
+                                                <div class="mailbox-attachment-info" style="background:#fff">
+                                                    <span class="mailbox-attachment-name"><i class="fa fa-industry" style="color:red"></i> BOM sản xuất</span>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col-6 col-sm-4 col-md-2">
+                                            <a href="/Task/Index">
+                                                <span class="mailbox-attachment-icon has-img"><img src="~/Assets/theme3/dist/img/dsnhiemvu.png" alt="Attachment"></span>
+                                                <div class="mailbox-attachment-info" style="background:#fff">
+                                                    <span class="mailbox-attachment-name"><i class="fa fa-list" style="color:red"></i> Danh sách nhiệm vụ</span>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col-6 col-sm-4 col-md-2">
+                                            <a href="/FixRequest/Index">
+                                                <span class="mailbox-attachment-icon has-img"><img src="~/Assets/theme3/dist/img/dssuachua.jpg" alt="Attachment"></span>
+                                                <div class="mailbox-attachment-info" style="background:#fff">
+                                                    <span class="mailbox-attachment-name"><i class="fa fa-list" style="color:red"></i> Danh sách thiết bị cần sửa chữa </span>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col-6 col-sm-4 col-md-2">
+                                            <a href="/Checklist/Index">
+                                                <span class="mailbox-attachment-icon has-img"><img src="~/Assets/theme3/dist/img/formchecklist.jpg" alt="Attachment"></span>
+                                                <div class="mailbox-attachment-info" style="background:#fff">
+                                                    <span class="mailbox-attachment-name"><i class="fa fa-list" style="color:red"></i> Danh sách Form Checklist </span>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col-6 col-sm-4 col-md-2">
+                                            <a href="/Checklist/History">
+                                                <span class="mailbox-attachment-icon has-img"><img src="~/Assets/theme3/dist/img/checklisthistory.jpg" alt="Attachment"></span>
+                                                <div class="mailbox-attachment-info" style="background:#fff">
+                                                    <span class="mailbox-attachment-name"><i class="fa fa-list" style="color:red"></i> History Checklist </span>
+                                                </div>
+                                            </a>
+                                        </div>
+
+                                    </div>
+
+                                    
+                                    <!-- /.post -->
+                                </div>
+                                <!-- /.tab-pane -->
+                                <div class="tab-pane" id="timeline">
+                                    <div class="row">
+                                        <ul class="timeline timeline-inverse">
+                                            <li class="time-label">
+                                                <span class="bg-success">
+                                                    Danh sách Sinh Nhật trong tháng
+                                                </span>
+                                            </li>
+                                            @foreach (var item in listPerBir)
+                                            {
+                                                <li>
+                                                    <i class="fa fa-birthday-cake bg-danger"></i>
+                                                    <div class="timeline-item">
+                                                        <h3 class="timeline-header no-border">
+                                                            <a href="#">@item.Name</a> @item.Position - sinh ngày @item.BirthDay.Value.ToString("dd/MM/yyyy")
+                                                        </h3>
+                                                    </div>
+                                                </li>
+                                            }
+
+                                            <li class="time-label">
+                                                <span class="bg-warning">
+                                                    Danh sách Nghỉ Phép trong tháng
+                                                </span>
+                                            </li>
+                                            @foreach (var item in listPerOff)
+                                            {
+                                                <li>
+                                                    <i class="fa fa-deaf bg-gray"></i>
+                                                    <div class="timeline-item">
+                                                        <h3 class="timeline-header no-border">
+                                                            <a href="#">@item.FullName</a> xin nghỉ phép từ
+                                                            <span class="badge badge-warning"><i class="fa fa-clock-o"></i>@item.StartNote @item.StartTime.ToString("dd/MM/yyyy") </span> đến hết
+                                                            <span class="badge badge-warning"><i class="fa fa-clock-o"></i>@item.EndNote @item.EndTime.ToString("dd/MM/yyyy")</span>
+                                                        </h3>
+                                                    </div>
+                                                </li>
+                                            }
+
+
+                                        </ul>
+                                    </div>
+
+                                </div>
+                                <div class="tab-pane" id="settings">
+                                  
+                                </div>
+                                <!-- /.tab-pane -->
+                            </div>
+                            <!-- /.tab-content -->
+                        </div><!-- /.card-body -->
+                    </div>
+                    <!-- /.nav-tabs-custom -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+</div>
+
+
+
+
+
+<form id="myFormCancel" method="post">
+    <div class="modal fade" id="myModalCancel" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Điền mật khẩu mới</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    
+                </div>
+                <div class="modal-body">
+                    <input class="form-control" data-val="true" id="passw" name="pass"type="password" value="">
+                </div>
+                <script>
+                    $(document).ready(function () {
+                        $("#passw").blur(function () {
+                            var newpass = $('#passw').val();
+                            var abc = $('#huyphieu').attr("data-pass", newpass);
+
+                        });
+                    });
+                </script>
+
+                <div class="modal-footer">
+                    <a href="#" id="huyphieu" class="btn-cancel" data-pass="" style="background: red;    padding: 7px;  color: white;">ĐỔI MẬT KHẨU</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+
+
+
+
+

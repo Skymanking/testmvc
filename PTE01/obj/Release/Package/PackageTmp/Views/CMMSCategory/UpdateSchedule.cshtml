@@ -1,0 +1,78 @@
+﻿@model Model.EF.CMMSPlan1
+@{
+    ViewBag.Title = "UpdateSchedule";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+}
+@section jsFooter
+{
+    <script src="/Assets/theme3/plugins/datepicker/js/bootstrap-datetimepicker.js"></script>
+    <script src="/Assets/theme3/plugins/datepicker/js/locales/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
+    <script>
+        $(function () {
+            $('.form_datetime').datepicker({
+                format: 'mm/dd/yyyy',
+                todayBtn: 1,
+                autoclose: 1,
+                todayHighlight: 1,
+            });
+
+        })
+    </script>
+}
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+<div class="row">
+
+    <div class="col-md-12">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Thông tin thiết bị</h3>
+            </div>
+            <div class="card-body">
+                <div class="tab-content">
+                    @using (Html.BeginForm("UpdateSchedule", "CMMSCategory", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                        <div class="row">
+                            <div class='col-md-1'>
+                                <label class="control-label">ID</label>
+                                @Html.TextBoxFor(model => model.ID, new { @class = "form-control", @readonly = true })
+                            </div>
+                            <div class='col-md-5'>
+                                <label class="control-label">Tên thiết bị</label>
+                                @Html.TextBoxFor(model => model.NameDevice, new { @class = "form-control", @readonly = true })
+                            </div>
+                            <div class='col-md-6'>
+                                <label class="control-label">Tên hạng mục</label>
+                                @Html.TextBoxFor(model => model.Name, new { @class = "form-control", @readonly = true })
+                            </div>
+                            <div class="col-md-2">
+                                <label class="control-label">Ngày bảo trì</label>
+                                <div class="bootstrap-timepicker">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <input type="text" id="deadline" name="deadline" class="form-control form_datetime" readonly="readonly" value="@Model.Deadline"><br>
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <button type="submit" class="btn btn-primary">Lưu thông tin</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

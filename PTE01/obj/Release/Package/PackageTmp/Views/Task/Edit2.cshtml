@@ -1,0 +1,702 @@
+﻿@*@model Model.EF.Task
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    var nguoitao = (bool)ViewBag.creater;
+    var listU = (IEnumerable<Model.View.UserView2>)ViewBag.listUser;
+    var nguoinhan = new List<SelectListItem>();
+    nguoinhan.Add(new SelectListItem
+    {
+        Text = "Chọn Người Thực Hiện",
+        Value = "none",
+        Selected = true
+    });
+    foreach (var item in listU)
+    {
+        nguoinhan.Add(new SelectListItem
+        {
+            Text = item.FullName,
+            Value = item.UserName,
+        });
+    }
+}
+@section jsFooter
+{
+    <script src="/Scripts/TaskUpdateDeadline.js"></script>
+    <script src="/Assets/theme3/plugins/datepicker/js/bootstrap-datetimepicker.js"></script>
+    <script src="/Assets/theme3/plugins/datepicker/js/locales/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
+    <script src="/Assets/theme3/plugins/ionslider/ion.rangeSlider.min.js"></script>
+    <!-- Bootstrap slider -->
+    <script src="/Assets/theme3/plugins/bootstrap-slider/bootstrap-slider.js"></script>
+    <script>
+        $(function () {
+
+            $('.form_datetime').datetimepicker({
+                format: 'mm/dd/yyyy hh:ii',
+                todayBtn: 1,
+                autoclose: 1,
+                todayHighlight: 1,
+            });
+
+            $('input[type="checkbox"].flat-green, input[type="radio"].flat-green').iCheck({
+                checkboxClass: 'icheckbox_flat-green',
+                radioClass: 'iradio_flat-green'
+            })
+            $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+                checkboxClass: 'icheckbox_flat-red',
+                radioClass: 'iradio_flat-red'
+            })
+            $('#Rate').ionRangeSlider({
+                min: 0,
+                from: @Model.Rate,
+                max: 100,
+                type: 'single',
+                step: 10,
+                postfix: ' %',
+
+            })
+
+        })
+    </script>
+
+}
+<link rel="stylesheet" href="/Assets/theme3/plugins/ionslider/ion.rangeSlider.css">
+<!-- ion slider Nice -->
+<link rel="stylesheet" href="/Assets/theme3/plugins/ionslider/ion.rangeSlider.skinNice.css">
+<!-- bootstrap slider -->
+<link rel="stylesheet" href="/Assets/theme3/plugins/bootstrap-slider/slider.css">
+
+@using (Html.BeginForm("Edit2", "Task", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Nội dung nhiệm Vụ</h3>
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label col-md-12">Tên Công Việc</label>
+                                @Html.TextBoxFor(model => model.Subject, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-12">Owner</label>
+                                @Html.DropDownListFor(model => model.Owner, nguoinhan, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Ngày bắt đầu:</label>
+                                <div class="input-group date form_datetime" data-link-field="StartDate">
+                                    @if (@Model.StartDate != null)
+                                    { <input class="form-control" type="text" value='@Model.StartDate.Value.ToString("MM/dd/yyyy HH:mm")' readonly>}
+                                    else
+                                    { <input class="form-control" type="text" value='' readonly>}
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                </div>
+                                @Html.TextBoxFor(model => model.StartDate, new { @class = "form-control", @type = "hidden" }) <br />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Deadline: <span data-toggle="tooltip" title="@Model.LogDL"><i class="fa fa-info-circle"></i></span></label>
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" value="@Model.Deadline.ToString("MM/dd/yyyy HH:mm")" readonly>
+
+                                    <div class="input-group-append" data-toggle="modal" data-target="#toolModal">
+                                        <span class="input-group-text"><i class="fa fa-edit"></i></span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label col-md-12">Diễn giải chi tiết</label>
+                                @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @rows = "4" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row float-right">
+                        <div class="form-group">
+                            <label>
+                                @Html.CheckBoxFor(model => model.Canceled, new { @class = "flat-red" })
+                                Hủy nhiệm vụ
+                            </label>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Lưu thông tin</button>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-6">
+            <div class="card card-success">
+                <div class="card-header">
+                    <h3 class="card-title">Nội dung thực hiện</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label"> Tiến độ</label>
+                            <input id="Rate" type="text" name="Rate" class="form-control">
+                        </div>                       
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label col-md-12">Ghi chú thực hiện</label>
+                                @Html.TextAreaFor(model => model.Note, new { @class = "form-control", @rows = "8" })
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>
+                                    @Html.CheckBoxFor(model => model.Refuse, new { @class = "flat-red" })
+                                    Từ chối
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>
+                                    @Html.CheckBoxFor(model => model.Finish, new { @class = "flat-green" })
+                                    Đã hoàn thành
+                                </label>
+                            </div>
+                        </div>
+                        @if (nguoitao)
+                        {
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Ngày hoàn thành:</label>
+                                    <div class="input-group date form_datetime" data-link-field="StartDate">
+                                        @if (@Model.FinishDate != null)
+                                        { <input class="form-control" id="FinishDate" name="FinishDate" type="text" value='@Model.FinishDate.Value.ToString("MM/dd/yyyy HH:mm")' readonly>}
+                                        else
+                                        { <input class="form-control" id="FinishDate" name="FinishDate" type="text" value='' readonly>}
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                        </div>
+                                    </div>
+                                    @Html.TextBoxFor(model => model.FinishDate, new { @class = "form-control", @type = "hidden" })
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-success">Lưu thông tin</button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+}
+
+
+<div id="myForm">
+    <div class="modal fade" id="toolModal" role="dialog">
+        <div class="modal-dialog" style="max-width: 300px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" style="width: 50px; font-size: 20px;">&times;</button>
+                    <h4 class="modal-title" style="position: absolute;">Thay đổi Deadline</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Deadline mới:</label>
+                                <div class="input-group date form_datetime" data-link-field="deadline">
+                                    <input class="form-control" type="text" value='@Model.Deadline.ToString("MM/dd/yyyy HH:mm")' readonly>
+
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                </div>
+                                <input class="form-control" id="deadline" name="deadline" type="hidden" value="">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="control-label col-md-12">Lý do</label>
+                            <textarea class="form-control" id="lydo" rows="4"></textarea>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" id="createP" class="btn-createP" data-id="@Model.ID" style="background: red; padding: 7px;  color: white;">Lưu thông tin</a>
+                </div>
+                <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+                <script>
+                    $(document).ready(function () {
+                        $("#createP").hover(function () {
+                            $('#createP').attr("data-deadline", $('#deadline').val());
+                            $('#createP').attr("data-lydo", $('#lydo').val());
+                        });
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+</div>*@
+
+
+@model Model.EF.Task
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    var listU = (IEnumerable<Model.View.UserView2>)ViewBag.listUser;
+    var nguoitao = (bool)ViewBag.creater;
+    var nguoithuchien = (bool)ViewBag.nguoithuchien;
+    var nguoinhan = new List<SelectListItem>();
+    nguoinhan.Add(new SelectListItem
+    {
+        Text = "Chọn Người Thực Hiện",
+        Value = "none",
+        Selected = true
+    });
+    foreach (var item in listU)
+    {
+        nguoinhan.Add(new SelectListItem
+        {
+            Text = item.FullName,
+            Value = item.UserName,
+        });
+    }
+    List<SelectListItem> loai = new List<SelectListItem>();
+    loai.Add(new SelectListItem
+    {
+        Text = "Định kỳ",
+        Value = "0",
+        Selected = true
+    });
+    loai.Add(new SelectListItem
+    {
+        Text = "Phát sinh",
+        Value = "1",
+    });
+    List<SelectListItem> danhgia = new List<SelectListItem>();
+    danhgia.Add(new SelectListItem
+    {
+        Text = "chưa đánh giá",
+        Value = "0",
+        Selected = true
+    });
+    danhgia.Add(new SelectListItem
+    {
+        Text = "Không đạt (1 điểm)",
+        Value = "1",
+    });
+
+    danhgia.Add(new SelectListItem
+    {
+        Text = "Cần cố gắng (2 điểm)",
+        Value = "2",
+    });
+
+    danhgia.Add(new SelectListItem
+    {
+        Text = "Đạt yêu cầu (3 điểm)",
+        Value = "3",
+        Selected = true
+    });
+    danhgia.Add(new SelectListItem
+    {
+        Text = "Vượt yêu cầu (4 điểm)",
+        Value = "4",
+    });
+    List<SelectListItem> tytrong = new List<SelectListItem>();
+    tytrong.Add(new SelectListItem
+    {
+        Text = "(1 điểm)không Quan trọng và không gấp",
+        Value = "1",
+        Selected = true
+    });
+    tytrong.Add(new SelectListItem
+    {
+        Text = "(2 điểm)Quan trọng hoặc Cần gấp",
+        Value = "2",
+    });
+    tytrong.Add(new SelectListItem
+    {
+        Text = "(3 điểm)Quan trọng và Cần gấp",
+        Value = "3",
+    });
+}
+@section jsFooter
+{
+    <script src="/Assets/plugin/ckfinder/ckfinder.js"></script>
+    <script src="/Scripts/TaskUpdateDeadline.js"></script>
+    <script src="/Assets/theme3/plugins/datepicker/js/bootstrap-datetimepicker.js"></script>
+    <script src="/Assets/theme3/plugins/datepicker/js/locales/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
+    <script src="/Assets/theme3/plugins/ionslider/ion.rangeSlider.min.js"></script>
+    <!-- Bootstrap slider -->
+    <script src="/Assets/theme3/plugins/bootstrap-slider/bootstrap-slider.js"></script>
+    <script>
+        $(function () {
+
+            $('.form_datetime').datetimepicker({
+                format: 'mm/dd/yyyy hh:ii',
+                todayBtn: 1,
+                autoclose: 1,
+                todayHighlight: 1,
+            });
+            $('.select2').select2()
+
+            $('input[type="checkbox"].flat-green, input[type="radio"].flat-green').iCheck({
+                checkboxClass: 'icheckbox_flat-green',
+                radioClass: 'iradio_flat-green'
+            })
+            $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+                checkboxClass: 'icheckbox_flat-red',
+                radioClass: 'iradio_flat-red'
+            })
+            $('#Rate').ionRangeSlider({
+                min: 0,
+                from: @Model.Rate,
+                max: 100,
+                type: 'single',
+                step: 10,
+                postfix: ' %',
+
+            })
+
+        })
+    </script>
+
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link rel="stylesheet" href="/Assets/theme3/plugins/ionslider/ion.rangeSlider.css">
+<!-- ion slider Nice -->
+<link rel="stylesheet" href="/Assets/theme3/plugins/ionslider/ion.rangeSlider.skinNice.css">
+<!-- bootstrap slider -->
+<link rel="stylesheet" href="/Assets/theme3/plugins/bootstrap-slider/slider.css">
+
+@using (Html.BeginForm("Edit2", "Task", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Nội dung nhiệm Vụ</h3>
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label col-md-12">Tên Công Việc</label>
+                                @Html.TextBoxFor(model => model.Subject, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="form-group">
+                                <label class="control-label col-md-12">Owner</label>
+                                @Html.DropDownListFor(model => model.Owner, nguoinhan, new { @class = "form-control select2", @style = "width: 100%;" })
+                            </div>
+                        </div>
+                        @*<div class='col-md-3 col-6'>
+                                <label class="control-label">Loại</label>
+                                @Html.DropDownListFor(model => model.Type, loai, new { @class = "form-control", })
+
+                            </div>*@
+                        <div class='col-md-5 col-6'>
+                            <label class="control-label">Tỷ trọng</label>
+                            @Html.DropDownListFor(model => model.Proportion, tytrong, new { @class = "form-control", })
+
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Ngày bắt đầu:</label><span style="font-size:12px; color:red; font-style:italic">(task owner)</span>
+                                <div class="input-group date form_datetime" data-link-field="StartDate">
+                                    @if (@Model.StartDate != null)
+                                    { <input class="form-control" style="background: #c7f9d3;" type="text" value='@Model.StartDate.Value.ToString("MM/dd/yyyy HH:mm")' readonly>}
+                                    else
+                                    { <input class="form-control" type="text" value='' readonly>}
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                </div>
+                                @Html.TextBoxFor(model => model.StartDate, new { @class = "form-control", @type = "hidden" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Deadline: <span data-toggle="tooltip" title="@Model.LogDL"><i class="fa fa-info-circle"></i></span></label>
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" style="background: #9bc7f7;" value="@Model.Deadline.ToString("MM/dd/yyyy HH:mm")" readonly>
+
+                                    <div class="input-group-append" data-toggle="modal" data-target="#toolModal">
+                                        <span class="input-group-text"><i class="fa fa-edit"></i></span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        @if (nguoitao)
+                        {
+                            <div class='col-md-8'>
+                                <label class="control-label">Đính kèm file</label>
+                                <div class='input-group'>
+                                    @Html.TextBoxFor(model => model.File1, new { @class = "form-control", @style = "background: #c2c7d0;", @placeholder = "chọn file..." })
+                                    <div class=" input-group-append">
+                                        <span class="input-group-text">
+                                            <a id="btnSelectFile" href="#"><span class="fa fa-file"></span></a>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <script>
+                                $('#btnSelectFile').on('click', function (e) {
+                                    e.preventDefault();
+                                    var finder = new CKFinder();
+                                    finder.selectActionFunction = function (url) {
+                                        $('#File1').val(url);
+                                        $('#btnViewFile').attr("href", $('#File1').val());
+                                    };
+                                    finder.popup();
+                                })
+                            </script>
+                        }
+                        <div class='col-md-4'>
+                            <label class="control-label">.</label><br />
+                            @if (Model.File1 != null)
+                            { <a href="@Model.File1" target="_blank" style="font-size:20px"><i class="fa fa-download"></i> Download File</a>}
+                            else
+                            { <b><i class="fa fa-file"></i> Không có File đính kèm</b>}
+
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label col-md-12">Diễn giải chi tiết</label>
+                                @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @rows = "8" })
+                            </div>
+                        </div>
+
+                    </div>
+                    <div>
+
+                    </div>
+
+                    <div class="row float-right">
+                        <div class="form-group">
+                            <label>
+                                @Html.CheckBoxFor(model => model.Canceled, new { @class = "flat-red" })
+                                Hủy nhiệm vụ
+                            </label>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Lưu thông tin</button>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-6">
+            <div class="card card-success">
+                <div class="card-header">
+                    <h3 class="card-title">Nội dung thực hiện</h3>
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            <label class="control-label"> Tiến độ</label>
+                            <input id="Rate" type="text" name="Rate" class="form-control">
+                        </div>
+                        @if (nguoithuchien)
+                        {
+                            <div class='col-md-8'>
+                                <label class="control-label">Đính kèm file</label>
+                                <div class='input-group'>
+                                    @Html.TextBoxFor(model => model.File2, new { @class = "form-control", @style = "background: #c2c7d0;", @placeholder = "chọn file..." })
+                                    <div class=" input-group-append">
+                                        <span class="input-group-text">
+                                            <a id="btnSelectFile2" href="#"><span class="fa fa-file"></span></a>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <script>
+                                $('#btnSelectFile2').on('click', function (e) {
+                                    e.preventDefault();
+                                    var finder = new CKFinder();
+                                    finder.selectActionFunction = function (url) {
+                                        $('#File2').val(url);
+                                        $('#btnViewFile').attr("href", $('#File2').val());
+                                    };
+                                    finder.popup();
+                                })
+                            </script>
+                        }
+                        <div class='col-md-4'>
+                            <label class="control-label"> .</label><br />
+                            @if (Model.File2 != null)
+                            { <a href="@Model.File2" target="_blank" style="font-size:20px"><i class="fa fa-download"></i> Download File</a>}
+                            else
+                            { <b><i class="fa fa-file"></i> Không có File đính kèm</b>}
+
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label col-md-12">Ghi chú thực hiện</label>
+                                @Html.TextAreaFor(model => model.Note, new { @class = "form-control", @rows = "7" })
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>
+                                    @Html.CheckBoxFor(model => model.Refuse, new { @class = "flat-red" })
+                                    Từ chối
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>
+                                    @Html.CheckBoxFor(model => model.Finish, new { @class = "flat-green" })
+                                    Đã hoàn thành
+                                </label>
+                            </div>
+                        </div>
+                        @if (nguoitao)
+                        {
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Ngày hoàn thành:<span style="font-size:12px; color:red; font-style:italic">(task creator)</span></label>
+                                    <div class="input-group date form_datetime" data-link-field="StartDate">
+                                        @if (@Model.FinishDate != null)
+                                        { <input class="form-control" id="FinishDate" style="background: #9bc7f7;" name="FinishDate" type="text" value='@Model.FinishDate.Value.ToString("MM/dd/yyyy HH:mm")' readonly>}
+                                        else
+                                        { <input class="form-control" id="FinishDate" style="background: #9bc7f7;" name="FinishDate" type="text" value='' readonly>}
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                        </div>
+                                    </div>
+                                    @Html.TextBoxFor(model => model.FinishDate, new { @class = "form-control", @type = "hidden" })
+                                </div>
+                            </div>
+                        }
+
+                        @*<div class="col-md-12">
+                                <div class="form-group">
+                                    <label>
+                                        @Html.CheckBoxFor(model => model.Imqualified, new { @class = "flat-red" })
+                                        Kết quả chưa đạt<span style="font-size:12px; color:red; font-style:italic">(task creator)</span>
+                                    </label>
+                                </div>
+                            </div>*@
+                        <div class='col-md-6 col-12'>
+                            <label class="control-label">Đánh giá kết quả<span style="font-size:12px; color:red; font-style:italic">(task creator)</span></label>
+                            @Html.DropDownListFor(model => model.Imqualified, danhgia, new { @class = "form-control", })
+
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label col-md-12">Ghi chú đánh giá kết quả<span style="font-size:12px; color:red; font-style:italic">(task creator)</span></label>
+                                @Html.TextAreaFor(model => model.Review, new { @class = "form-control", @rows = "2" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-success">Lưu thông tin</button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+}
+
+
+<div id="myForm">
+    <div class="modal fade" id="toolModal" role="dialog">
+        <div class="modal-dialog" style="max-width: 300px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" style="width: 50px; font-size: 20px;">&times;</button>
+                    <h4 class="modal-title" style="position: absolute;">Thay đổi Deadline</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Deadline mới:</label>
+                                <div class="input-group date form_datetime" data-link-field="deadline">
+                                    <input class="form-control" type="text" value='@Model.Deadline.ToString("MM/dd/yyyy HH:mm")' readonly>
+
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                </div>
+                                <input class="form-control" id="deadline" name="deadline" type="hidden" value="">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="control-label col-md-12">Lý do</label>
+                            <textarea class="form-control" id="lydo" rows="4"></textarea>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" id="createP" class="btn-createP" data-id="@Model.ID" style="background: red; padding: 7px;  color: white;">Lưu thông tin</a>
+                </div>
+                <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+                <script>
+                    $(document).ready(function () {
+                        $("#createP").hover(function () {
+                            $('#createP').attr("data-deadline", $('#deadline').val());
+                            $('#createP').attr("data-lydo", $('#lydo').val());
+                        });
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+</div>

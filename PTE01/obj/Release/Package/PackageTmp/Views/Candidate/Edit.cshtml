@@ -1,0 +1,415 @@
+﻿@model Model.EF.Candidate
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    List<SelectListItem> source = new List<SelectListItem>();
+    source.Add(new SelectListItem
+    {
+        Text = "JobStreet",
+        Value = "JobStreet",
+        Selected = true
+    });
+    source.Add(new SelectListItem
+         {
+             Text = "CareerBuilder",
+             Value = "CareerBuilder",
+         });
+    source.Add(new SelectListItem
+    {
+        Text = "TOPCV",
+        Value = "TOPCV",
+    });
+    source.Add(new SelectListItem
+    {
+        Text = "TìmViệcNhanh",
+        Value = "TìmViệcNhanh",
+    });
+    source.Add(new SelectListItem
+    {
+        Text = "Giới Thiệu",
+        Value = "Giới Thiệu",
+    });
+    source.Add(new SelectListItem
+    {
+        Text = "Tự Nộp Hồ Sơ",
+        Value = "Tự Nộp Hồ Sơ",
+    });
+    source.Add(new SelectListItem
+    {
+        Text = "Careerlink",
+        Value = "Careerlink",
+    });
+    source.Add(new SelectListItem
+    {
+        Text = "Khác",
+        Value = "Khác",
+    });
+    List<SelectListItem> list1 = new List<SelectListItem>();
+    list1.Add(new SelectListItem
+    {
+        Text = "Đạt tiêu chí",
+        Value = "1",
+        Selected = true
+    });
+    list1.Add(new SelectListItem
+    {
+        Text = "Không đạt",
+        Value = "0",
+    });
+    List<SelectListItem> list2 = new List<SelectListItem>();
+    list2.Add(new SelectListItem
+    {
+        Text = "chưa liên hệ",
+        Value = "2",
+        Selected = true
+    });
+    list2.Add(new SelectListItem
+    {
+        Text = "Liên hệ được",
+        Value = "1",
+
+    });
+    list2.Add(new SelectListItem
+    {
+        Text = "Không liên hệ được",
+        Value = "0",
+    });
+    list2.Add(new SelectListItem
+    {
+        Text = "Ứng viên từ chối",
+        Value = "3",
+    });
+    list2.Add(new SelectListItem
+    {
+        Text = "Ứng viên đang tham khảo CV",
+        Value = "4",
+    });
+    List<SelectListItem> list3 = new List<SelectListItem>();
+    list3.Add(new SelectListItem
+    {
+        Text = "chưa gửi thông tin ứng viên",
+        Value = "0",
+        Selected = true
+    });
+    list3.Add(new SelectListItem
+    {
+        Text = "đã gửi thông tin ứng viên",
+        Value = "1",
+
+    });
+    List<SelectListItem> list4 = new List<SelectListItem>();
+    list4.Add(new SelectListItem
+    {
+        Text = "chưa nhận xét",
+        Value = "2",
+        Selected = true
+    });
+    list4.Add(new SelectListItem
+    {
+        Text = "CV đạt",
+        Value = "1",
+    });
+    list4.Add(new SelectListItem
+    {
+        Text = "CV không đạt",
+        Value = "0",
+    });
+    List<SelectListItem> list5 = new List<SelectListItem>();
+    list5.Add(new SelectListItem
+    {
+        Text = "chưa chọn",
+        Value = "2",
+        Selected = true
+    });
+    list5.Add(new SelectListItem
+    {
+        Text = "Ứng viên đồng ý phỏng vấn",
+        Value = "1",
+    });
+    list5.Add(new SelectListItem
+    {
+        Text = "Ứng viên Không đồng ý phỏng vấn",
+        Value = "0",
+    });
+    List<SelectListItem> list6 = new List<SelectListItem>();
+    list6.Add(new SelectListItem
+    {
+        Text = "chưa chọn",
+        Value = "2",
+        Selected = true
+    });
+    list6.Add(new SelectListItem
+    {
+        Text = "Ứng viên đồng ý nhận việc",
+        Value = "1",
+    });
+    list6.Add(new SelectListItem
+    {
+        Text = "Ứng viên Không đồng ý nhận việc",
+        Value = "0",
+    });
+    List<SelectListItem> list7 = new List<SelectListItem>();
+    list7.Add(new SelectListItem
+    {
+        Text = "chưa chọn",
+        Value = "2",
+        Selected = true
+    });
+    list7.Add(new SelectListItem
+    {
+        Text = "Đạt",
+        Value = "1",
+    });
+    list7.Add(new SelectListItem
+    {
+        Text = "Không Đạt",
+        Value = "0",
+    });
+    list7.Add(new SelectListItem
+    {
+        Text = "Xem xét lại",
+        Value = "3",
+    });
+    list7.Add(new SelectListItem
+    {
+        Text = "Không đến phỏng vấn",
+        Value = "4",
+    });
+
+
+
+}
+@section jsFooter
+{
+    <script src="/Assets/plugin/ckfinder/ckfinder.js"></script>
+    <script src="/Assets/theme3/plugins/datepicker/js/bootstrap-datetimepicker.js"></script>
+    <script src="/Assets/theme3/plugins/datepicker/js/locales/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
+    <script>
+        $(function () {
+            $('.form_datetime').datetimepicker({
+                format: 'mm/dd/yyyy hh:ii',
+                todayBtn: 1,
+                autoclose: 1,
+                todayHighlight: 1,
+            });
+            $('.select2').select2()
+
+        })
+    </script>
+
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Thông tin ứng viên</h3>
+    </div>
+    @using (Html.BeginForm("Edit", "Candidate", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="card-body">
+            <div class="row">
+
+                <div class="col-md-12">
+                    <div class="row" style="background: #f6fcfd; padding-bottom: 15px;">
+                        <div class='col-md-3'>
+                            <label class="control-label">Họ Tên</label>
+                            @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                        </div>
+                        <div class='col-md-2'>
+                            <label class="control-label">Điện Thoại</label>
+                            @Html.TextBoxFor(model => model.Phone, new { @class = "form-control" })
+                        </div>
+                        <div class='col-md-2'>
+                            <label class="control-label">Email</label>
+                            @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+                        </div>
+                       
+                        <div class='col-md-2'>
+                            <label class="control-label">Bằng Cấp</label>
+                            @Html.DropDownListFor(model => model.LevelCV, null, new { @class = "form-control" })
+                        </div>
+                        <div class='col-md-3'>
+                            <label class="control-label">Chuyên ngành</label>
+                            @Html.TextBoxFor(model => model.Specialize, new { @class = "form-control" })
+                        </div> 
+
+                    </div>
+                    <div class="row" style="background: #f6fcfd; padding-bottom: 15px;">
+                        <div class='col-md-6'>
+                            <label class="control-label">Địa chỉ</label>
+                            @Html.TextBoxFor(model => model.Address, new { @class = "form-control" })
+                        </div> 
+                        <div class='col-md-1'>
+                            <label class="control-label">Năm Sinh</label>
+                            @Html.TextBoxFor(model => model.Year, new { @class = "form-control", @type = "number" })
+                        </div>
+                        <div class='col-md-3'>
+                            <label class="control-label">Vị trí ứng tuyển</label>
+                            @Html.DropDownListFor(model => model.PositionID, null, new { @class = "form-control select2" })
+                        </div>
+                        <div class='col-md-2'>
+                            <label class="control-label">Bộ phận</label>
+                            @Html.DropDownListFor(model => model.IDGroup, null, new { @class = "form-control" })
+                        </div>                                                             
+                    </div>
+
+                    <div class="row" style="background: #f6fcfd; padding-bottom: 15px;">
+                       
+                        <div class='col-md-2'>
+                            <label class="control-label">Nguồn</label>
+                            @Html.DropDownListFor(model => model.Source, source, new { @class = "form-control" })
+                        </div>
+                        <div class='col-md-3'>
+                            <label class="control-label">Người giới thiệu (nếu có)</label>
+                            @Html.TextBoxFor(model => model.Presenter, new { @class = "form-control" })
+                        </div>
+                        <div class='col-md-2'>
+                            <label class="control-label">Số phiếu tuyển dụng</label>
+                            @Html.TextBoxFor(model => model.RecuID, new { @class = "form-control", @type = "number" })
+                        </div>
+                        <div class='col-md-5'>
+                            <label class="control-label">File Hồ Sơ</label>
+                            <div class='input-group'>
+                                @Html.TextBoxFor(model => model.FileName, new { @class = "form-control", @style = "background: #f9d7d4;", @placeholder = "điền số hồ sơ giấy, hoặc up file CV" })
+                                <div class=" input-group-append">
+                                    <span class="input-group-text">
+                                        <a id="btnSelectImage" href="#"><span class="fa fa-paperclip"></span></a><span>....</span> <a id="btnViewFile" target="_blank" href="@Model.FileName"><span class="fa fa-file"></span></a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <script>
+                            $('#btnSelectImage').on('click', function (e) {
+                                e.preventDefault();
+                                var finder = new CKFinder();
+                                finder.selectActionFunction = function (url) {
+                                    $('#FileName').val(url);
+                                    $('#btnViewFile').attr("href", $('#FileName').val());
+                                };
+                                finder.popup();
+                            })
+                        </script>
+                    </div>
+
+                    <div class="row" style="background: #daf0f3; padding-bottom: 15px;">
+                        <div class='col-md-2'>
+                            <label class="control-label">Chất lượng hồ sơ</label>
+                            @Html.DropDownListFor(model => model.CVComment1, list1, new { @class = "form-control" })
+                        </div>
+                        <div class='col-md-2'>
+                            <label class="control-label">Liên hệ Ứng viên</label>
+                            @Html.DropDownListFor(model => model.ContactUV1, list2, new { @class = "form-control" })
+                        </div>
+                        <div class='col-md-8'>
+                            <label class="control-label">Ghi chú / Lý do</label>
+                            @Html.TextBoxFor(model => model.Note3, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="row" style="background: #b9e9f1;padding-bottom: 15px;">
+                        <div class='col-md-3'>
+                            <label class="control-label">Gửi CV cho người PV</label>
+                            @Html.DropDownListFor(model => model.ContactTBP, list3, new { @class = "form-control" })
+                        </div>
+                        <div class='col-md-9'>
+                            <label class="control-label">Tên người phỏng vấn</label>
+                            @Html.TextBoxFor(model => model.NameTBP, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="row" style="background: #b9e9f1;padding-bottom: 15px;">
+                        <div class='col-md-3'>
+                            <label class="control-label">Nhận xét CV của người PV</label>
+                            @Html.DropDownListFor(model => model.CVComment2, list4, new { @class = "form-control" })
+                        </div>
+                        <div class='col-md-9'>
+                            <label class="control-label">Ghi chú / Lý do</label>
+                            @Html.TextBoxFor(model => model.Note5, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="row" style="background: #93e4f1; padding-bottom: 15px;">
+                        <div class='col-md-2'>
+                            <label class="control-label">Tham gia phỏng vấn</label>
+                            @Html.DropDownListFor(model => model.UVAgree1, list5, new { @class = "form-control" })
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Thời gian phỏng vấn:</label>
+                                <div class="input-group date form_datetime" data-link-field="InterviewTime">
+                                    @if (@Model.InterviewTime != null)
+                                    { <input class="form-control" type="text" value='@Model.InterviewTime.Value.ToString("MM/dd/yyyy HH:mm")' readonly>}
+                                    else
+                                    { <input class="form-control" type="text" value='' readonly>}
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                </div>
+                                @Html.TextBoxFor(model => model.InterviewTime, new { @class = "form-control", @type = "hidden" })
+                            </div>
+                            </div>
+                        <div class='col-md-8'>
+                            <label class="control-label">Ghi chú / Lý do</label>
+                            @Html.TextBoxFor(model => model.Note3, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="row" style="background: #93e4f1; padding-bottom: 15px;">
+                        <div class='col-md-2'>
+                            <label class="control-label">Kết quả PV</label>
+                            @Html.DropDownListFor(model => model.ResultPV, list7, new { @class = "form-control" })
+                        </div>
+                        <div class='col-md-2'>
+                            <label class="control-label">Đồng ý nhận việc</label>
+                            @Html.DropDownListFor(model => model.UVAgree2, list6, new { @class = "form-control" })
+                        </div>
+                        <div class='col-md-8'>
+                            <label class="control-label">Ghi chú / Lý do</label>
+                            @Html.TextBoxFor(model => model.Note1, new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="row" style="background: #43c9df; padding-bottom: 15px;">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Ngày nhận việc:</label>
+                                <div class="input-group date form_datetime" data-link-field="StartDate">
+                                    @if (@Model.StartDate != null)
+                                    { <input class="form-control" type="text" value='@Model.StartDate.Value.ToString("MM/dd/yyyy HH:mm")' readonly>}
+                                    else
+                                    { <input class="form-control" type="text" value='' readonly>}
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                </div>
+                                @Html.TextBoxFor(model => model.StartDate, new { @class = "form-control", @type = "hidden" }) <br />
+                            </div>
+
+                            
+                        </div>
+                        <div class='col-md-2'>
+                            <label class="control-label">Mã Nhân Viên</label>
+                            @Html.TextBoxFor(model => model.PersonalID, new { @class = "form-control" })
+                        </div>
+                        <div class='col-md-7'>
+                            <label class="control-label">Ghi Chú Nhân Sự</label>
+                            @Html.TextBoxFor(model => model.Note2, new { @class = "form-control" })
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary" onclick="openNav()">Lưu thông tin</button>
+        </div>
+
+
+    }
+</div>

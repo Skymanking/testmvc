@@ -1,0 +1,103 @@
+﻿@model PagedList.IPagedList<Model.View.Candidate1>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    int sumOnline = 1;
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-success card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Ứng Viên</h3>
+                <div class="card-tools">
+                    <div class="btn-group" style="height: 37px; margin-top: -20px;">
+                        <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-filter"></i>
+                        </button>
+                        <div class="dropdown-menu float-right" role="menu">
+                            <a class="dropdown-item" href="/Candidate/SearchAdvance1">Tìm kiếm nâng cao</a>
+                            <a class="dropdown-item" href="/Candidate?searchString=cophongvan">Ứng viên có lịch PV</a>
+                            @*<a class="dropdown-item" href="/Candidate/Report1">Tổng Hợp</a>
+                                <a class="dropdown-item" href="//Candidate/Report2?ngay1=@DateTime.Now.AddMonths(-1).ToString("MM/dd/yyyy")&ngay2=@DateTime.Now.ToString("MM/dd/yyyy")">Thống kê tháng</a>*@
+                        </div>
+                    </div>
+                    <a href="/Candidate/Create" data-toggle="tooltip" title="Thêm mới "><i class="fa fa-plus-circle" style="font-size: 40px; color: red"></i></a>
+
+                    @* <a class="btn btn-warning float-right" href="/Candidate/Create"><i class="fa fa-plus" style="font-size:24px;"></i></a>*@
+                    <div style="float:left">
+                        @using (Html.BeginForm("Index", "Candidate", FormMethod.Get))
+                        {
+                            <div class="input-group " style="width: 150px;">
+                                <input type="text" value="@ViewBag.SearchString" name="searchString" class="form-control float-right" placeholder="tìm kiếm">
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <!-- /.panel-heading -->
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Tên Ứng Viên</th>
+                                <th>Email</th>
+                                <th>Điện Thoại</th>
+                                <th>Vị Trí</th>
+                                <th style="width:30px;">Status</th>
+                                <th>Thời gian PV</th>
+                                <th>Xem</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.ID</td>
+                                    <td>@item.Name</td>
+                                    <td>@item.Email</td>
+                                    <td>@item.Phone</td>
+                                    <td>@item.PositionName</td>
+                                    <td>
+                                        @if (item.Status1 == 3 || item.Status2 == 0 || item.Status3 == 0 || item.Status4 == 0 || item.Status5==0)
+                                        {
+                                            <i class="fa fa-frown-o" style="color:red; font-size:24px" data-toggle="tooltip" title="Ứng viên từ chối liên hệ - phỏng vấn hoặc Ứng viên không đạt!"></i>
+                                        }
+                                    </td>
+                                    @if (item.InterviewTime != null)
+                                    {
+                                        <td>@item.InterviewTime.Value.ToString("dd/MM/yyyy HH:mm")</td> }
+                                    else
+                                    {
+                                        <td>null</td>}
+                                    <td><a href="/Candidate/Edit/@item.ID"><span class='fa fa-eye' style="font-size: 22px;"></span></a></td>
+                                </tr>
+
+                                    sumOnline = sumOnline + 1;
+                            }
+
+
+                        </tbody>
+                    </table>
+
+                </div>
+
+
+                <!-- /.table-responsive -->
+            </div>
+            <div class="card-footer clearfix">
+
+                <div class="dataTables_paginate paging_simple_numbers float-right" id="example2_paginate">
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, @searchString = @ViewBag.SearchString }))
+                </div>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+
+    </div>
+</div>

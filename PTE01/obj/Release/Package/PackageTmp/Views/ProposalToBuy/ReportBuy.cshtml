@@ -1,0 +1,61 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme1.cshtml";
+    int monthnow = DateTime.Now.Month;
+    int yearnow = DateTime.Now.Year;
+}
+
+
+<div class="row">
+
+    <div class="col-lg-12">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Report Tiến Độ Mua Vật Tư
+            </div>
+            <p style="color:red;">Click vào ô tháng bên dưới muốn xem Report tình hình mua vật tư của tháng đó (dựa vào thời hạn đáp ứng).</p>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div style="width:100%;background:#eee;padding:10px;margin-top:10px;">
+                    <h2 style="color: #d9534f">Năm @(yearnow -1) </h2>
+                    <ul class="pagination pagination-lg">
+                        @for (int i = 1; i <= 12; i++)
+                        {                           
+                            <li><a href="/ProposalToBuy/Report1/@(yearnow -1)/@i">@i</a></li>
+                        }
+                    </ul>
+                    </div>
+                <div style="width:100%;background:#eee;padding:10px;margin-top:10px;">
+                    <h2 style="color: #d9534f">Năm @yearnow</h2>
+                    <ul class="pagination pagination-lg">
+                        @for (int i = 1; i <= 12; i++)
+                        {
+                            if (i == monthnow)
+                            {
+                                <li class="active"><a href="/ProposalToBuy/Report1/@yearnow/@i">@i</a></li> }
+                            else
+                            {
+                                <li><a href="/ProposalToBuy/Report1/@yearnow/@i">@i</a></li>}
+
+                        }
+                    </ul>
+                </div>
+                <div style="width:100%;background:#eee;padding:10px;margin-top:10px;">
+                    <h2 style="color: #d9534f">Năm @(yearnow + 1)</h2>
+                    <ul class="pagination pagination-lg">
+                        @for (int i = 1; i <= 12; i++)
+                        {
+                                <li><a href="/ProposalToBuy/Report1/@(yearnow + 1)/@i">@i</a></li>
+
+                        }
+                    </ul>
+                </div>
+
+
+
+                    <!-- /.panel-body -->
+                </div>
+        </div>
+    </div>
+</div>

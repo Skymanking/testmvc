@@ -1,0 +1,400 @@
+﻿@model List<Model.View.RecruitmentView2>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+
+    int tongdatuyen = 0; int tongdunghan = 0; int tongdunghan2 = 0; int tongdunghanconlam = 0; int tongconlam = 0;
+    int sumcantuyen = 0; int sumdunghan = 0; int sumdunghan2 = 0; int dakyhd = 0; int danghichuakyhd = 0; int danghitruochanchuakyhd = 0; int sumdatuyen = 0;
+    int danghitruochan = 0;
+    int can15 = 0; int dat15 = 0; int dung15 = 0; int datuyen15 = 0;
+    int can30 = 0; int dat30 = 0; int dung30 = 0; int datuyen30 = 0;
+    int can35 = 0; int dat35 = 0; int dung35 = 0; int datuyen35 = 0;
+    int can45 = 0; int dat45 = 0; int dung45 = 0; int datuyen45 = 0;
+    int can60 = 0; int dat60 = 0; int dung60 = 0; int datuyen60 = 0;
+    int can90 = 0; int dat90 = 0; int dung90 = 0; int datuyen90 = 0;
+    
+
+}
+
+<div class="card card-primary card-outline">
+    <div class="card-header">
+        <h3 class="card-title"><i class="fa fa-clipboard"></i>Tìm kiếm</h3>
+        <div class="card-tools">
+            <div class="btn-group" style="height:40px">
+                <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                    More
+                </button>
+                <div class="dropdown-menu float-right" role="menu">
+                    <a class="dropdown-item" href="/ProposalRecruitment/Index">Danh sách</a>
+                    @*<a class="dropdown-item" href="/ProposalRecruitment/Index2">Chi Tiết Tổng</a>*@
+                    <a class="dropdown-item" href="/ProposalRecruitment/Index3?month=@DateTime.Now.Month&year=@DateTime.Now.Year">Chi Tiết Từng Tháng</a>
+                    <a class="dropdown-item" href="/ProposalRecruitment/Report2?year=@DateTime.Now.Year&month=@DateTime.Now.Month">Report Nhóm Ứng Viên</a>
+                    <a class="dropdown-item" href="/ProposalRecruitment/Report5">Thống kê 12 Tháng</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+            @using (Html.BeginForm("Index3", "ProposalRecruitment", FormMethod.Get))
+            {<div class="row">
+                <div class="col-md-6 text-right">
+                    <p style="margin-bottom: 0;"> Chọn tháng/năm cần xem</p>
+                    <p style="color:red"> Note: nếu muốn xem cả năm thì chọn tháng = 0</p>
+
+                </div>
+                <div class="col-md-2">
+                    <input type="number" value="@ViewBag.month" class="form-control" name="month" />
+                </div>
+                <div class="col-md-2">
+                    <input type="number" value="@ViewBag.year" class="form-control" name="year" />
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-success form-control">Xem Báo Cáo</button>
+                </div>
+            </div>
+            }
+        </div>
+
+    </div>
+</div>
+
+    <div class="card card-primary">
+        <div class="card-header">
+            Danh Sách Yêu Cầu Tuyển Dụng
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover">
+                    <thead>
+                        <tr>
+
+                            <th>ID</th>
+                            <th>Ngày duyệt</th>
+                            <th>Vị trí cần tuyển</th>
+                            <th>Nhân viên đã tuyển</th>
+                            <th>SL cần</th>
+                            <th>SL tuyển đạt QĐ</th>
+                            <th>đã tuyển</th>
+                            <th>đúng hạn</th>
+                            @*<th>đã ký HD</th>*@
+                            <th>cần tuyển thêm</th>
+                            <th>Hạn tuyển</th>
+                            <th>Đã xác nhận đủ</th>
+                        </tr>
+                    </thead>
+
+
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+
+                            <tr id="row_tuyendung">
+                                <td>@item.IDRec</td>
+                                <td>@item.ApprovalDate.Value.ToString("dd/MM/yyyy")</td>
+                                <td>@item.PositionName</td>
+
+                                <td>
+                                    @if (item.Personal != null)
+                                    {
+                                        danghichuakyhd = 0;
+                                        tongdatuyen = 0;
+                                        tongdunghan = 0;
+                                        tongdunghanconlam = 0;
+                                        tongconlam = 0;
+                                        dakyhd = 0;
+                                        danghitruochanchuakyhd=0;
+                                        danghitruochan = 0;
+                                        foreach (var listid in item.Personal)
+                                        {
+                                            tongdatuyen = tongdatuyen + 1;
+                                            if (listid.haveHDLD == true)
+                                            { dakyhd = dakyhd + 1; }
+
+                                            if (listid.Status == true)
+                                            {
+                                                tongconlam = tongconlam + 1;                                                
+
+                                                if (listid.StartDate.Value < item.ApprovalDate.Value.AddDays(item.TypeJob))
+                                                {
+                                                    <a href="../../Personal/Edit2/@listid.ID">
+                                                        <span style="margin:3px;" class="label label-success" data-toggle="tooltip" title="@listid.Name - ngày vào làm: @listid.StartDate.Value.ToString("dd/MM/yyyyy") - còn làm - tuyển đúng hạn">@listid.ID <span class="fa fa-thumbs-up" style="color: white;font-size: 14px;"></span></span>
+                                                    </a>
+                                                    tongdunghan = tongdunghan + 1;
+                                                    tongdunghanconlam = tongdunghanconlam + 1;
+                                                }
+                                                else
+                                                {
+                                                    <a href="../../Personal/Edit2/@listid.ID">
+                                                        <span style="margin:3px;" class="label label-success" data-toggle="tooltip" title="@listid.Name - ngày vào làm: @listid.StartDate.Value.ToString("dd/MM/yyyyy") - còn làm - tuyển trễ hạn">@listid.ID <span class="fa fa-thumbs-down" style="color: black;font-size: 14px;"></span></span>
+                                                    </a>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (listid.haveHDLD == true)
+                                                {
+
+
+                                                    if (listid.StartDate.Value < item.ApprovalDate.Value.AddDays(item.TypeJob))
+                                                    {
+                                                        <a href="../../Personal/Edit2/@listid.ID">
+                                                            <span style="margin:3px;" class="label label-warning" data-toggle="tooltip" title="@listid.Name - ngày vào làm: @listid.StartDate.Value.ToString("dd/MM/yyyyy") - đã nghỉ @if(listid.EndDate!=null){<span>ngày @listid.EndDate.Value.ToString("dd/MM/yyyyy")</span>} - đã ký HDLD 1 năm - tuyển đúng hạn">@listid.ID <span class="fa fa-thumbs-up" style="color: white;font-size: 14px;"></span></span>
+                                                        </a>
+                                                        tongdunghan = tongdunghan + 1;
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href="../../Personal/Edit2/@listid.ID">
+                                                            <span style="margin:3px;" class="label label-warning" data-toggle="tooltip" title="@listid.Name - ngày vào làm: @listid.StartDate.Value.ToString("dd/MM/yyyyy") - đã nghỉ @if(listid.EndDate!=null){<span>ngày @listid.EndDate.Value.ToString("dd/MM/yyyyy")</span>} - đã ký HDLD 1 năm - tuyển trễ hạn">@listid.ID <span class="fa fa-thumbs-down" style="color: black;font-size: 14px;"></span></span>
+                                                        </a>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    if (listid.StartDate.Value < item.ApprovalDate.Value.AddDays(item.TypeJob))
+                                                    {
+                                                        <a href="../../Personal/Edit2/@listid.ID">
+                                                            <span style="margin:3px;" class="label label-danger" data-toggle="tooltip" title="@listid.Name - ngày vào làm: @listid.StartDate.Value.ToString("dd/MM/yyyyy") - đã nghỉ  @if(listid.EndDate!=null){<span>ngày @listid.EndDate.Value.ToString("dd/MM/yyyyy")</span>}- chưa ký HDLD 1 năm - tuyển đúng hạn">@listid.ID <span class="fa fa-thumbs-up" style="color: white;font-size: 14px;"></span></span>
+                                                        </a>
+                                                        tongdunghan = tongdunghan + 1;
+                                                        danghitruochanchuakyhd = danghitruochanchuakyhd + 1;
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href="../../Personal/Edit2/@listid.ID">
+                                                            <span style="margin:3px;" class="label label-danger" data-toggle="tooltip" title="@listid.Name - ngày vào làm: @listid.StartDate.Value.ToString("dd/MM/yyyyy") - đã nghỉ  @if(listid.EndDate!=null){<span>ngày @listid.EndDate.Value.ToString("dd/MM/yyyyy")</span>}- chưa ký HDLD 1 năm - tuyển trễ hạn">@listid.ID <span class="fa fa-thumbs-down" style="color: black;font-size: 14px;"></span></span>
+                                                        </a>
+                                                    }
+                                                    danghichuakyhd = danghichuakyhd + 1;
+
+                                                }
+                                                if(listid.EndDate!=null && listid.EndDate<item.ApprovalDate.Value.AddDays(item.TypeJob) )
+                                                { danghitruochan = danghitruochan + 1; }
+                                            }
+                                        }
+                                    }
+
+                                </td>
+                                <td>@item.Quality</td>
+                                <td>@(tongdunghan - danghitruochan)</td>
+                                <td>@tongdatuyen</td>
+                                <td>@tongdunghan</td>
+                                @*<td>@dakyhd</td>*@
+                                <td>@(item.Quality - (tongdatuyen - danghichuakyhd))</td>
+                                <td>@item.ApprovalDate.Value.AddDays(item.TypeJob).ToString("dd/MM/yyyy")</td>
+                                @if (item.StartConfirm == true)
+                                {
+                                    <td style="background: #8BC34A;">@Html.Raw("<span class='fa fa-check fa-2x'></span>")</td>}
+                                else
+                                {
+                                    <td>@Html.Raw("<span class='fa fa-times fa-2x'></span>")</td>}
+
+                                @{
+                                    //tongdunghan = tongdunghan < item.Quality ? tongdunghan : item.Quality;
+                                    tongdunghan2= tongdunghan - danghitruochan;
+                                    //tongdunghan2 = tongdunghan2 < item.Quality ? tongdunghan2 : item.Quality;
+                                 }
+                            </tr>
+                            
+
+                            //if (DateTime.Now > item.ApprovalDate.Value.AddDays(item.TypeJob))
+                            //{
+
+                                sumcantuyen = sumcantuyen + item.Quality;
+                                sumdunghan = sumdunghan + tongdunghan;
+                                sumdunghan2 = sumdunghan2 + tongdunghan2;
+                                sumdatuyen = sumdatuyen + tongdatuyen;
+                                switch (item.TypeJob)
+                                {
+                                    case 15:
+                                        can15 = can15 + item.Quality;
+                                        dat15 = dat15 + tongdunghan2;                             
+                                        dung15 = dung15 + tongdunghan;
+                                        datuyen15 = datuyen15 + tongdatuyen;
+                                        break;
+                                    case 30:
+                                        can30 = can30 + item.Quality;
+                                        dat30 = dat30 + tongdunghan2;
+                                        dung30 = dung30 + tongdunghan;
+                                        datuyen30 = datuyen30 + tongdatuyen;
+                                        break;
+                                    case 35:
+                                        can35 = can35 + item.Quality;
+                                        dat35 = dat35 + tongdunghan2;
+                                        dung35 = dung35 + tongdunghan;
+                                        datuyen35 = datuyen35 + tongdatuyen;
+                                        break;
+                                    case 45:
+                                        can45 = can45 + item.Quality;
+                                        dat45 = dat45 + tongdunghan2;
+                                        dung45 = dung45 + tongdunghan;
+                                        datuyen45 = datuyen45 + tongdatuyen;           
+                                        break;
+                                    case 60:
+                                        can60 = can60 + item.Quality;
+                                        dat60 = dat60 + tongdunghan2;
+                                        dung60 = dung60 + tongdunghan;
+                                        datuyen60 = datuyen60 + tongdatuyen;
+                                        break;
+                                    case 90:
+                                        can90 = can90 + item.Quality;
+                                        dat90 = dat90 + tongdunghan2;
+                                        dung90 = dung90 + tongdunghan;
+                                        datuyen90 = datuyen90 + tongdatuyen;
+                                        break;
+                                //}
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>    
+
+
+
+<div class="card card-primary">
+    <div class="card-header">
+        Thống kê
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <table class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+
+                        <th>Loại nhân viên</th>
+                        <th>SL cần tuyển</th>
+                        <th>SL đã tuyển</th>
+                        <th>SL tuyển đạt QĐ</th>
+                        <th>% tuyển đạt QĐ</th>
+                        <th>SL tuyển đúng hạn</th>
+                        <th>% tuyển đúng hạn</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Lao động phổ thông</td>
+                        <td>@can15</td>
+                        <td>@datuyen15</td>
+                        <td>@dat15</td>
+                        <td>@if (can15 > 0) { <span>@(dat15 *100 / can15) %</span>} else{<span>N/A</span>}</td>
+                        <td>@dung15</td>
+                        <td>@if (can15 > 0)
+                        { <span>@(dung15 * 100 / can15) %</span>}
+                        else
+                        {<span>N/A</span>}</td>
+                    </tr>
+                    <tr>
+                        <td>Nhân viên Văn Phòng, Gián Tiếp, Bảo vệ</td>
+                        <td>@can30</td>
+                        <td>@datuyen30</td>
+                        <td>@dat30</td>
+                        <td>@if (can30 > 0)
+                        { <span>@(dat30 * 100 / can30) %</span>}
+                        else
+                        {<span>N/A</span>}</td>
+                        <td>@dung30</td>
+                        <td>
+                            @if (can30 > 0)
+                            { <span>@(dung30 * 100 / can30) %</span>}
+                            else
+                            {<span>N/A</span>}
+                    </td>
+                    </tr>
+                    <tr>
+                        <td>Công nhân kỹ thuật có tay nghề</td>
+                        <td>@can35</td>
+                        <td>@datuyen35</td>
+                        <td>@dat35</td>
+                        <td>@if (can35 > 0)
+                        { <span>@(dat35 * 100 / can35) %</span>}
+                        else
+                        {<span>N/A</span>}</td>
+                        <td>@dung35</td>
+                        <td>
+                            @if (can35 > 0)
+                            { <span>@(dung35 * 100 / can35) %</span>}
+                            else
+                            {<span>N/A</span>}
+                    </td>
+                    </tr>
+                    <tr>
+                        <td>Quản lý cấp trung</td>
+                        <td>@can45</td>
+                        <td>@datuyen45</td>
+                        <td>@dat45</td>
+                        <td>@if (can45 > 0)
+                        { <span>@(dat45 * 100 / can45) %</span>}
+                        else
+                        {<span>N/A</span>}</td>
+                        <td>@dung45</td>
+                        <td>
+                            @if (can45 > 0)
+                            { <span>@(dung45 * 100 / can45) %</span>}
+                            else
+                            {<span>N/A</span>}
+                    </td>
+                    </tr>
+                    <tr>
+                        <td>Quản lý cấp cao</td>
+                        <td>@can60</td>
+                        <td>@datuyen60</td>
+                        <td>@dat60</td>
+                        <td>@if (can60 > 0)
+                        { <span>@(dat60 * 100 / can60) %</span>}
+                        else
+                        {<span>N/A</span>}</td>
+                        <td>@dung60</td>
+                        <td>
+                            @if (can60 > 0)
+                            { <span>@(dung60 * 100 / can60) %</span>}
+                            else
+                            {<span>N/A</span>}
+                    </td>
+                    </tr>
+                    <tr>
+                        <td>Cấp lãnh đạo</td>
+                        <td>@can90</td>
+                        <td>@datuyen90</td>
+                        <td>@dat90</td>
+                        <td>@if (can90 > 0)
+                        { <span>@(dat90 * 100 / can90) %</span>}
+                        else
+                        {<span>N/A</span>}</td>
+                        <td>@dung90</td>
+                        <td>
+                            @if (can90 > 0)
+                            { <span>@(dung90 * 100 / can90) %</span>}
+                            else
+                            {<span>N/A</span>}
+                    </td>
+                    </tr>
+                    <tr style="font-size: 22px; background: #28a745;">
+                        <td>Tổng</td>
+                        <td>@sumcantuyen</td>
+                        <td>@sumdatuyen</td>
+                        <td>@sumdunghan2</td>
+                        <td>@if (sumcantuyen > 0)
+                        { <span>@(sumdunghan2 * 100 / sumcantuyen) %</span>}
+                        else
+                        {<span>N/A</span>}</td>
+                        <td>@sumdunghan</td>
+                        <td>
+                            @if (sumcantuyen > 0)
+                            { <span>@(sumdunghan * 100 / sumcantuyen) %</span>}
+                            else
+                            {<span>N/A</span>}
+                    </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>

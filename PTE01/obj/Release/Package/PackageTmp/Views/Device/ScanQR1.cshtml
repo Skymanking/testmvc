@@ -1,0 +1,84 @@
+﻿@model Model.EF.DeviceFix
+@{
+    ViewBag.Title = "Scan1";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+
+}
+<style>
+    input, label {
+        vertical-align: middle;
+    }
+
+    .qrcode-text {
+        padding-right: 1.7em;
+        margin-right: 0;
+        width: 95%;
+    }
+
+    .qrcode-text-btn {
+        display: inline-block;
+        background: url(/Assets/theme3/dist/img/qr_icon.svg) 50% 50% no-repeat;
+        height: 90px;
+        width: 90px;
+        margin-left: -110px;
+        margin-top: 10px;
+        cursor: pointer;
+    }
+
+        .qrcode-text-btn > input[type=file] {
+            position: absolute;
+            overflow: hidden;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+        }
+</style>
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/instascan.min.js"></script>
+
+<div class="card card-primary card-outline">
+    <div class="card-header">
+        <h3 class="card-title">Check Thông Tin Thiết Bị</h3>
+    </div>
+    <div class="card-body">
+        <div class="tab-content">
+            <div class="row">
+
+                <div class='col-md-12'>
+                    <div class="row" style="padding-left: 10px; padding-top:0;">
+                        <input id="DeviceID" name="DeviceID" type="number" size=16 placeholder="Quét QR Code thiết bị-->" class="qrcode-text form-control">
+                        <label class=qrcode-text-btn>
+                            <input type=file accept=" image />*" capture=environment onchange="openQRCamera(this);" tabindex=-1>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/qr_packed.js"></script>
+<script>
+    function openQRCamera(node) {
+        var reader = new FileReader();
+        reader.onload = function () {
+            node.value = "";
+            qrcode.callback = function (res) {
+                if (res instanceof Error) {
+                    alert("Không tìm thấy QR Code. Hãy thử lại và canh chỉnh camera nhìn rõ nét QR Code cần quét.");
+                } else {
+                    node.parentNode.previousElementSibling.value = res;
+                    var qr = $("#DeviceID").val();
+
+                    window.location = '../../CMMSCategory/CMMSPerform/' + qr;
+                }
+            };
+            qrcode.decode(reader.result);
+
+        };
+        reader.readAsDataURL(node.files[0]);
+
+    }
+
+</script>

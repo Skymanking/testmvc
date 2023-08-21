@@ -1,0 +1,115 @@
+﻿@model PagedList.IPagedList<Model.View.ProposalLeave1>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    string userOnline = ViewBag.userOnline;
+
+}
+@section jsFooter
+{
+    <script src="/Scripts/LeaveOK.js"></script>
+    <script src="/Scripts/ChangeStatusProposalLeave.js"></script>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-success card-outline">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fa fa-clipboard"></i> Nghỉ Phép</h3>
+
+                <div class="card-tools">
+                    @using (Html.BeginForm("Index", "ProposalLeave", FormMethod.Get))
+                    {
+                        <div class="input-group " style="width: 300px;">
+                            <input type="text" value="@ViewBag.SearchString" name="searchString" class="form-control float-right" placeholder="tìm kiếm">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <script src="~/Scripts/jquery-1.9.1.min.js"></script>
+            <div class="card-body">
+                <ul class="todo-list">
+                    @foreach (var item in Model)
+                    {
+                        <li>                            
+                            <span><i class="fa fa-star text-warning"></i> </span>
+                            @if(item.Status==true)
+                            {<span class="text" style="color: #009688">@item.FullName</span> }
+                            else
+                            {<span class="text" style="color: #dc3545">@item.FullName đã hủy phiếu này</span> }
+                             
+
+                            @*<span class="badge badge-dark" data-toggle="tooltip" title="tạo ngày: @item.CreateDate"><i class="fa fa-user"></i> @item.CreateBy </span>*@
+                            <span class="badge badge-warning"><i class="fa fa-clock-o"></i>@item.StartNote @item.StartTime.ToString("dd/MM/yyyy") </span> đến hết
+                            <span class="badge badge-warning"><i class="fa fa-clock-o"></i>@item.EndNote @item.EndTime.ToString("dd/MM/yyyy")</span>
+
+                            <span class="badge badge-info float-right"><i class="fa fa-user-circle"></i> @item.ApprovalPer </span>
+                            @if (item.Approval == null)
+                            {
+                                <span class="badge badge-dark float-right"> chưa duyệt </span>
+                            }
+                            else
+                            {
+                                if (item.Approval == true)
+                                { <span class="badge badge-success float-right"> đã duyệt </span>}
+                                else
+                                { <span class="badge badge-danger float-right"> không duyệt </span>}
+                            }
+                            @if (userOnline == item.ApprovalPer)
+                            {
+                                if (item.Approval != true && item.Status== true)
+                                {<a href="#"><span id="duyetnghi_@item.ID" class="badge badge-danger" data-lydonghi="@item.Reason" data-toggle="modal" data-target="#myModal" style="width:140px;font-size:18px"> <i class="fa fa-edit" style="font-size:22px;"></i>Phê duyệt</span></a>}
+                            }
+                            @if (userOnline == item.CreateBy)
+                            {
+                                if(item.Status==true)
+                                {
+                                <a href="#"><span id="" class="badge badge-danger btn-changestatus" data-id="@item.ID" style="width:40px;font-size:18px"> <i class="fa fa-trash-o" style="font-size:22px;"></i></span></a>
+                             }
+                            }
+
+                        </li>
+                        <script>
+                            $(document).ready(function () {
+                                $('#duyetnghi_@item.ID').on('click', function () {
+                                    var lydos = $(this).attr("data-lydonghi");
+                                    $('#lydonghi').text(lydos);
+                                    $('#oknghi').attr("data-id", '@item.ID');
+                                    $('#notnghi').attr("data-id", '@item.ID');
+                                });
+                            });
+                        </script>
+                    }
+
+                </ul>
+            </div>
+            <!-- The Modal -->
+            <div class="modal" id="myModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header"><h4 class="modal-title">Lý do xin nghỉ phép</h4><button type="button" class="close" data-dismiss="modal">&times;</button></div>
+                        <div class="modal-body">
+                            <span id="lydonghi" style="font-size: 18px; color: #007bff;"></span>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-dark" data-dismiss="modal">Bỏ Qua</button>
+                            <button id="oknghi" data-id="" type="button" class="btn btn-success">Duyệt Nghỉ</button>
+                            <button id="notnghi" data-id="" type="button" class="btn btn-danger">Không Duyệt</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer clearfix">
+                <a class="btn btn-sm btn-info float-left" href="/ProposalLeave/Create"><i class="fa fa-plus"></i> Thêm mới</a>
+                <div class="dataTables_paginate paging_simple_numbers float-right" id="example2_paginate">
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, @searchString = @ViewBag.SearchString }))
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

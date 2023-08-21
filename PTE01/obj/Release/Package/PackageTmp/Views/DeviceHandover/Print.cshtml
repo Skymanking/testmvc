@@ -1,0 +1,97 @@
+﻿@{
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+
+
+    var infohandover = (Model.EF.DeviceHandover)ViewBag.infohandover;
+    var infodevice = (Model.EF.Device)ViewBag.infodevice;
+    var infopersonal = (string)ViewBag.infopersonal;
+
+}
+
+<div class="row">
+    <table>
+        <tbody>
+            <tr id="rowt" style="background:none;">
+                <td class="text-center" style="border:none;"><img class="img-responsive" src="~/Assets/dist/css/logo2.jpg" /> </td>
+                <td class="text-center" style="border:none;"><h1>BIÊN BẢN BÀN GIAO THIẾT BỊ</h1></td>
+            </tr>
+        </tbody>
+    </table>
+
+
+</div>
+
+<div class="row">
+    <div class='col-md-6'>
+        <p>Người nhận bàn giao: <b style="font-size:120%">@infopersonal</b></p>
+    </div>
+    <div class='col-md-3'>
+        <p>Mã nhân viên: <b style="font-size:120%">@infohandover.PerID</b></p>
+    </div>
+    <div class='col-md-12'>
+        <p>Ngày bàn giao: <b style="font-size:120%">@infohandover.DeliveryDate.ToString("dd/MM/yyyy")</b> </p>
+    </div>
+</div>
+<div class="row">
+
+    <div class='col-md-12'>
+        <p>Tên Thiết Bị: @infodevice.Name</p>
+    </div>
+    <div class='col-md-12'>
+        <p>Model: <b style="font-size:120%">@infodevice.Model</b></p>
+    </div>
+
+    <div class='col-md-6'>
+        <p>Nhà SX: @infodevice.Manufacturer</p>
+    </div>
+
+    <div class='col-md-6'>
+        <p>Ngày Mua: @if (@infodevice.DateofPur != null){<span>@infodevice.DateofPur.Value.ToString("dd/MM/yyyy")</span>}</p>
+    </div>
+
+    <div class='col-md-12'>
+        <p>QRCode: @infodevice.QRCode</p>
+    </div>
+    <div class='col-md-12'>
+        <p>SerialCode1: @infodevice.SerialCode1</p>
+    </div>
+    <div class='col-md-12'>
+        <p>SerialCode2: @infodevice.SerialCode2</p>
+
+    </div>
+
+</div>
+<div class="row">
+    <div class='col-md-12'>
+        <b>Thông tin kỹ thuật</b>
+        <textarea style="width: 100%; min-height: 220px;">@infodevice.Description</textarea>
+       
+    </div>
+
+    <div class='col-md-12'>
+        <b>Ghi chú</b>
+        <textarea style="width: 100%; min-height: 120px;">@infodevice.Note</textarea>
+        
+    </div>
+</div>
+
+<div class="row">
+    <div class='col-md-6'>
+        <div class='text-center'>
+            <b>Người lập biên bản</b>
+        </div>
+
+        <div class='text-center'>
+            <p>Ký Tên</p>
+        </div>
+    </div>
+    <div class='col-md-6'>
+        <div class='text-center'>
+            <b>Người nhận bàn giao</b>
+        </div>
+
+        <div class='text-center'>
+            <p>Ký Tên</p>
+        </div>
+    </div>
+</div>

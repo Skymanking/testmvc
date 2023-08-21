@@ -1,0 +1,320 @@
+﻿@model List<Model.EF.PTE_baocom1>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    // var listnv = (IEnumerable<Model.EFBIO.iclock_transaction>)ViewBag.dsnv;
+    var dschuabc = (List<Model.View.Personal9>)ViewBag.dschuabc;
+    var dscodilam = (List<Model.View.Personal9>)ViewBag.dscodilam;
+    DateTime ngay = Convert.ToDateTime(ViewBag.ngay1);
+    string ngaythangnam = "INPUTDATA" + DateTime.Now.ToUniversalTime();
+    int demM = 0;
+    int demB = 0;
+    int demC = 0;
+}
+@section jsFooter
+{
+    <script src="/Assets/plugin/ckfinder/ckfinder.js"></script>
+    <script src="/Assets/theme3/plugins/datepicker/js/bootstrap-datetimepicker.js"></script>
+    <script src="/Assets/theme3/plugins/datepicker/js/locales/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
+    <script src="/Assets/theme3/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+    <script src="/Assets/theme3/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="/Assets/theme3/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+        $(function () {
+            $("#ngay1").datepicker();
+            $('input[type="checkbox"].flat-green, input[type="radio"].flat-green').iCheck({
+                checkboxClass: 'icheckbox_flat-green',
+                radioClass: 'iradio_flat-green'
+            })
+        })
+    </script>
+    <script>
+        $(function () {
+            $("#example1").DataTable();
+            $('#baocom').DataTable({
+                "paging": false,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": false,
+                "autoWidth": false
+            });
+            $('#example2').DataTable({
+                "paging": false,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": false,
+                "autoWidth": false
+            });
+            $('#example3').DataTable({
+                "paging": false,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": false,
+                "autoWidth": false
+            });
+        });
+    </script>
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+<link rel="stylesheet" href="/Assets/theme3/plugins/datatables/dataTables.bootstrap4.min.css">
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Tìm kiếm nâng cao</h3>
+        <div class="card-tools">
+            <div class="btn-group" style="height:37px">
+                <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                    More
+                </button>
+                <div class="dropdown-menu float-right" role="menu">
+                    <a class="dropdown-item" href="/PTE_baocom/Report2" style="color:#000">Danh sách đã đặt</a>
+                    <a class="dropdown-item" href="/PTE_baocom/Index3" style="color:#000">Đăng ký Cơm</a>
+                    <a class="dropdown-item" href="/PTE_baocom/Index2" style="color:#000">Thay đổi Cơm</a>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <div class="card-body">
+        @using (Html.BeginForm("Report2", "PTE_baocom", FormMethod.Get))
+        {
+            <div class="row">
+
+                <div class="col-md-2">
+
+                    <div class="callout callout-info">
+                        <label class="control-label" style="color: #FF5722;">Ngày - Buổi</label><br>
+                        <div class="bootstrap-timepicker">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" id="ngay1" name="ngay1" class="form-control" readonly="readonly" value="@if(ViewBag.ngay1!=null){@ViewBag.ngay1}else{@DateTime.Now.ToShortDateString()}"><br>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <label><input type="radio" class="flat-green" id="buoi" name="buoi" value="Sang" checked />Cơm Sáng</label><br>
+                        <label><input type="radio" class="flat-green" id="buoi" name="buoi" value="Toi" />Cơm Tối</label><br>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="callout callout-info">
+                        <label class="control-label" style="color: #FF5722;">Món</label><br>
+                        <label><input type="radio" class="flat-green" id="mon" name="mon" value="null" checked />Tất cả</label><br>
+                        <label><input type="radio" class="flat-green" id="mon" name="mon" value="MM" />Món mặn</label><br>
+                        <label><input type="radio" class="flat-green" id="mon" name="mon" value="BS" />Chay & Bánh sữa</label><br>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="callout callout-info">
+                        <label class="control-label" style="color: #FF5722;">Xưởng làm việc</label><br>
+                        <label><input type="radio" class="flat-green" id="xuong" name="xuong" value="null" checked />Tất cả</label><br>
+                        <label><input type="radio" class="flat-green" id="xuong" name="xuong" value="X1" />Xưởng 1</label><br>
+                        <label><input type="radio" class="flat-green" id="xuong" name="xuong" value="X2" />Xưởng 2</label><br>
+                        <label><input type="radio" class="flat-green" id="xuong" name="xuong" value="X3" />Xưởng 3</label><br>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="callout callout-info">
+                        <label class="control-label" style="color: #FF5722;">Tìm theo mã NV</label><br>
+                        <input type="text" class="form-control" id="searchString" name="searchString" placeholder="A..." />
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i>Tìm kiếm</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <script src="~/Scripts/jquery-1.9.1.min.js"></script>
+    </div>
+    <div class="card-footer">
+
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-success card-outline">
+            <div class="card-header">
+                <label style="font-size:25px"><i class="fa fa-clipboard"></i> Kết quả: </label> &nbsp &nbsp
+                <label id="iddemM">Món mặn: </label> &nbsp &nbsp
+                <label id="iddemC">Món chay: </label> &nbsp &nbsp
+                <label id="iddemB">Bánh sữa: </label> &nbsp &nbsp
+                <div class="card-tools">
+                    <div class="btn-group" style="height:40px">
+                        <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                            Tool
+                        </button>
+                        <div class="dropdown-menu float-right" role="menu">
+                            <span class="dropdown-item" onclick="exportTableToExcel('baocom', '@ngaythangnam')">Export to Excel</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <div id="example2_filter" class="dataTables_filter" aria-controls="example2">
+
+                    </div>
+
+                    <script>
+                        function exportTableToExcel(tableID, filename) {
+                            var downloadLink;
+                            var dataType = 'application/vnd.ms-excel';
+                            var tableSelect = document.getElementById(tableID);
+                            var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+                            filename = filename ? filename + '.xls' : 'excel_data.xls';
+                            downloadLink = document.createElement("a");
+                            document.body.appendChild(downloadLink);
+                            if (navigator.msSaveOrOpenBlob) {
+                                var blob = new Blob(['\ufeff', tableHTML], {
+                                    type: dataType
+                                });
+                                navigator.msSaveOrOpenBlob(blob, filename);
+                            } else {
+                                downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+                                downloadLink.download = filename;
+                                downloadLink.click();
+                            }
+                        }
+                    </script>
+                    <table class="table table-striped table-bordered table-hover" id="baocom">
+                        <thead>
+                            <tr>
+                                <th>Mã NV </i></th>
+                                <th>Tên NV</i></th>
+                                <th>Món</th>
+                                <th>Xưởng làm việc</th>
+                                <th>Nơi chấm công</th>
+                                <th>Bộ phận -Nhóm</th>
+                                <th>Ngày đặt cơm</th>
+                                <th>Buổi  ></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var item in Model)
+                            {
+                                <tr id="row_@item.ID">
+                                    <td>@item.emp_code</td>
+                                    <td>@item.first_name</td>
+                                    <td>@item.mon</td>
+                                    <td>@item.xuong1</td>
+                                    <td>@item.xuong</td>
+                                    <td>@item.dep_name</td>
+                                    <td>@item.Day1.Day/@item.Day1.Month/@item.Day1.Year</td>
+                                    @if (item.xuong.Contains("Xuong"))
+                                    {
+                                        if (item.mon.Contains("BS"))
+                                        {
+                                            demB++;
+                                        }
+                                        if (item.mon.Contains("MC"))
+                                        {
+                                            demC++;
+                                        }
+                                        if (item.mon.Contains("MM"))
+                                        {
+                                            demM++;
+                                        }
+                                    }
+                                    <td>@item.buoi</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+                <div class="table-responsive">
+                    <h2 style="color:red; font-weight:bold;">DANH SÁCH NHÂN VIÊN CHƯA BÁO CƠM NHƯNG CÓ ĐI LÀM NGÀY @ngay.ToString("dd/MM/yyyy")</h2>
+                    <table class="table table-bordered" id="example2">
+                        <thead>
+                            <tr>
+                                <th>Mã NV</th>
+                                <th>Tên NV</th>
+                                <th>Bộ phận -Nhóm</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var item in dscodilam)
+                            {
+                                <tr>
+                                    <td>@item.ID</td>
+                                    <td>@item.Name</td>
+                                    <td>@item.GroupName</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+                <div class="table-responsive">
+                    <h2 style="color:red; font-weight:bold;">DANH SÁCH NHÂN VIÊN CHƯA BÁO CƠM NGÀY @ngay.ToString("dd/MM/yyyy")</h2>
+                    <table class="table table-bordered" id="example3">
+                        <thead>
+                            <tr>
+                                <th>Mã NV</th>
+                                <th>Tên NV</th>
+                                <th>Bộ phận -Nhóm</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var item in dschuabc)
+                            {
+                                <tr>
+                                    <td>@item.ID</td>
+                                    <td>@item.Name</td>
+                                    <td>@item.GroupName</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+            <script>
+                $(document).ready(function () {
+                    var tbpduyet = $("input[name=chamcong]:checked").val();
+                    var pgdduyet = $("input[name=buoi]:checked").val();
+                    var gdduyet = $("input[name=xuong]:checked").val();
+                    var mhduyet = $("input[name=mon]:checked").val();
+                    var ngay1 = $('#ngay1').val();
+                    var searchString = $('#searchString').val();
+                    $('#inbaocao').attr("href", '/PTE_baocom/Report2?buoi=' + buoi + '&xuong=' + xuong + '&mon=' + mon + '&ngay1=' + ngay1 + '&searchString=' + searchString);
+
+                    $("#inbaocao").focus(function () {
+                        var tbpduyet = $("input[name=chamcong]:checked").val();
+                        var pgdduyet = $("input[name=buoi]:checked").val();
+                        var gdduyet = $("input[name=xuong]:checked").val();
+                        var mhduyet = $("input[name=mon]:checked").val();
+                        var ngay1 = $('#ngay1').val();
+                        var searchString = $('#searchString').val();
+                        $('#inbaocao').attr("href", '/PTE_baocom/Report2?&buoi=' + buoi + '&xuong=' + xuong + '&mon=' + mon + '&ngay1=' + ngay1 + '&searchString=' + searchString);
+
+                    });
+                });
+            </script>
+            <script type="text/javascript">
+                document.getElementById("iddemM").innerHTML = "<span style='font-size: 22px;color: #C7CF1E;'>" + "Món mặn: " +@demM + "</span> "
+                document.getElementById("iddemC").innerHTML = "<span style='font-size: 22px;color: #39CF1E;'>" + "Món chay: " +@demC + "</span> "
+                document.getElementById("iddemB").innerHTML = "<span style='font-size: 22px;color: #1E5ECF;'>" + "Bánh sữa: " +@demB + "</span> "
+            </script>
+            <div class="card-footer clearfix">
+
+            </div>
+            <!-- /.panel-body -->
+        </div>
+
+    </div>
+</div>
+</div>

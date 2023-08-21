@@ -1,0 +1,104 @@
+﻿@model PagedList.IPagedList<Model.View.ProjectList>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-success card-outline">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fa fa-clipboard"></i>Dự Án</h3>
+                <div class="card-tools">
+                    @* <a class="btn btn-warning float-right" href="/Project/Create1"><i class="fa fa-plus" style="font-size:24px;"></i></a>*@
+                    <div class="btn-group" style="height:37px;margin-top:-20px;">
+                        <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-filter"></i>
+                        </button>
+                        <div class="dropdown-menu float-right" role="menu">
+                            <a href="/Project/Index?searchString=status0" style="color:black;" class="dropdown-item"><i class="fa fa-circle fa-2x" style="color: #ffc107;"></i>Working</a>
+                            <a href="/Project/Index?searchString=status1" style="color:black;" class="dropdown-item"><i class="fa fa-circle fa-2x" style="color: #28a745;"></i>Done</a>
+                            <a href="/Project/Index?searchString=status2" style="color:black;" class="dropdown-item"><i class="fa fa-circle fa-2x" style="color: #dc3545;"></i>Delay</a>
+                            <a href="/Project/Index?searchString=status3" style="color:black;" class="dropdown-item"><i class="fa fa-circle fa-2x" style="color: #c2c7d0;"></i>Cancel</a>
+                            <a href="/Project/Index" style="color:black;" class="dropdown-item"><i style="width:20px;height:20px;border-radius:50%; background:red;"></i>Tất cả</a>
+                        </div>
+                    </div>
+                    <a href="/Project/Create1" data-toggle="tooltip" title="Thêm mới "><i class="fa fa-plus-circle" style="font-size: 40px; color: red"></i></a>
+                    <div style="float:left">
+                        @using (Html.BeginForm("Index", "Project", FormMethod.Get))
+                        {
+                            <div class="input-group " style="width: 200px;">
+                                <input type="text" value="@ViewBag.SearchString" name="searchString" class="form-control float-right" placeholder="tìm kiếm">
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive" style="overflow:inherit">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th width="70px">Task</th>
+                                <th width="100px">Status</th>
+                                <th width="70px">Owner</th>
+                                <th width="100px">Due date</th>
+                                <th width="70px">File</th>
+                                <th width="60px">Config</th>                               
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr style="border-left: 6px solid green;">
+                                    <td><a href="/Project/Edit/@item.ID" style="color:black;">@item.Name</a></td>
+                                    <td><span style="font-weight:bold; color:green;"> @item.Count1 </span>/@item.Count2 </td>
+                                    @if (item.Status == 0)
+                                    {
+                                        <td style="background: #ffc107;font-size:12px;">Working</td>
+                                    }
+                                    @if (item.Status == 1)
+                                    {
+                                        <td style="background: #28a745; font-size: 12px;">Done</td>
+                                    }
+                                    @if (item.Status == 2)
+                                    {
+                                        <td style="background: #dc3545; font-size: 12px;">Delay</td>
+                                    }
+                                    @if (item.Status == 4)
+                                    {
+                                        <td style="background: ##c2c7d0; font-size: 12px;">Cancel</td>
+                                    }
+
+                                    <td>
+                                        <div class="tooltipImage" style="background: url('@item.ImageOwner');background-size: 35px;">
+                                            <span>
+                                                <img src="@item.ImageOwner" style="width: 100px;">
+                                                <p>@item.CreateBy</p>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td> @item.EndDate.ToString("dd/MM/yyyy")</td>
+                                    <td><a href="/Project/File/@item.ID"><img src="~/Assets/theme3/dist/img/projectfile.png" /></a></td>
+                                    <td><a href="/Project/Edit2/@item.ID"><span class='fa fa-cogs' style="font-size: 20px;"></span></a></td>
+                                   
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer clearfix">
+                <a class="btn btn-sm btn-info float-left" href="/Project/Create1"><i class="fa fa-plus"></i> Thêm mới</a>
+                <div class="dataTables_paginate paging_simple_numbers float-right" id="example2_paginate">
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, @searchString = @ViewBag.SearchString }))
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

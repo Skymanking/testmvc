@@ -1,0 +1,42 @@
+﻿@model List<Model.ERP.check_job>
+@{
+    ViewBag.Title = "check_BOM";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+}
+
+<div class="card-body">
+
+        <table class="table table-striped table-bordered table-hover" id="Warehouse">
+            <thead>
+                <tr>
+                    <th>Job</th>
+                    <th>SL Item</th>
+                    <th>Estimate</th>
+                    <th>SL Item</th>
+                    <th>Current</th>
+                    <th>SL Item</th>
+                    <th>Xem</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    string jobCu = "";
+                    if (!string.IsNullOrEmpty(item.jobC))
+                    {
+                        jobCu = item.jobC.Replace(" ", "");
+                    }
+                    <tr id="row_@item.job">
+                        <td>@item.job</td>
+                        <td>@item.count_materialC</td>
+                        <td>@item.jobE</td>
+                        <td>@item.count_materialE</td>
+                        <td>@item.jobC</td>
+                        <td>@item.count_materialJ</td>
+                        <td><a href="check_BOMDetail?job=@item.job,@item.jobE,@jobCu">Chi tiết</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>

@@ -1,0 +1,65 @@
+﻿@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_Theme1.cshtml";
+    var detail = (Model.View.FullQuestion)ViewBag.detail;
+    var lenght = detail.detail.Count();
+}
+
+<div class="row">
+    <!-- Cot ben trai -->
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                Thông Tin Câu Hỏi Trắc Nghiệm Số: <strong>@detail.item.ID</strong>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p>Nội dung câu hỏi: <strong>@detail.item.Name</strong></p>
+                            </div>                           
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-xs-6">
+                                <p>Đáp áp đúng: <strong>@detail.item.RightNo</strong></p>
+                            </div>
+                            <div class="col-md-6 col-xs-6">
+                                <p>Số Điểm: <strong>@detail.item.Point</strong></p>
+                            </div>
+                        </div>
+                        <div class="row" style="padding-top:5px;margin:20px;">
+                            <table class="table table-striped table-bordered table-hover" id="gvCustomers">
+                                
+                                <tbody>
+                                    @for (int i = 0; i < lenght; i++)
+                                    {
+                                        <tr id="row">
+                                            <td width="40px">  @detail.detail[i].No</td>
+                                            <td>   @detail.detail[i].Name</td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                           
+                        </div>
+                      >
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+</div>
+
+
+
+<p></p>
+<p></p>
+<p></p>
+<p></p>

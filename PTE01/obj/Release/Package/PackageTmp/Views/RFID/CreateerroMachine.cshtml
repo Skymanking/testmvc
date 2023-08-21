@@ -1,0 +1,145 @@
+﻿@{
+    ViewBag.Title = "SetupProduct";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+}
+@section jsFooter
+{
+    <script src="/Assets/plugin/ckfinder/ckfinder.js"></script>
+    <script src="/Assets/theme3/plugins/datepicker/js/bootstrap-datetimepicker.js"></script>
+    <script src="/Assets/theme3/plugins/datepicker/js/locales/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
+    <script src="/Assets/theme3/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+    <script src="/Assets/plugin/ckfinder/ckfinder.js"></script>
+    <script src="/Assets/theme3/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+<script>
+    $(function () {
+        $('.form_datetime').datetimepicker({
+            format: 'mm/dd/yyyy hh:ii',
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+        });
+        $('.select2').select2()
+
+    })
+</script>
+
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+
+
+<div class="card card-primary">
+    <div class="card-body">
+        <script src="~/Scripts/jquery-1.9.1.min.js"></script>
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Tạo thông báo máy lỗi</h3>
+            </div>
+            @using (Html.BeginForm("Create", "Jig", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label>Tên máy</label>
+                                <div class="input-group mb-3">
+                                    <select class="form-control">
+                                        <option>MAY1 - May 1</option>
+                                        <option>MAY2 - May 2</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <label>Từ:</label>
+                            <div class="input-group date form_datetime" data-link-field="Deadline">
+                                <input class="form-control" type="text" value="" readonly>
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                </div>
+                            </div>
+                            <input type="hidden" id="Deadline" name="Deadline" value="" /><br />
+                        </div>
+                        <div class="col-md-2">
+                            <label>Đến:</label>
+                            <div class="input-group date form_datetime" data-link-field="Deadline">
+                                <input class="form-control" type="text" value="" readonly>
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                </div>
+                            </div>
+                            <input type="hidden" id="Deadline" name="Deadline" value="" /><br />
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Loại lỗi</label>
+                                <div class="input-group mb-3">
+                                    <select class="form-control">
+                                        <option>Có kế hoạch</option>
+                                        <option>Không có kế hoạch</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='col-md-8'>
+                            <label class="control-label">Hình ảnh</label>
+                            <div class='input-group'>
+                                <input type="text" class="form-control" id="Ga" name="Ga" placeholder="Hình ảnh" readonly ="readonly"/>
+                                <div class=" input-group-append">
+                                    <span class="input-group-text">
+                                        <a id="btnSelectImage" href="#"><span class="fa fa-image"></span></a>
+                                    </span>
+                                </div>
+                            </div>
+                            <script>
+                                $('#btnSelectImage').on('click', function (e) {
+                                    e.preventDefault();
+                                    var finder = new CKFinder();
+                                    finder.selectActionFunction = function (url) {
+                                        $('#GImage').val(url);
+                                        $('#hinh').attr('src', $('#GImage').val());
+                                    };
+                                    finder.popup();
+                                })
+                            </script>
+
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label col-md-12">Lý do<span style="font-weight:bold;color:red">*</span></label>
+                                <input type="text" class="form-control" id="Ga" name="Ga" placeholder="Lý do" style="height:100px; text-align:justify;" />
+                            </div>
+                        </div>             
+
+                        <script>
+                            $('#btnSelectFile').on('click', function (e) {
+                                e.preventDefault();
+                                var finder = new CKFinder();
+                                finder.selectActionFunction = function (url) {
+                                    $('#File1').val(url);
+                                    $('#btnViewFile').attr("href", $('#File1').val());
+                                };
+                                finder.popup();
+                            })
+                        </script>
+
+
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary" onclick="openNav()">Lưu thông tin</button>
+                </div>
+            }
+        </div>
+
+    </div>
+
+</div>

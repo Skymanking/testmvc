@@ -1,0 +1,393 @@
+﻿@model Model.View.FullMeeting
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    var listU = (IEnumerable<Model.View.UserView2>
+    )ViewBag.listUser;
+    var userLogin = (string)ViewBag.userLogin;
+    var deID = (long)ViewBag.deID;
+    bool Readed = false;
+    var nguoinhan = new List<SelectListItem>
+        ();
+    nguoinhan.Add(new SelectListItem
+    {
+        Text = "Chọn Người Tham Gia",
+        Value = "none",
+    });
+    foreach (var item in listU)
+    {
+        nguoinhan.Add(new SelectListItem
+        {
+            Text = item.FullName,
+            Value = item.UserName,
+        });
+    }
+    List<SelectListItem> phonghop = new List<SelectListItem>();
+    phonghop.Add(new SelectListItem
+    {
+        Text = "Phòng họp ONLINE",
+        Value = "0",
+        Selected = true
+    });
+    phonghop.Add(new SelectListItem
+    {
+        Text = "Phòng 1 X1 (tầng trệt)",
+        Value = "1",
+    });
+    phonghop.Add(new SelectListItem
+         {
+             Text = "Phòng 2 X1 (tầng trệt)",
+             Value = "2",
+
+         });
+    
+    phonghop.Add(new SelectListItem
+    {
+        Text = "Phòng 3 X1 (mới-tầng trệt)",
+        Value = "6",
+
+    });
+    phonghop.Add(new SelectListItem
+    {
+        Text = "Phòng 4 X1 (lầu 2)",
+        Value = "5",
+
+    });
+    //phonghop.Add(new SelectListItem
+    //{
+    //    Text = "Phòng họp Xưởng 3",
+    //    Value = "3",
+
+    //});
+    //phonghop.Add(new SelectListItem
+    //{
+    //    Text = "Phòng họp Xưởng 2",
+    //    Value = "4",
+
+    //});
+
+    IEnumerable<Model.EF.WorkPlan>
+        minutesMeeting = ViewBag.minutesMeeting;
+    if ((deID == 1) || (deID == 13) || (deID == 6))
+    { Readed = true; }
+    if (userLogin == Model.item.CreateBy)
+    { Readed = true; }
+    foreach (var item in Model.detail)
+    {
+        if (item.Username == userLogin)
+        { Readed = true; }
+    }
+    Readed = true;
+}
+@section jsFooter
+                    {
+    <script src="/Scripts/DeleteUserMeeting.js"></script>
+    <script src="/Scripts/ChangeAprovalMeeting.js"></script>
+    <script src="/Scripts/CreateBBH.js"></script>
+    <script src="/Scripts/AddUserMeeting.js"></script>
+    <script src="/Scripts/ChangeStatusWorkPlan.js"></script>
+    <script src="/Scripts/ChangeConfirmWorkPlan.js"></script>
+    <script src="/Scripts/CancelMeeting.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $(window).keydown(function (event) {
+            if (event.keyCode == 13) {
+                event.preventDefault();
+                return false;
+            }
+        });
+    });
+</script>
+<script>
+    $(function () {
+        $('.select2').select2()
+    })
+</script>
+
+<script>
+    $(document).ready(function () {
+     
+        if ($('.tiepkhach').is(':checked')) {
+                $(".chude").attr("placeholder", "Quốc Gia nào?");
+                $(".chude").attr("style", "background:#FFEB3B");
+                $(".chude1").text("Chuẩn Bị Lá Cờ Quốc Gia");
+                $(".noidung").attr("placeholder", "Cần chuẩn bị trà, bánh, cơm trưa như thế nào?");
+                $(".noidung").attr("style", "background:#FFEB3B");
+                $(".noidung1").text("Nội dung cần chuẩn bị đón khách");
+            }
+            else {
+                $(".chude").attr("placeholder", "");
+                $(".chude1").text("Chủ đề họp");
+                $(".chude").attr("style", "background:#ffffff");
+                $(".noidung").attr("placeholder", "");
+                $(".noidung").attr("style", "background:#ffffff");
+                $(".noidung1").text("Nội dung chi tiết cuộc họp");
+            }
+
+
+        $(".nutsave").click(function () {
+            alert("Bấm OK và Hãy chờ tí để hệ thống gửi mail cho các thành viên trong cuộc họp nhé !");
+        });
+
+        if ($("#item_IDRoom").find(":selected").val() == "1")
+        { $("#wellcome").text("Màn hình WELCOME (cú pháp: Tên Cty , Tên các vị khách)"); $(".tivi").show(); $("#linkhop").hide(); }
+        else
+        {
+            if ($("#item_IDRoom").find(":selected").val() == "0")
+            { $("#wellcome").text("Link tham gia phòng họp ONLINE"); $(".tivi").show(); $("#linkhop").show(); }
+            else
+            {
+                $(".tivi").hide();
+            }
+
+        }
+
+
+    });
+</script>
+
+}
+@if (Readed == true)
+{
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+    <div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Thông Tin Phòng Họp</h3>
+    </div>
+    @using (Html.BeginForm("Edit", "Meeting", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="card-body">
+            <div class="form-group" style="display:none">
+                <div class='col-md-4'>
+                    <label class="control-label">ID Meeting</label>
+                    @Html.TextAreaFor(model => model.item.ID, new { @class = "form-control", })
+                </div>
+                <div class='col-md-4'>
+                    <label class="control-label">Nguoi tao</label>
+                    @Html.TextAreaFor(model => model.item.CreateBy, new { @class = "form-control", })
+                </div>
+            </div>
+            <div class="row">
+                <div class='col-md-4 col-6'>
+                    <label class="control-label">Phòng Họp</label>
+                    @Html.DropDownListFor(model => model.item.IDRoom, phonghop, new { @class = "form-control", @disabled = "disabled" })
+                </div>
+                <div class='col-md-4 col-6'>
+                    <label>Ngày họp:</label>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" value='@Model.date.ToString("MM/dd/yyyy")' disabled>
+                        <div class=" input-group-append">
+                            <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-md-2 col-6'>                
+                      <label>Từ:</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" value='@Model.time1.Replace(".0", "h")' disabled>
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fa fa-clock-o"></i></span>
+                                </div>
+                            </div>                    
+                </div>
+                <div class='col-md-2 col-6'>                   
+                            <label>Đến:</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" value='@Model.time2.Replace(".0","h")' disabled>
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fa fa-clock-o"></i></span>
+                                </div>
+                            </div>
+                        </div>                   
+                </div>
+
+           
+            <div class="row">
+                <div class='col-md-6 col-8 tivi'>
+                    <label class="control-label" id="wellcome">Link tham gia phòng họp ONLINE </label><a target="_blank" href="@Model.item.CustomerName" id="linkhop"><i class="fa fa-sign-in" aria-hidden="true" style="font-size:30px;"></i></a>
+                    @Html.TextBoxFor(model => model.item.CustomerName, new { @class = "form-control" })
+                </div>
+                <div class='col-md-6 col-4'>
+                    <div class="form-group">
+                        <center> <label class="control-label" style="color:red;">Cần chuẩn bị tiếp khách?</label></center>
+                        @Html.CheckBoxFor(model => model.item.Cared, new { @class = "tiepkhach form-control", @style = "height:40px", @disabled = "disabled" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class='col-md-12'>
+                    <label class="control-label chude1">Chủ đề họp</label>
+                    @Html.TextBoxFor(model => model.item.Reason, new { @class = "chude form-control", @placeholder = "điền vào chủ đề cuộc họp" })
+                    @Html.ValidationMessageFor(model => model.item.Reason, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row">
+                <div class='col-md-12'>
+                    <label class="control-label noidung1">Nội dung họp</label>
+                    @Html.TextAreaFor(model => model.item.Details, new { @class = "noidung form-control", @rows = "7", @placeholder = "điền vào nội dung chi tiết cuộc họp" })
+                    @Html.ValidationMessageFor(model => model.item.Details, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="row" style="padding-top:20px;">
+                <table class="table table-striped table-bordered table-hover" id="gvCustomers">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Tên thành viên tham gia họp</th>
+                            <th>Có tham gia</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (var i = 0; i < Model.detail.Count; i++)
+                        {
+                            foreach (var item in nguoinhan)
+                            {
+                                if (item.Value == Model.detail[@i].Username)
+                                {
+                                    item.Selected = true;
+                                    break;
+                                }
+                            }
+                            <tr id="@Model.detail[@i].Username" class="clonedInput">
+                                <td width="40px"> <button type="button" data-idmeet="@Model.item.ID" data-user="@Model.detail[@i].Username" class="xoaUser" style="color:red; width:30px;height:30px;border-radius:50%;"><span class="fa fa-trash"></span></button></td>
+                                <td> @Html.DropDownListFor(model => model.detail[@i].Username, nguoinhan, new { @class = "form-control" })</td>
+                                @if (Model.detail[@i].Username == userLogin)
+                                {
+                                    <td width="110px"><a href="#" class="btn-status" data-id="@Model.item.ID" data-no="@Model.detail[@i].Username">@Html.Raw(@Model.detail[@i].Approval ? "<span class='fa fa-check fa-2x'></span>" : "<span class='fa fa-times fa-2x'></span>")</a></td>
+                                }
+                                else
+                                {
+                                    <td width="110px">@Html.Raw(@Model.detail[@i].Approval ? "<span class='fa fa-check fa-2x'></span>" : "<span class='fa fa-times fa-2x'></span>")</td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+
+            </div>
+
+           
+ 
+
+        </div>
+        <div class="card-footer">
+            <div class="row">
+
+                <div class="col-md-4">
+                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModaladdU">Thêm người tham gia họp </button>
+                </div>
+                <div class="col-md-4">
+                    <input type="submit" value="Thay đổi nội dung họp" class="btn btn-info" />
+                </div>
+                <div class="col-md-4">
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModalCancel">Hủy cuộc họp </button>
+                </div>
+            </div>
+            
+        </div>
+
+    }
+</div>
+    
+    
+
+
+    <form id="myFormAddU" method="post">
+        <div class="modal fade" id="myModaladdU" role="dialog">
+            <div class="modal-dialog">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" style="width:20px">&times;</button>
+                        <h4 class="modal-title">Thêm người tham gia họp</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+
+                            <div class='col-md-12'>
+                                <label class="control-label">Người tham gia</label>
+                                <select class="form-control select2" id="nguoimoi" name="nguoimoi" style="width:100%;">
+                                    <option value="none">Chọn Người Tham Gia</option>
+                                    @foreach (var item in nguoinhan)
+                                    {
+                                        <option value="@item.Value">   @item.Text    </option>
+                                    }
+
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                    <script>
+                        $(document).ready(function () {
+                            $("#createU").hover(function () {
+                                $('#createU').attr("data-nguoimoi", $("#nguoimoi option:selected").val());
+                            });
+                            $("#createU").click(function () {
+                                $('#createU').attr("data-nguoimoi", $("#nguoimoi option:selected").val());
+                            });
+
+                        });
+                    </script>
+
+
+                    <div class="modal-footer">
+                        <a href="#" id="createU" class="btn-createU" data-id="@Model.item.ID" style="background: red;    padding: 7px;  color: white;">Lưu thông tin</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </form>
+
+
+    <form id="myFormCancel" method="post">
+        <div class="modal fade" id="myModalCancel" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Lý do hủy cuộc họp</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input class="form-control" data-val="true" id="lydo" name="lydo" placeholder="điền lý do hủy phiếu " type="text" value="">
+                    </div>
+                    <script>
+                        $(document).ready(function () {
+                            $("#lydo").keypress(function () {
+                                var lydos = $('#lydo').val();
+                                var abc = $('#huyphieu').attr("data-lydo", lydos);
+
+                            });
+                        });
+                    </script>
+
+                    <div class="modal-footer">
+                        <a href="#" id="huyphieu" class="btn-cancel" data-id="@Model.item.ID" style="background: red;    padding: 7px;  color: white;">Gửi mail thông báo và Xóa Phiếu</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+
+
+}
+else
+{<p></p>
+
+    <div class="alert alert-danger alert-dismissable">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Bạn không được xem thông tin cuộc họp này!</strong> chỉ có người tham gia họp mới xem được thông tin cuộc họp
+    </div>
+
+}

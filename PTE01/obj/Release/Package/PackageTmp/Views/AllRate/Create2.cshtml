@@ -1,0 +1,308 @@
+﻿@model Model.EF.AllRate
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Theme2.cshtml";
+
+    List<SelectListItem> point = new List<SelectListItem>();
+    point.Add(new SelectListItem
+    {
+        Text = "1 Điểm",
+        Value = "1",
+
+    });
+
+    point.Add(new SelectListItem
+         {
+             Text = "2 Điểm",
+             Value = "2",
+
+         });
+    point.Add(new SelectListItem
+    {
+        Text = "3 Điểm",
+        Value = "3",
+        Selected = true
+    });
+
+    point.Add(new SelectListItem
+         {
+             Text = "4 Điểm",
+             Value = "4",
+
+         });
+    point.Add(new SelectListItem
+    {
+        Text = "5 Điểm",
+        Value = "5",
+
+    });
+    var kn11 = "Công ty luôn yêu cầu hiệu quả làm việc cao từ các nhân viên ";
+    var kn12 = "Bạn tin công ty đang cung cấp các sản phẩm tốt nhất cho khách hàng";
+    var kn13 = "Bạn cơ bản hiểu được mục tiêu và chiến lược phát triển công ty";
+    var kn14 = "Bạn có biết công việc ủa bạn đóng góp một phần vào sự thành công của công ty";
+    var kn15 = "Công ty luôn quan tâm đến đời sống nhân viên ";
+    var kn16 = "Bạn rất tự hào nói với người khác về công ty PTE bạn đang làm việc ";
+    var kn17 = "Bạn có biết được Văn Hóa Doanh Nghiệp của công ty mình là gì không";
+    var kn18 = "Bạn có tự hào về Văn Hóa Doanh Nghiệp của công ty mình không";
+    var kn21 = "Mọi người có được trao đổi thẳng thắn về kiến thức ,ý tướng và các vấn đề khác trong công ty";
+    var kn22 = "Bạn có được thông báo đầy đủ về tình hình hoạt động của công ty";
+    var kn23 = "Công ty luôn khuyến khích hợp tác làm việc giữa các nhóm / bộ phận ";
+    var kn24 = "Quản lý đã trao đổi về kế hoạch phát triển nghề nghiệp của bạn bao nhiêu lần";
+    var kn31 = "Quản lý của bạn có tham khảo ý kiến của cấp đươi khi đưa ra quyết định";
+    var kn32 = "Quản lý của bạn có cung cấp đầy đủ thông tin (mục đích, yêu cầu và thời gian hoàn thành công việc..) khi giao việc cho bạn khôn)";
+    var kn33 = "Bạn có hài lòng với người quản lý trực tiếp của mình";
+    var kn41 = "Công việc hiện tại của bạn có đầy thú vị và thử thách";
+    var kn42 = "Trách nhiệm công việc của bạn có được định nghĩa rõ ràng";
+    var kn43 = "Bạn có quyền tự quyết định cách thức hoàn thành công việc của mình một cách hiệu quả nhất";
+    var kn44 = "Bạn được cung cấp đầy đủ dụng cụ làm việc và các tài nguyên khác để hoàn thành công việc";
+    var kn51 = "Ánh sáng nơi làm việc";
+    var kn52 = "Nhiệt độ nơi làm việc";
+    var kn53 = "Nhà vệ sinh";
+    var kn54 = "Nước uống";
+    var kn55 = "Nhà ăn";
+    var kn56 = "Khu vực để xe";
+    var kn61 = "Lương và phúc lợi của bạn có cạnh tranh so với thị trường lao động trong nước";
+    var kn71 = "Bạn được biết hiệu quả công việc được đánh giá như thế nào";
+    var kn72 = "Bạn luôn nhận được phản hồi về hiệu quả làm việc của bạn";
+    var kn73 = "Hiệu quả công việc của bạn luôn được đánh giá chính xác và công bằng";
+    var kn74 = "Công ty luôn khen thưởng cho các thành tích xuất sắc hay hoàn thành tốt mục tiêu";
+    var kn81 = "Công ty cung cấp đầy đủ các khóa huấn luyện cho bạn trong quá trình làm việc";
+    var kn82 = "Sau khi đào tạo, công ty luôn khuyến khích bạn thử nghiệm các ý tưởng mới";
+    var kn83 = "Bạn luôn có cơ hội học hỏi và phát triển nghề nghiệp tại công ty";
+    var kn91 = "Bạn cảm thấy bản thân rất thân thuộc với công ty và là một phần của công ty";
+    var kn92 = "Bạn tin tưởng vào sự lãnh đạo của công ty";
+    var kna1 = "Bạn có bị phân biệt, kỳ thị vì lý do tín ngưỡng, tôn giáo?";
+    var kna2 = "Bạn có bị xúc phạm tín ngưỡng, tôn giáo?";
+    var kna3 = "Bạn có bị ép buộc, mua chuộc để theo hoặc bỏ 1 tín ngưỡng, tôn giáo?";
+    var knb1 = "Bạn có bị phân biệt đối xử vì tham gia hội đoàn, công đoàn?";
+    var knb2 = "Bạn có bị ngăn cấm, can thiệp khi tham gia các hoạt động công đoàn?";
+    var knb3 = "Công ty có gây bất lợi đối với tổ chức và hoạt động công đoàn?";
+
+}
+
+
+<section class="content">
+    <div class="container-fluid">
+
+        <div class="row">
+            @using (Html.BeginForm("Create2", "AllRate", FormMethod.Post))
+    {
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <!-- Cot ben trai -->
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                PHIẾU KHẢO SÁT MỨC ĐỘ HÀI LÒNG NHÂN VIÊN
+            </div>
+            <div class="panel-body">
+                <div class="row" style=" margin-top: 15px; background: #5bc0de;">
+                    <div class="row" style=" margin: 5px;">
+                        <div class='col-md-9'> <label class="control-label">@kn11 </label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point11, point, new { @class = "form-control" })  </div>
+                    </div>
+                    <div class="row" style=" margin: 5px;">
+                        <div class='col-md-9'> <label class="control-label">@kn12</label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point12, point, new { @class = "form-control" })  </div>
+
+                    </div>
+                    <div class="row" style="   margin: 5px;">
+                        <div class='col-md-9'> <label class="control-label">@kn13</label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point13, point, new { @class = "form-control" })  </div>
+                    </div>
+                    <div class="row" style="   margin: 5px;">
+                        <div class='col-md-9'> <label class="control-label">@kn14</label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point14, point, new { @class = "form-control" })  </div>
+                    </div>
+                    <div class="row" style="   margin: 5px;">
+                        <div class='col-md-9'> <label class="control-label">@kn15</label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point15, point, new { @class = "form-control" })  </div>
+                    </div>
+                    <div class="row" style="   margin: 5px;">
+                        <div class='col-md-9'> <label class="control-label">@kn16</label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point16, point, new { @class = "form-control" })  </div>
+                    </div>
+                    <div class="row" style="   margin: 5px;">
+                        <div class='col-md-9'> <label class="control-label">@kn17</label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point17, point, new { @class = "form-control" })  </div>
+                    </div>
+                    <div class="row" style="   margin: 5px;">
+                        <div class='col-md-9'> <label class="control-label">@kn18</label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point18, point, new { @class = "form-control" })  </div>
+                    </div>
+                </div>
+                <div class="row" style=" margin-top: 15px; background: #5cb85c;">
+                    <div class="row" style=" margin: 5px;">
+                        <div class='col-md-9'> <label class="control-label">@kn21 </label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point21, point, new { @class = "form-control" })  </div>
+                    </div>
+                    <div class="row" style=" margin: 5px;">
+                        <div class='col-md-9'> <label class="control-label">@kn22 </label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point22, point, new { @class = "form-control" })  </div>
+                    </div>
+                    <div class="row" style=" margin: 5px;">
+                        <div class='col-md-9'> <label class="control-label">@kn23 </label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point23, point, new { @class = "form-control" })  </div>
+                    </div>
+                    <div class="row" style=" margin: 5px;">
+                        <div class='col-md-9'> <label class="control-label">@kn24 </label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point24, point, new { @class = "form-control" })  </div>
+                    </div>
+                </div>
+                <div class="row" style=" margin-top: 15px; background: #f0ad4e;">
+                    <div class="row" style=" margin: 5px;">
+                        <div class='col-md-9'> <label class="control-label">@kn31 </label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point31, point, new { @class = "form-control" })  </div>
+                    </div>
+                    <div class="row" style=" margin: 5px;">
+                        <div class='col-md-9'> <label class="control-label">@kn32 </label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point32, point, new { @class = "form-control" })  </div>
+                    </div>
+                    <div class="row" style=" margin: 5px;">
+                        <div class='col-md-9'> <label class="control-label">@kn33 </label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point33, point, new { @class = "form-control" })  </div>
+                    </div>
+                </div>
+                <div class="row" style=" margin-top: 15px; background: #fcf8e3;">
+                    <div class="row" style=" margin: 5px;">
+                        <div class='col-md-9'> <label class="control-label">@kn41 </label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point41, point, new { @class = "form-control" })  </div>
+                    </div>
+                    <div class="row" style=" margin: 5px;">
+                        <div class='col-md-9'> <label class="control-label">@kn42 </label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point42, point, new { @class = "form-control" })  </div>
+                    </div>
+                    <div class="row" style=" margin: 5px;">
+                        <div class='col-md-9'> <label class="control-label">@kn43 </label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point43, point, new { @class = "form-control" })  </div>
+                    </div>
+                    <div class="row" style=" margin: 5px;">
+                        <div class='col-md-9'> <label class="control-label">@kn44 </label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point44, point, new { @class = "form-control" })  </div>
+                    </div>
+                </div>
+                <div class="row" style=" margin-top: 15px; background: #f2dede;">
+                    <div class="row" style=" margin: 5px;">
+                        <div class='col-md-9'> <label class="control-label">@kn51 </label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point51, point, new { @class = "form-control" })  </div>
+                    </div>
+                    <div class="row" style=" margin: 5px;">
+                        <div class='col-md-9'> <label class="control-label">@kn52 </label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point52, point, new { @class = "form-control" })  </div>
+                    </div>
+                    <div class="row" style=" margin: 5px;">
+                        <div class='col-md-9'> <label class="control-label">@kn53 </label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point53, point, new { @class = "form-control" })  </div>
+                    </div>
+                    <div class="row" style=" margin: 5px;">
+                        <div class='col-md-9'> <label class="control-label">@kn54 </label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point54, point, new { @class = "form-control" })  </div>
+                    </div>
+                    <div class="row" style=" margin: 5px;">
+                        <div class='col-md-9'> <label class="control-label">@kn55 </label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point55, point, new { @class = "form-control" })  </div>
+                    </div>
+                    <div class="row" style=" margin: 5px;">
+                        <div class='col-md-9'> <label class="control-label">@kn56 </label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point56, point, new { @class = "form-control" })  </div>
+                    </div>
+                </div>
+                <div class="row" style=" margin-top: 15px; background: #999999;">
+                    <div class="row" style=" margin: 5px;">
+                        <div class='col-md-9'> <label class="control-label">@kn61 </label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point61, point, new { @class = "form-control" })  </div>
+                    </div>
+                </div>
+                <div class="row" style=" margin-top: 15px; background: #d9534f;">
+                    <div class="row" style=" margin: 5px;">
+                        <div class='col-md-9'> <label class="control-label">@kn71 </label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point71, point, new { @class = "form-control" })  </div>
+                    </div>
+                    <div class="row" style=" margin: 5px;">
+                        <div class='col-md-9'> <label class="control-label">@kn72 </label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point72, point, new { @class = "form-control" })  </div>
+                    </div>
+                    <div class="row" style=" margin: 5px;">
+                        <div class='col-md-9'> <label class="control-label">@kn73 </label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point73, point, new { @class = "form-control" })  </div>
+                    </div>
+                    <div class="row" style=" margin: 5px;">
+                        <div class='col-md-9'> <label class="control-label">@kn74 </label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point74, point, new { @class = "form-control" })  </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 15px; background: #009688; ">
+                    <div class="row" style=" margin: 5px;">
+                        <div class='col-md-9'> <label class="control-label">@kn81 </label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point81, point, new { @class = "form-control" })  </div>
+                    </div>
+                    <div class="row" style=" margin: 5px;">
+                        <div class='col-md-9'> <label class="control-label">@kn82 </label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point82, point, new { @class = "form-control" })  </div>
+                    </div>
+                    <div class="row" style=" margin: 5px;">
+                        <div class='col-md-9'> <label class="control-label">@kn83 </label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point83, point, new { @class = "form-control" })  </div>
+                    </div>
+                </div>
+                <div class="row" style=" margin-top: 15px; background: #e7e7e7;">
+                    <div class="row" style=" margin: 5px; ">
+                        <div class='col-md-9'> <label class="control-label">@kn91 </label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point91, point, new { @class = "form-control" })  </div>
+                    </div>
+                    <div class="row" style=" margin: 5px; ">
+                        <div class='col-md-9'> <label class="control-label">@kn92 </label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point92, point, new { @class = "form-control" })  </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 15px; background: #009688; ">
+                    <div class="row" style=" margin: 5px;">
+                        <div class='col-md-10'> <label class="control-label">@kna1 </label> </div>
+                        <div class='col-md-2'> @Html.DropDownListFor(model => model.PointA1, point, new { @class = "form-control" })  </div>
+                    </div>
+                    <div class="row" style=" margin: 5px;">
+                        <div class='col-md-10'> <label class="control-label">@kna2 </label> </div>
+                        <div class='col-md-2'> @Html.DropDownListFor(model => model.PointA2, point, new { @class = "form-control" })  </div>
+                    </div>
+                    <div class="row" style=" margin: 5px;">
+                        <div class='col-md-10'> <label class="control-label">@kna3 </label> </div>
+                        <div class='col-md-2'> @Html.DropDownListFor(model => model.PointA3, point, new { @class = "form-control" })  </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 15px; background: #009688; ">
+                    <div class="row" style=" margin: 5px;">
+                        <div class='col-md-10'> <label class="control-label">@knb1 </label> </div>
+                        <div class='col-md-2'> @Html.DropDownListFor(model => model.PointB1, point, new { @class = "form-control" })  </div>
+                    </div>
+                    <div class="row" style=" margin: 5px;">
+                        <div class='col-md-10'> <label class="control-label">@knb2 </label> </div>
+                        <div class='col-md-2'> @Html.DropDownListFor(model => model.PointB2, point, new { @class = "form-control" })  </div>
+                    </div>
+                    <div class="row" style=" margin: 5px;">
+                        <div class='col-md-10'> <label class="control-label">@knb3 </label> </div>
+                        <div class='col-md-2'> @Html.DropDownListFor(model => model.PointB3, point, new { @class = "form-control" })  </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+        <!--------------------------fd-------End------------------------------------>
+
+    <div class="form-group">
+        <div class="col-md-4">
+            <input type="submit" value="Lưu Lại" class="btn btn-primary" />
+        </div>
+    </div>
+    <br>
+    <br>
+
+    }
+        </div>
+
+    </div><!-- /.container-fluid -->
+</section>
+
+

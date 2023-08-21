@@ -1,0 +1,446 @@
+﻿@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    System.Data.DataTable daExcel = ViewBag.daTable;
+    int dem = 0;
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<div>
+    <div class="row" style="background: #8eeba3;color: #dc3545;">
+        <div class="col-12"><center>  <h2>Check BOM</h2></center> </div>
+    </div>
+    <div id="upload" style="margin-top: 10px; border: 1px solid #f2dede; padding: 10px; background: #fcf8e3; " class="row">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Bước 1</th>
+                    <th>Bước 2</th>
+                    <th>Bước 3</th>
+                    <th>Bước 4</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><a class="btn btn-info" href="/ERPCheckBOM/DownloadTemplate">Download Template</a></td>
+                    <td><input type='file' id="files" name="item.Files" class="btn btn-info" /> </td>
+                    <td><input type="button" id="upload" value="Upload & Show" class="btn btn-info" /></td>
+                    <td><input type="button" id="import" value="Check" class="btn btn-info" onclick="showTableData()" /></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+    <script>
+        $body = $("body");
+        $(document).on({
+            ajaxStart: function () { $body.addClass("loading"); },
+            ajaxStop: function () { $body.removeClass("loading"); }
+        });
+
+        $(document).ready(function () {
+            $("#upload").click(function () {
+                var data = new FormData();
+                var files = $("#files").get(0).files;
+                for (i = 0; i < files.length; i++) {
+                    data.append("files" + i, files[i]);
+                }
+                if (files.length > 0) {
+                    $.ajax({
+                        type: 'POST',
+                        url: "@Url.Action("Upload")",
+                        data: data,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            var linktext = "/ERPCheckBOM/LoadDataFromExcelToGV?linkfile=/App_Data/uploads/" + $("#files").val().substring(12, 400);
+                            window.location.href = linktext;
+                        },
+                        error: function () {
+                            var linktext = "/ERPCheckBOM/LoadDataFromExcelToGV?linkfile=/App_Data/uploads/" + $("#files").val().substring(12, 400);
+                            window.location.href = linktext;
+                        },
+                    });
+                }
+            });
+        });
+    </script>
+    @if (daExcel != null)
+    {
+        <table class="table table-striped table-bordered table-hover" id="empTable">
+            <thead>
+                <tr>
+                    <th>Job</th>
+                    <th>
+                        Job Type
+                    </th>
+                    <th>
+                        Item
+                    </th>
+                    <th>
+                        Released
+                    </th>
+                    <th>
+                        Start Date
+                    </th>
+                    <th>
+                        End Date
+                    </th>
+                    <th>
+                        Output Type
+                    </th>
+                    <th>
+                        Status
+                    </th>
+                    <th>
+                        For Whse
+                    </th>
+                    <th>
+                        Job Description
+                    </th>
+                    <th>
+                        Work Center
+                    </th>
+                    <th>
+                        Material
+                    </th>
+                    <th>BOM</th>
+                    <th>
+                        Checked
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (System.Data.DataRow ro in daExcel.Rows)
+                {
+                    if (@ro["Item"] != null && @ro["Item"].ToString().Length > 3 && @ro["Item"].ToString().Length < 17 && @ro["Item"].ToString().Length < 41)
+                    {
+                        dem = dem + 1;
+                        <tr id="JobLine_@dem">
+                            <td>
+                                @try
+                                {@ro["Job"].ToString()}
+                            catch
+                            {<span>Error</span>}
+                            </td>
+                            <td>
+                                @try
+                                {@ro["Job Type"].ToString()}
+                            catch
+                            {<span>Error</span>}
+                            </td>
+                            <td id="item_@dem">
+
+                                @try
+                                {@ro["Item"].ToString()}
+
+                            catch
+                            {<span>Error</span>}
+                            </td>
+                            <td>
+                                @try
+                                {@ro["Released"].ToString()}
+                            catch
+                            {<span>Error</span>}
+                            </td>
+
+                            <td>
+                                @try
+                                {@ro["Start Date"].ToString().Substring(0, @ro["Start Date"].ToString().IndexOf("0:"));
+                            }
+                            catch
+                            {<span>Error</span>}
+                            </td>
+                            <td>
+                                @try
+                                {@ro["End Date"].ToString().Substring(0, @ro["End Date"].ToString().IndexOf("0:"));
+                            }
+                            catch
+                            {<span> Error </span>}
+                            </td>
+                            <td>
+                                @try
+                                {@ro["Output Type"].ToString()}
+                            catch
+                            {<span>Error</span>}
+                            </td>
+                            <td>
+                                @try
+                                {@ro["Status"].ToString()}
+                            catch
+                            {<span>Error</span>}
+                            </td>
+                            <td>
+                                @try
+                                {@ro["For Whse"].ToString()}
+                            catch
+                            {<span>Error</span>}
+                            </td>
+                            <td>
+                                @try
+                                {@ro["Job Description"].ToString()}
+                            catch
+                            {<span>Error</span>}
+                            </td>
+                            <td id="wc_@dem">
+
+                                @try
+                                {@ro["Work Center"].ToString()}
+                            catch
+                            {<span>Error</span>}
+                            </td>
+                            <td id="material_@dem">
+                                @try
+                                {@ro["Material"].ToString()}
+                            catch
+                            {<span>Error</span>}
+                            </td>
+                            <td id="BOMType_@dem">
+                                @try
+                                {@ro["BOM Version"].ToString()}
+                            catch
+                            {<span>Error</span>}
+                            </td>
+                            <td id="BOMID_@dem" style="text-align:center">
+                            </td>
+
+                        </tr>
+
+                    }
+                }
+            </tbody>
+        </table>
+        <script>
+            $(document).on('change', '.checkchange', function () {
+                $("#BOMID_" + this.id.split("_")[1]).find("i").remove();
+                $("#BOMID_" + this.id.split("_")[1]).append('<a onclick ="CheckOneLine(' + this.id.split("_")[1] + ')"><i class="fa fa-2x fa-refresh" style="color:red"></i></a>');
+            });
+            function CheckOneLine(line) {
+                var matl = document.getElementById("selMatl_" + line).value;
+                var wc = document.getElementById("selWC_" + line).value;
+                var bom = document.getElementById("selBOM_" + line).value;
+                var item = document.getElementById("item_" + line).textContent.replace(/(\r\n|\n|\r| )/gm, "");
+                $.ajax({
+                    url: "/ERPCheckBOM/CheckBOM",
+                    data: { item: item, wc: wc, material: matl, no: line },
+                    dataType: "json",
+                    type: "POST",
+                    success: function (response) {
+                        var selWC = '<select class="form-control checkchange" id="selWC_' + response.no + '">';
+                        var selMatl = '<select class="form-control checkchange" id="selMatl_' + response.no + '">';
+                        var selBOM = '<select class="form-control checkchange" id="selBOM_' + response.no + '">';
+                        if (response.WC == "") {
+                            selWC += '<option value="" selected></option>';
+                        }
+                        if (response.Matl == "") {
+                            selMatl += '<option value="" selected></option>';
+                        }
+                        if (response.Matl == "") {
+                            selMatl += '<option value="" selected></option>';
+                        }
+                        if (!response.ListWC.includes(response.WC)) {
+                            selWC += '<option value="' + response.WC + '" selected>' + response.WC + '</option>';
+                        }
+                        $.each(response.ListWC, function (index, value) {
+                            if (this == response.WC) {
+                                selWC += '<option value="' + this + '" selected>' + this + '</option>';
+                            } else {
+                                selWC += '<option value="' + this + '">' + this + '</option>';
+                            }
+                        });
+                        $.each(response.ListMatl, function (index, value) {
+                            if (this == response.Matl) {
+                                selMatl += '<option value="' + this + '" selected>' + this + '</option>';
+                            } else {
+                                selMatl += '<option value="' + this + '">' + this + '</option>';
+                            }
+                        });
+                        if (response.BOMOK == "None") {
+                            selBOM += '<option value="None">None</option>';
+                            document.getElementById("JobLine_" + response.no).style.backgroundColor = "#ff6f6f";
+                        }
+                        else if (response.BOMOK != "") {
+                            $.each(response.BOMOK.split(","), function (index, value) {
+                                if (this != "") {
+                                    let show = "";
+                                    let title = "";
+                                    if (this.split("&&")[1] == "S") {
+                                        show = "Current";
+                                    }
+                                    else if (this.split("&&")[1] == "E") {
+                                        show = this.split("&&")[0] + " :Version";
+                                    }
+                                    else {
+                                        show = this.split("&&")[0] + this.split("&&")[1];
+                                    }
+                                    if (this.split("&&")[2] != "") {
+                                        document.getElementById("JobLine_" + response.no).style.backgroundColor = "#ff6f6f";
+                                        var ListErr = this.split("&&")[2].split("-");
+                                        console.log(ListErr);
+                                        if (ListErr[0] != "0") {
+                                            title += "Thiếu công đoạn: " + ListErr[0] + "; ";
+                                        }
+                                        if (ListErr[1] != 0) {
+                                            title += "Hàng NG công đoạn: " + ListErr[1] + "; ";
+                                        }
+                                        if (ListErr[2] != 0) {
+                                            title += "Thiếu NVL công đoạn: " + ListErr[2] + "; ";
+                                        }
+                                    }
+                                    selBOM += '<option value="' + this.split("&&")[0] + '" title="' + title + '">' + show + '</option>';
+                                    document.getElementById("JobLine_" + response.no).style.backgroundColor = "";
+                                }
+                            });
+                        }
+                        else {
+                            $.each(response.BOMNG.split(","), function (index, value) {
+                                if (this != "") {
+                                    let title = "";
+                                    let show = "Fault: ";
+                                    if (this.split("&&")[1] == "W") {
+                                        show += "Workcenter";
+                                    }
+                                    else if (this.split("&&")[1] == "M") {
+                                        show += "Material";
+                                    }
+                                    else if (this.split("&&")[1] == "NG") {
+                                        show += "Workcenter & Material"
+                                    }
+                                    selBOM += '<option value="' + this.split("&&")[1] + '" >' + show + '</option>';
+                                    document.getElementById("JobLine_" + response.no).style.backgroundColor = "#ff6f6f";
+                                }
+                            });
+                        }
+
+                        selBOM += '</select>';
+                        selMatl += '</select>';
+                        selWC += '</select>';
+                        document.getElementById("wc_" + response.no).textContent = "";
+                        $("#wc_" + response.no).append(selWC);
+                        document.getElementById("material_" + response.no).textContent = "";
+                        $("#material_" + response.no).append(selMatl);
+                        document.getElementById("BOMType_" + response.no).textContent = "";
+                        $("#BOMType_" + response.no).append(selBOM);
+                    }
+                });
+                $("#BOMID_" + line).find("i").remove();
+                $("#BOMID_" + line).append('<i class="fa fa-2x fa-check-circle-o" style="color:dodgerblue"></i>');
+            }
+            function showTableData() {
+                let myTab = document.getElementById('empTable').rows.length;
+                for (var i = 1; i < myTab; i++) {
+                    let item = document.getElementById("item_" + i).textContent.replace(/(\r\n|\n|\r| )/gm, "");
+                    let wc = document.getElementById("wc_" + i).textContent.replace(/(\r\n|\n|\r| )/gm, "");
+                    let material = document.getElementById("material_" + i).textContent.replace(/(\r\n|\n|\r| )/gm, "");
+                    $.ajax({
+                        url: "/ERPCheckBOM/CheckBOM",
+                        data: { item: item, wc: wc, material: material, no: i },
+                        dataType: "json",
+                        type: "POST",
+                        success: function (response) {
+                            console.log(response);
+                            var selWC = '<select class="form-control checkchange" id="selWC_' + response.no + '">';
+                            var selMatl = '<select class="form-control checkchange" id="selMatl_' + response.no + '">';
+                            var selBOM = '<select class="form-control checkchange" id="selBOM_' + response.no + '">';
+                            if (response.WC == "") {
+                                selWC += '<option value="" selected></option>';
+                            }
+                            if (response.Matl == "") {
+                                selMatl += '<option value="" selected></option>';
+                            }
+                            if (!response.ListWC.includes(response.WC)) {
+                                selWC += '<option value="' + response.WC + '" selected>' + response.WC + '</option>';
+                            }
+                            if (!response.ListMatl.includes(response.Matl)) {
+                                selMatl += '<option value="' + response.Matl + '" selected>' + response.Matl + '</option>';
+                            }
+                            $.each(response.ListWC, function (index, value) {
+                                if (this == response.WC) {
+                                    selWC += '<option value="' + this + '" selected>' + this + '</option>';
+                                } else {
+                                    selWC += '<option value="' + this + '">' + this + '</option>';
+                                }
+                            });
+                            $.each(response.ListMatl, function (index, value) {
+                                if (this == response.Matl) {
+                                    selMatl += '<option value="' + this + '" selected>' + this + '</option>';
+                                } else {
+                                    selMatl += '<option value="' + this + '">' + this + '</option>';
+                                }
+                            });
+                            if (response.BOMOK == "None") {
+                                selBOM += '<option value="None">None</option>';
+                                document.getElementById("JobLine_" + response.no).style.backgroundColor = "#ff6f6f";
+                            }
+                            else if (response.BOMOK != "") {
+                                $.each(response.BOMOK.split(","), function (index, value) {
+                                    if (this != "") {
+                                        let show = "";
+                                        let title = "";
+                                        let Sevalue = this.split("&&")[0];
+                                        if (this.split("&&")[1] == "S") {
+                                            show = "Current";
+                                        }
+                                        else if (this.split("&&")[1] == "E") {
+                                            show = this.split("&&")[0] + " :Version";
+                                        }
+                                        else {
+                                            show = this.split("&&")[0] + this.split("&&")[1];
+                                        }
+                                        if (this.split("&&")[2] != "") {
+                                            document.getElementById("JobLine_" + response.no).style.backgroundColor = "#ff6f6f";
+                                            var ListErr = this.split("&&")[2].split("-");
+                                            console.log(ListErr);
+                                            if (ListErr[0] != "0") {
+                                                title += "Thiếu công đoạn: " + ListErr[0] + "; ";
+                                            }
+                                            if (ListErr[1] != 0) {
+                                                title += "Hàng NG công đoạn: " + ListErr[1] + "; ";
+                                            }
+                                            if (ListErr[2] != 0) {
+                                                title += "Thiếu NVL công đoạn: " + ListErr[2] + "; ";
+                                            }
+                                        }
+                                        selBOM += '<option value="' + Sevalue + '" title="' + title + '">' + show + '</option>';
+                                    }
+                                });
+                            }
+                            else {
+                                $.each(response.BOMNG.split(","), function (index, value) {
+                                    if (this != "") {
+                                        let title = "";
+                                        let show = "Fault: ";
+                                        if (this.split("&&")[1] == "W") {
+                                            show += "Workcenter";
+                                        }
+                                        else if (this.split("&&")[1] == "M") {
+                                            show += "Material";
+                                        }
+                                        else if (this.split("&&")[1] == "NG") {
+                                            show += "Workcenter & Material"
+                                        }
+                                        selBOM += '<option value="' + this.split("&&")[1] + '" >' + show + '</option>';
+                                        document.getElementById("JobLine_" + response.no).style.backgroundColor = "#ff6f6f";
+                                    }
+                                });
+                            }
+                            selBOM += '</select>';
+                            selMatl += '</select>';
+                            selWC += '</select>';
+                            document.getElementById("wc_" + response.no).textContent = "";
+                            $("#wc_" + response.no).append(selWC);
+                            document.getElementById("material_" + response.no).textContent = "";
+                            $("#material_" + response.no).append(selMatl);
+                            document.getElementById("BOMType_" + response.no).textContent = "";
+                            $("#BOMType_" + response.no).append(selBOM);
+                            $("#BOMID_" + response.no).append('<i class="fa fa-2x fa-check-circle-o" style="color:dodgerblue"></i>');
+                        }
+                    });
+                }
+            }
+        </script>
+    }
+</div>
+

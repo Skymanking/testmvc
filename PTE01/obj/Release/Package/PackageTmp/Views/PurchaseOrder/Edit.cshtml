@@ -1,0 +1,146 @@
+﻿@model Model.EF.PurchaseOrder
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    var khachhang = (IEnumerable<Model.EFFASTNB.dmkh>)ViewBag.khachhang;
+
+    var lisCus = new List<SelectListItem>();
+    lisCus.Add(new SelectListItem
+    {
+        Text = "Chọn Khách Hàng",
+        Value = "none",
+        Selected = true
+    });
+    foreach (var item in khachhang)
+    {
+
+        lisCus.Add(new SelectListItem
+       {
+           Text = item.ten_kh + " MST:" + item.ma_so_thue,
+           Value = item.ma_kh,
+       });
+    }
+}
+@section jsFooter
+{
+<script src="/Scripts/CancelPO.js"></script>
+    <script>
+        $(function () {
+            $('.select2').select2();
+            $('.date').datepicker();
+        })
+    </script>
+    <script>
+        $(document).ready(function () {
+
+            $('#IDCus').on('change', function () {
+                var temp = $(this).find(":selected").text();
+                var pos = temp.indexOf('MST:');
+                var tenkh = temp.substr(0, pos);
+                $('#CusName').val(tenkh);
+            });
+
+
+        });
+    </script>
+
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+
+
+
+
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Thông tin Đơn Hàng</h3>
+    </div>
+    @using (Html.BeginForm("Edit", "PurchaseOrder", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Số PO</label>
+                        @Html.TextBoxFor(model => model.IDPO, new { @class = "form-control",@disabled="disabled" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Mã Khách Hàng</label>
+                        @Html.TextBoxFor(model => model.IDCus, new { @class = "form-control", @disabled = "disabled" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label">Tên Khách Hàng</label>
+                        @Html.TextBoxFor(model => model.CusName, new { @class = "form-control", @disabled = "disabled" })
+                    </div>
+                </div>            
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="control-label">Diễn giải chi tiết</label>
+                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @rows = "4", @disabled = "disabled" })
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="control-label">Ghi chú</label>
+                        @Html.TextAreaFor(model => model.Note, new { @class = "form-control", @rows = "4" })
+                    </div>
+                </div>
+
+                <div class="col-md-4" style="background: #f2fbe9;">
+                    <div class="form-group">
+                            <center>
+                            <label class="control-label">Ngày Tạm Ứng: @Model.DepositDat.ToString("dd/MM/yyy")</label>
+                            <br/>
+                            @Html.CheckBoxFor(model => model.DepositApp, new { @style = "height:60px; width:60px;" })
+                        </center>
+                        @if (Model.DepositADat != null)
+                        {<span> @Model.DepositAPer duyệt @Model.DepositADat.Value.ToString("dd/MM/yyyy")</span>}
+
+                    </div>
+                </div>
+                <div class="col-md-4" style="background: #e0f9c6;">                    
+                    <div class="form-group">
+                        <center>
+                            <label class="control-label">Ngày Giao Hàng: @Model.DeliveryDat.ToString("dd/MM/yyy")</label>
+                            <br />
+                            @Html.CheckBoxFor(model => model.DeliveryApp, new { @style = "height:60px; width:60px;" })
+                        </center>
+                        @if (Model.DeliveryADat != null)
+                        {<span> @Model.DeliveryAPer duyệt @Model.DeliveryADat.Value.ToString("dd/MM/yyyy")</span>}
+
+                    </div>
+                </div>
+                <div class="col-md-4" style="background: #baf184;">
+                    <div class="form-group">
+                        <center>
+                            <label class="control-label">Ngày Thanh Toán: @Model.PaymentDat.ToString("dd/MM/yyy")</label>
+                            <br />
+                            @Html.CheckBoxFor(model => model.PaymentApp, new { @style = "height:60px; width:60px;" })
+                        </center>
+                        @if (Model.PaymentADat != null)
+                        {<span> @Model.PaymentAPer duyệt @Model.PaymentADat.Value.ToString("dd/MM/yyyy")</span>}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary" id="luulai" onclick="openNav()">Lưu thông tin</button>
+            <button type="button" class="btn btn-danger float-right" id="huydon" data-id="@Model.ID">Hủy đơn </button>
+        </div>
+    }
+</div>
+
+
+
+
+
+
+

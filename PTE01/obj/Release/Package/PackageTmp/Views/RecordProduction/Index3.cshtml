@@ -1,0 +1,158 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    var listLine = (List<Model.EF.WorkCenter>)ViewBag.Linek;
+    var temp = (List<Model.View.PlaningView1>)ViewBag.temp;
+}
+@section jsFooter
+        {
+    <script src="/Assets/theme3/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+    <script>
+        $(function () {
+            $("#dates").datepicker();
+            $("#end").datepicker();
+            $("#StartDate").datepicker();
+            $("#EndDate").datepicker();
+            $('input[type="checkbox"].flat-green, input[type="radio"].flat-green').iCheck({
+                checkboxClass: 'icheckbox_flat-green',
+                radioClass: 'iradio_flat-green'
+            })
+            $('.select2').select2()
+        })
+    </script>
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Ghi nhận kết quả SX có NG</h3>
+        <div class="card-tools">
+            <div class="btn-group" style="height:40px">
+                <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                    More
+                </button>
+                <div class="dropdown-menu float-right" role="menu">
+                    <a class="dropdown-item" href="/RecordProduction/Index2" style="color:#000">Ghi nhận kết quả SX</a>
+                    <a class="dropdown-item" href="/RecordProduction/Index3" style="color:#000">Ghi nhận kết quả SX có NG</a>
+                    <a class="dropdown-item" href="/RecordProduction/Index" style="color:#000">Xem lại kết quả SX</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3">
+                <label class="control-label">Line</label><br>
+                <select class="form-control select2" id="lines" name="lines">
+                    <option value="">Hãy chọn Line</option>
+                    @foreach (var item in listLine)
+                    {
+                        if (ViewBag.lines == item.ID)
+                        {
+                            <option value="@item.ID" selected>@item.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@item.ID">@item.Name</option>}
+
+                    }
+
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <label class="control-label">Ngày:</label>
+                <div class="bootstrap-timepicker">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input type="text" id="dates" name="dates" class="form-control" readonly="readonly" value='@if (ViewBag.dates != ""){@ViewBag.dates}else{@DateTime.Now.ToShortDateString()}'><br>
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label class="control-label">Sản phẩm:</label>
+                <input type="text" id="iditems" name="iditems" class="form-control">
+            </div>
+
+            <div class="col-md-2 text-center">
+                <label class="control-label"></label>
+                <div class="form-group">
+                    <a class="btn btn-primary" id="inbaocao">Tìm kiếm</a>
+                </div>
+            </div>
+        </div>
+        @*
+            <script src="~/Scripts/jquery-1.9.1.min.js"></script>*@
+        <script>
+            $(document).ready(function () {
+
+                $("#inbaocao").click(function () {
+                    var iditems = $("#iditems").val();
+                    var lines = $('#lines').val();
+                    var dates = $('#dates').val();
+                    if (lines == "" || dates == "") {
+                        alert("chưa nhập đủ thông tin");
+                        $('#inbaocao').attr("href", '#');
+                    }
+                    else { $('#inbaocao').attr("href", '/RecordProduction/Index3?iditems=' + iditems + '&lines=' + lines + '&dates=' + dates); }
+
+                });
+            });
+
+        </script>
+    </div>
+
+
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-success card-outline">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fa fa-clipboard"></i> <span id="sokq" style="color:red;font-weight:bold;"></span>Cập Nhật Kết Quả Sản Xuất</h3>
+            </div>
+
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Kế Hoạch</th>
+                                <th>Sản Phẩm</th>
+                                <th style="width:130px">Ghi nhận chi tiết</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in temp)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.ID
+                                        <p>@item.StartDate.ToString("dd/MM/yyyy HH:mm")-@item.EndDate.ToString("dd/MM/yyyy HH:mm")</p>
+                                    </td>
+                                    <td>
+                                        <span style="font-size:22px">  @item.ItemName </span>
+                                        <p style="font-size:22px; color:red;"> @item.ItemID - SL:<strong> @item.Quantity</strong></p>
+                                    </td>                                    
+                                    <td>
+                                        <a class="btn-saveitem btn btn-app" href="/RecordProduction/Create/@item.ID" style="color: #dc3545; background: #c0daf7; font-weight: bold; height: 60px; width: 100%; margin-left: 0; padding-top: 10px;">
+                                            <i class="fa fa-save"></i> Nhập thông tin
+                                        </a>
+                                    </td>
+
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

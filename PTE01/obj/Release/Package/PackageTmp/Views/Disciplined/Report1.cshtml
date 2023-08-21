@@ -1,0 +1,122 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    var listbp = (List<Model.EF.PersonalGroup>)ViewBag.listbp;
+    var listdetail = (List<Model.View.DisciplinedView2>)ViewBag.listdetail;
+    int tongvipham = 0; int loai1 = 0; int loai2 = 0; int loai3 = 0; int loai4 = 0;
+    int stongvipham = 0; int sloai1 = 0; int sloai2 = 0; int sloai3 = 0; int sloai4 = 0;
+
+    string listmanv = "";
+
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-success card-outline">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fa fa-clipboard"></i>Thống Kê Vi Phạm Tháng @ViewBag.month / @ViewBag.year</h3>
+
+                <div class="card-tools">
+
+                    <div class="btn-group" style="height:40px">
+                        <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-file-excel-o"></i>
+                        </button>
+                        <div class="dropdown-menu float-right" role="menu">
+                            <a class="dropdown-item" href="/Disciplined/">Danh sách</a>       
+                            <a class="dropdown-item" href="/Disciplined/Report1?year=@DateTime.Now.Year&month=@DateTime.Now.AddMonths(-1).Month">Thống kê theo BP</a>         
+                        </div>
+                    </div>
+                    <div style="float:left">
+                        @using (Html.BeginForm("Report1", "Disciplined", FormMethod.Get))
+                        {
+                            <div class="input-group " style="width: 300px;">
+                                <input type="number" value="@ViewBag.month" name="month" max="12" min="1" step="1" class="form-control float-right" style="background: #e6c5c8; font-weight: bold;">
+                                <input type="number" value="@ViewBag.year" name="year" max="@DateTime.Now.Year" min="2017" step="1" class="form-control float-right" style="background: #e6c5c8; font-weight: bold;">
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Bộ phận</th>
+                                <th>Tổng số vi phạm</th>
+                                <th>Khiển trách </th>
+                                <th>Kéo dài THNL</th>
+                                <th>Sa thải</th>
+                                <th>Khác</th>
+                                <th>DS mã NV</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var bp in listbp)
+                            {
+                                { tongvipham = 0; loai1 = 0; loai2 = 0; loai3 = 0; loai4 = 0; listmanv = ""; }
+                                <tr>
+                                    <td>@bp.Name</td>
+                                    @foreach (var item in listdetail)
+                                    {
+                                        if (item.GroupID == bp.ID)
+                                        {
+                                            tongvipham = tongvipham + 1;
+                                            stongvipham = stongvipham + 1;
+                                            listmanv = listmanv + "<a href='/Disciplined?searchString=" + item.PerID + "'>" + item.PerID + "</a> ;";
+                                            
+                                            if (item.Decision== "muc1")
+                                            {
+                                                loai1 = loai1 + 1;
+                                                sloai1 = sloai1 + 1;
+                                            }
+                                            if (item.Decision == "muc2")
+                                            {
+                                                loai2 = loai2 + 1;
+                                                sloai2 = sloai2 + 1;
+                                            }
+                                            if (item.Decision == "muc3")
+                                            {
+                                                loai3 = loai3 + 1;
+                                                sloai3 = sloai3 + 1;
+                                            }
+                                            if (item.Decision == "muc4")
+                                            {
+                                                loai4 = loai4 + 1;
+                                                sloai4 = sloai4 + 1;
+                                            }                                            
+                                        }
+
+
+                                    }
+                                    <td>@if(tongvipham >0 ){<span style="color:red; font-weight:bold;font-size:24px;">@tongvipham</span>}else{<span>0</span>}</td>
+                                    <td>@loai1</td>
+                                    <td>@loai2</td>
+                                    <td>@loai3</td>
+                                    <td>@loai4</td>
+                                    <td>@Html.Raw(@listmanv) </td>
+                                </tr>
+
+                            }
+                            <tr>
+                                <td>Tổng</td>
+                                <td>@stongvipham</td>
+                                <td>@sloai1</td>
+                                <td>@sloai2</td>
+                                <td>@sloai3</td>
+                                <td>@sloai4</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+

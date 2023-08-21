@@ -1,0 +1,11 @@
+﻿@{
+    Layout = null;
+    var infouser = (Model.View.UserView1)ViewBag.infouser;
+}
+
+<div class="nav navbar-top-links navbar-right">
+    <p style=" color: white; line-height: 40px; font-size: 14px; padding-right: 15px;">
+        Xin chào @infouser.FullName ,
+        @Html.ActionLink("Đăng xuất","Logout","Login")
+    </p>
+</div>

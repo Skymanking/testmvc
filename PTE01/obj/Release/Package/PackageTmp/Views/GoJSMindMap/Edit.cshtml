@@ -1,0 +1,98 @@
+﻿@model Model.EF.GoJSMindMap
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    var ListUser = (List<Model.View.Dropdownlist2>)ViewBag.User;
+    var User = new List<SelectListItem>();
+    User.Add(new SelectListItem
+    {
+        Value = "0",
+        Text = "Chọn Owner",
+    });
+    foreach (var item in ListUser)
+    {
+        User.Add(new SelectListItem
+        {
+            Text = item.Name,
+            Value = item.ID,
+        });
+    }
+}
+<script src="/Assets/plugin/ckfinder/ckfinder.js"></script>
+<script src="~/Scripts/GoJSMindMap.js"></script>
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
+<link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet" />
+<div class="card card-primary">
+    <div class="card-header">
+        <h3>Mind Map</h3>
+    </div>
+</div>
+<div class="md:flex flex-col md:flex-row md:min-h-screen w-full max-w-screen-xl mx-auto card-body">
+
+    <div class="row" style="padding: 0 1.5rem 0 1.5rem">
+        <div class="col-md-12">
+            <label>Name</label><br />
+            <input class="form-control" id="name" value="@Model.Name" style="background-color:transparent;" />
+        </div>
+        @*<div class="col-md-4">
+                <div id="chosenewmen">
+                    <label>Chọn thành viên</label>
+                    <select data-placeholder="Nhân viên" multiple class="chosen-select form-control" id="newmember" style="width:99%; ">
+                        @foreach (var member in ListUser)
+                        {
+                            <option value="@member.ID">@member.Name</option>
+                        }
+                    </select>
+                </div>
+                <script type="text/javascript">
+                    $(".chosen-select").chosen({
+                        no_results_text: "Không tìm thấy:"
+                    });
+                    $('#newmember_chosen').css({ "width": "100%" });
+                </script>
+            </div>*@
+    </div>
+
+    <div id="navSide" class="flex flex-col w-full md:w-48 text-gray-700 bg-white flex-shrink-0"></div>
+    <!-- * * * * * * * * * * * * * -->
+    <!-- Start of GoJS sample code -->
+
+    <script src="~/Scripts/go.js"></script>
+    <div id="allSampleContent" class="p-4 w-full">
+        <div id="sample">
+            <div id="myDiagramDiv" style="border: solid 1px black; width:100%; height:600px;"></div>
+            <textarea id="mySavedModel" style="width:100%;height:400px; display:none">@Model.Value  </textarea>
+        </div>
+    </div>
+    <input id="diagramEventsMsg" style="color: red;display:none" value="0" onchange="ChangColorInput()" />
+
+    <!-- * * * * * * * * * * * * * -->
+    <!--  End of GoJS sample code  -->
+</div>
+
+<div class="card-footer" style="text-align: center; background-color: #a8cbdb ">
+    <div class="row">
+        <div class="col-md-4">
+            <button id="SaveButton" onclick="save()" class="btn btn-success">Save</button>
+        </div>
+        <div class="col-md-4">
+            <a>Change Color &nbsp;&nbsp;<input type="color" class="btn btn-info" id="newcolor" onchange="changeColor()" style="background-color:transparent" /></a>
+        </div>
+        <div class="col-md-4">
+            @using (Html.BeginForm("Del", "GoJSMindMap", FormMethod.Post))
+            {
+
+                <button id="Del" class="btn btn-danger"> Delete</button>
+                <input id="IDMindMap" name="id" value="@Model.ID" style="display:none" />
+            }
+        </div>
+    </div>
+
+    @*<button onclick="load()" class="btn btn-success">Load</button>*@
+
+</div>
+

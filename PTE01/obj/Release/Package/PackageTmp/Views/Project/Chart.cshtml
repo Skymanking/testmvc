@@ -1,0 +1,166 @@
+﻿@model Model.EF.Task
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    long idPro = ViewBag.idPro;
+    var detail = (Model.EF.Project)ViewBag.detail;
+    var listU = (IEnumerable<Model.View.UserView2>)ViewBag.listUser;
+    var listTask = (IEnumerable<Model.View.TaskView4>)ViewBag.listTask;
+    var listKey = (IEnumerable<Model.EF.Project>)ViewBag.listKey;
+    string nguoitao = ViewBag.nguoitao;
+    var nguoinhan = new List<SelectListItem>();
+    nguoinhan.Add(new SelectListItem
+    {
+        Text = "Chọn Người Thực Hiện",
+        Value = "none",
+        Selected = true
+    });
+    foreach (var item in listU)
+    {
+        if (item.FullName == nguoitao)
+        {
+            nguoinhan.Add(new SelectListItem
+            {
+                Text = item.FullName,
+                Value = item.UserName,
+                Selected = true,
+            });
+        }
+        else
+        {
+            nguoinhan.Add(new SelectListItem
+            {
+                Text = item.FullName,
+                Value = item.UserName,
+            });
+        }
+    }
+}
+@section jsFooter
+{
+
+
+}
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link href="~/Scripts/GranttChart/jsgantt.css" rel="stylesheet" />
+<script src="~/Scripts/GranttChart/jsgantt.js"></script>
+
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Dự Án @detail.Name</h3>
+
+
+    </div>
+    <div class="card-body">
+
+        <div style="position:relative" class="gantt" id="GanttChartDIV"></div>
+        <script>
+
+            var g = new JSGantt.GanttChart('g', document.getElementById('GanttChartDIV'), 'day');
+            g.setShowRes(1); // Show/Hide Responsible (0/1)
+            g.setShowDur(1); // Show/Hide Duration (0/1)
+            g.setShowComp(1); // Show/Hide % Complete(0/1)
+            g.setCaptionType('Resource');  // Set to Show Caption
+
+            if (g) {
+
+                //g.AddTaskItem(new JSGantt.TaskItem(1, 'Define Chart API', '', '', 'ff0000', 'http://google.com', 0, 'Brian', 0, 1, 0, 1));
+                //g.AddTaskItem(new JSGantt.TaskItem(11, 'Chart Object', '2/20/2008', '2/20/2008', '2/22/2008', 'ff00ff', 'http://www.yahoo.com', 1, 'Shlomy', 100, 0, 1, 1));
+                //g.AddTaskItem(new JSGantt.TaskItem(12, 'Task Objects', '', '', '00ff00', '', 0, 'Shlomy', 40, 1, 1, 1));
+                 @foreach (var itemkey in listKey)
+                {
+                    <text>
+                    g.AddTaskItem(new JSGantt.TaskItem(@itemkey.ID, '@itemkey.Name', '@itemkey.StartDate.ToString("MM/dd/yyyy")', '@itemkey.EndDate.ToString("MM/dd/yyyy")', 'ff0000', 'http://www.yahoo.com', 0, ' ',0,100, 0, 1));
+
+                    </text>
+
+                    foreach(var item in listTask)
+                    {
+                        if (item.IDKey == itemkey.ID)
+                        {
+                            var trehan=false;
+                            if (item.IDPar == 0)
+                            {
+                                if (item.FinishDate == null && item.Deadline > DateTime.Now) { trehan = true; }
+                                if (item.FinishDate != null && item.FinishDate > item.Deadline) { trehan = true; }
+
+                                if(trehan)
+                                {
+                                    <text>
+                                      g.AddTaskItem(new JSGantt.TaskItem(@item.ID, '@item.Subject', '@item.StartDate.Value.ToString("MM/dd/yyyy")', '@item.Deadline.ToString("MM/dd/yyyy")', 'F44336', '/Task/Edit2/@item.ID', 0, '@item.Owner', @item.Rate,0,@item.IDPar, 1 ));
+                                    </text>
+                                }
+                                else
+                                {
+                                    <text>
+                                       g.AddTaskItem(new JSGantt.TaskItem(@item.ID, '@item.Subject', '@item.StartDate.Value.ToString("MM/dd/yyyy")', '@item.Deadline.ToString("MM/dd/yyyy")', '03A9F4', '/Task/Edit2/@item.ID', 0, '@item.Owner', @item.Rate,0,@item.IDPar, 1 ));
+                                    </text>
+                                }
+                                trehan=false;
+
+                                foreach(var item2 in listTask)
+                                {
+                                    if (item2.IDPar == item.ID)
+                                    {
+                                        if (item2.FinishDate == null && item2.Deadline > DateTime.Now) { trehan = true; }
+                                        if (item2.FinishDate != null && item2.FinishDate > item2.Deadline) { trehan = true; }
+
+                                        if(trehan)
+                                        {
+                                            <text>
+                                              g.AddTaskItem(new JSGantt.TaskItem(@item2.ID, ' + @item2.Subject', '@item2.StartDate.Value.ToString("MM/dd/yyyy")', '@item2.Deadline.ToString("MM/dd/yyyy")', 'F44336', '/Task/Edit2/@item2.ID', 0, '@item2.Owner', @item2.Rate,0,@item2.IDPar, 1 ));
+                                            </text>
+                                        }
+                                        else
+                                        {
+                                            <text>
+                                               g.AddTaskItem(new JSGantt.TaskItem(@item2.ID, ' + @item2.Subject', '@item2.StartDate.Value.ToString("MM/dd/yyyy")', '@item2.Deadline.ToString("MM/dd/yyyy")', '03A9F4', '/Task/Edit2/@item2.ID', 0, '@item2.Owner', @item2.Rate,0,@item2.IDPar, 1 ));
+                                            </text>
+                                        }
+                                        trehan = false;
+                                        foreach(var item3 in listTask)
+                                        {
+                                            if (item3.IDPar == item2.ID)
+                                            {
+                                                if (item3.FinishDate == null && item3.Deadline > DateTime.Now) { trehan = true; }
+                                                if (item3.FinishDate != null && item3.FinishDate > item3.Deadline) { trehan = true; }
+
+                                                if(trehan)
+                                                {
+                                                    <text>
+                                                      g.AddTaskItem(new JSGantt.TaskItem(@item3.ID, ' ++ @item3.Subject', '@item3.StartDate.Value.ToString("MM/dd/yyyy")', '@item3.Deadline.ToString("MM/dd/yyyy")', 'F44336', '/Task/Edit2/@item3.ID', 0, '@item3.Owner', @item3.Rate,0,@item3.IDPar, 1 ));
+                                                    </text>
+                                                }
+                                                else
+                                                {
+                                                    <text>
+                                                       g.AddTaskItem(new JSGantt.TaskItem(@item3.ID, ' ++ @item3.Subject', '@item3.StartDate.Value.ToString("MM/dd/yyyy")', '@item3.Deadline.ToString("MM/dd/yyyy")', '03A9F4', '/Task/Edit2/@item3.ID', 0, '@item3.Owner', @item3.Rate,0,@item3.IDPar, 1 ));
+                                                    </text>
+                                                }
+                                                trehan = false;
+                                            }
+                                        }
+                                    }
+
+                                }
+                            }
+
+
+                        }
+                    }
+                }
+
+                g.Draw();
+                g.DrawDependencies();
+
+
+            }
+            else {
+                alert("not defined");
+            }
+
+        </script>
+    </div>
+</div>

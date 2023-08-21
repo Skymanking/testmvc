@@ -1,0 +1,205 @@
+﻿@{
+    ViewBag.Title = "OEE";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+}
+
+@section jsFooter
+{
+    <script src="/Assets/plugin/ckfinder/ckfinder.js"></script>
+    <script src="/Assets/theme3/plugins/datepicker/js/bootstrap-datetimepicker.js"></script>
+    <script src="/Assets/theme3/plugins/datepicker/js/locales/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
+    <script src="/Assets/theme3/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+    <script>
+        $(function () {
+            $('.select2').select2()
+            $(".date").datepicker();
+        })
+    </script>
+
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">OEE</h3>
+        <div class="card-tools">
+            <div class="btn-group" style="height:40px">
+                <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                    More
+                </button>
+                <div class="dropdown-menu float-right" role="menu">
+                    <a class="dropdown-item" href="#" style="color:#000"></a>
+                    <a class="dropdown-item" href="#" style="color:#000"></a>
+                    <a class="dropdown-item" href="#" style="color:#000"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("Report2", "PTE_baocom", FormMethod.Get))
+        {
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label" style="color: #FF5722;">Tìm kiếm</label><br>
+                        <input type="text" class="form-control" id="searchString" name="searchString" placeholder="Tìm kiếm" />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="control-label">Chọn Line, Máy, Xưởng</label><br>
+                    <select class="form-control select2" id="dep" name="dep">
+                        <option value="">Tất cả</option>
+                        <option value="">Gá 1</option>
+                        <option value="">Gá 2</option>
+
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Từ ngày</label>
+                        <div class="input-group mb-3">
+                            <input type="text" id="ngay1" name="ngay1" class="date form-control" readonly="readonly" value="@if (ViewBag.ngay1!=null){@ViewBag.ngay1}else{@DateTime.Now.ToShortDateString()}"><br>
+                            <div class=" input-group-append">
+                                <span class=" input-group-text"><i class="fa fa-calendar"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Tới ngày</label>
+                        <div class="input-group mb-3">
+                            <input type="text" id="ngay1" name="ngay1" class="date form-control" readonly="readonly" value="@if (ViewBag.ngay1!=null){@ViewBag.ngay1}else{@DateTime.Now.ToShortDateString()}"><br>
+                            <div class=" input-group-append">
+                                <span class=" input-group-text"><i class="fa fa-calendar"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-2 text-center">
+                    <label></label>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i>Tìm kiếm</button>
+                    </div>
+                </div>
+            </div>
+        }
+        <script src="~/Scripts/jquery-1.9.1.min.js"></script>
+        @*Hàm foreach xử lý các máy*@
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-success card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fa fa-clipboard"></i> <span id="sokq" style="color:red;font-weight:bold;"></span> Kết quả</h3>
+                        <div class="card-tools">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6" style="height: 400px">
+                <div class="card bg-info text-white" style="text-align:center; font-size:24px">Máy Ép 1</div>
+
+                <div class="row" style="height: 300px">
+                    <div>
+                        <img src="~/Image/Tam/MayEP.jpg" width="250" height="250" />
+                    </div>
+                    <div class="col-sm-4">
+                        <div id="chart_div_0"></div>
+                    </div>
+                    <div class="col-sm-3">
+                        <label>Thời gian vận hành: </label> <i>250h</i> <br />
+                        <label>Thời gian lý thuyết: </label> <i>300h</i><br />
+                        <label>Tổng sản phẩm: </label> <i>2500</i><br />
+                        <label>Tổng sản phẩm đạt: </label> <i>2400</i><br />
+                        <label>Tổng sản phẩm lý thuyết: </label> <i>2500</i><br />
+                        <label>Tỷ lệ vận hành: </label> <i>30%</i><br />
+                        <label>Tỷ lệ hiệu suất: </label> <i>50%</i><br />
+                        <label>Tỷ lệ chất lựng: </label> <i>70%</i><br />
+                    </div>
+                </div>
+            </div>
+            <div id="curve_chart_0" style="height: 400px" class="col-md-6"></div>
+            <div class="col-md-6" style="height: 400px">
+                <div class="card bg-info text-white" style="text-align:center; font-size:24px">Máy Ép 2</div>
+                <div class="row" style="height: 300px">
+                    <div><img src="~/Image/Tam/MayEP.jpg" width="250" height="250" /></div>
+                    <div class="col-sm-4">
+                        <div id="chart_div_1"></div>
+                    </div>
+                    <div class="col-sm-3">
+                        <label>Thời gian vận hành: </label> <i>250h</i> <br />
+                        <label>Thời gian lý thuyết: </label> <i>300h</i><br />
+                        <label>Tổng sản phẩm: </label> <i>2500</i><br />
+                        <label>Tổng sản phẩm đạt: </label> <i>2400</i><br />
+                        <label>Tổng sản phẩm lý thuyết: </label> <i>2500</i><br />
+                        <label>Tỷ lệ vận hành: </label> <i>50%</i><br />
+                        <label>Tỷ lệ hiệu suất: </label> <i>40%</i><br />
+                        <label>Tỷ lệ chất lượng: </label> <i>60%</i><br />
+                    </div>
+                </div>
+            </div>
+            <div id="curve_chart_1" style="height: 300px" class="col-md-6"></div>
+
+
+
+            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+            @for (int i = 0; i < 2; i++)
+            {
+                <script type="text/javascript">
+                    google.charts.load('current', { 'packages': ['corechart'] });
+                    google.charts.setOnLoadCallback(drawChart);
+
+                    function drawChart() {
+                        var data = google.visualization.arrayToDataTable([
+                          ['Year', 'A', 'P', 'Q'],
+                          ['11/5', 30, 40, 50],
+                          ['12/5', 40, 45, 55],
+                          ['13/5', 50, 50, 80],
+                          ['16/5', 60, 60, 100]
+                        ]);
+
+                        var options = {
+                            title: 'Company Performance',
+                            curveType: 'function',
+                            legend: { position: 'bottom' }
+                        };
+
+                        var chart = new google.visualization.LineChart(document.getElementById('curve_chart_@i'));
+
+                        chart.draw(data, options);
+                    }
+                </script>
+                <script type="text/javascript">
+                    google.charts.load('current', { 'packages': ['gauge'] });
+                    google.charts.setOnLoadCallback(drawChart);
+
+                    function drawChart() {
+
+                        var data = google.visualization.arrayToDataTable([
+                          ['Label', 'Value'],
+                          ['OEE', 80],
+                        ]);
+
+                        var options = {
+                            width: 600, height: 200,
+                            redFrom: 0, redTo: 60,
+                            yellowFrom: 60, yellowTo: 80,
+                            greenFrom: 80, greenTo: 100,
+                            minorTicks: 5,
+                            max: 100,
+                            min: 0
+                        };
+
+                        var chart = new google.visualization.Gauge(document.getElementById('chart_div_@i'));
+                        chart.draw(data, options);
+                    }
+                </script>
+            }
+        </div>
+
+    </div>
+</div>

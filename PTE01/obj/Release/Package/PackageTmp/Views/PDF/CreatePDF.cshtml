@@ -1,0 +1,66 @@
+﻿@{
+    ViewBag.Title = "CreatePDF";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+}
+<div class="card card-primary">
+    <div class="card-header">
+        <a href="~/PDF/Index"><img src="~/Assets/theme3/dist/img/home6.png" style="width: 48px; float: left; margin: -10px 10px -10px -10px; " /></a>   <h3 class="card-title">Upload file</h3>
+    </div>
+    @using (Html.BeginForm("CreatePDF", "PDF", FormMethod.Post))
+    {
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <label>Tên file</label><br />
+                    <input class="form-control" name="Name" id="Name" />
+                </div>
+                <div class="col-md-12">
+                    <label>Chọn file</label><br />
+                    <input id="files" type="file" name="Data" />
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-success" id="upload" onclick="Check()">Lưu</button>
+        </div>
+    }
+</div>
+<script type="text/javascript">
+    function Check() {
+        var name = document.getElementById("Name").value;
+        var Data = document.getElementById("files").value;
+        if (name == "" || Data=="") {
+            event.preventDefault();
+            alert("Chưa nhập đủ thông tin")
+        }
+        else {
+            if ($("#files").val().substring(12, 400) != "") {
+                    var linkfile = "/App_Data/uploads/PDF" + $("#files").val().substring(12, 400);
+                    var data = new FormData();
+                    var files = $("#files").get(0).files;
+                    for (i = 0; i < files.length; i++) {
+                        data.append("files" + i, files[i]);
+                    }
+                    if (files.length > 0) {
+                        $.ajax({
+                            type: 'POST',
+                            url: "@Url.Action("Upload")",
+                            data: data,
+                            contentType: false,
+                            processData: false,
+                            success: function (data) {
+                            }
+                        });
+                    } else {
+                        alert("Chưa chọn file");
+                    }
+                }
+        }
+    }
+    $body = $("body");
+        $(document).on({
+            ajaxStart: function () { $body.addClass("loading"); },
+            ajaxStop: function () { $body.removeClass("loading"); }
+        });
+
+</script>

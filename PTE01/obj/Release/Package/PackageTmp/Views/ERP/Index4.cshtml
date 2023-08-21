@@ -1,0 +1,341 @@
+﻿@model  Model.View.ListString
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+
+    DateTime homnay = DateTime.Now;
+
+    string ngaythangnam = "ReportMH" + DateTime.Now.ToUniversalTime();
+    var temp = (List<Model.ERP.ePlaningView1>)ViewBag.temp;
+    decimal tilechuan = Convert.ToDecimal(0.9);
+    List<SelectListItem> listLine = new List<SelectListItem>();
+    listLine.Add(new SelectListItem
+    {
+        Text = "Line Ép Nhựa",
+        Value = "RGS-ME",
+    });
+    listLine.Add(new SelectListItem
+    {
+        Text = "Line Lắp Ráp",
+        Value = "RGS-LR",
+    });
+    listLine.Add(new SelectListItem
+    {
+        Text = "Line Sơn",
+        Value = "RGS-SN",
+    });
+    listLine.Add(new SelectListItem
+    {
+        Text = "Line Gá",
+        Value = "RGS-GA",
+    });
+    listLine.Add(new SelectListItem
+    {
+        Text = "Line Xi 1-1",
+        Value = "RGS-XI101",
+    });
+    listLine.Add(new SelectListItem
+    {
+        Text = "Line Xi 2-1",
+        Value = "RGS-XI201",
+    });
+    listLine.Add(new SelectListItem
+    {
+        Text = "Line Xi 2-2",
+        Value = "RGS-XI202",
+    });
+    listLine.Add(new SelectListItem
+    {
+        Text = "Line Xi 2-3",
+        Value = "RGS-XI203",
+    });
+    listLine.Add(new SelectListItem
+    {
+        Text = "Line Xi 2-4",
+        Value = "RGS-XI204",
+    });
+    listLine.Add(new SelectListItem
+    {
+        Text = "Line Xi 2-5",
+        Value = "RGS-XI205",
+    });
+    listLine.Add(new SelectListItem
+    {
+        Text = "Line Xi 2-6",
+        Value = "RGS-XI206",
+    });
+
+    List<SelectListItem> listOper = new List<SelectListItem>();
+    listOper.Add(new SelectListItem
+    {
+        Text = "Nhóm Sản Xuất",
+        Value = "10",
+        Selected = true,
+    });
+    listOper.Add(new SelectListItem
+    {
+        Text = "Nhóm QC",
+        Value = "20",
+    });
+}
+
+@section jsFooter
+{
+
+    <script src="/Assets/theme3/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+    <script>
+        $(function () {
+            $("#ngay1").datepicker();
+            $("#ngay2").datepicker();
+            $('input[type="checkbox"].flat-green, input[type="radio"].flat-green').iCheck({
+                checkboxClass: 'icheckbox_flat-green',
+                radioClass: 'iradio_flat-green'
+            })
+            $('.select2').select2()
+
+        })
+    </script>
+
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Kế Hoạch SX</h3>
+        <div class="card-tools">
+            <div class="btn-group" style="height:40px">
+                <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                    More
+                </button>
+                <div class="dropdown-menu float-right" role="menu">
+                    <a class="dropdown-item" href="/ERP/Index4" style="color:#000">View Chart</a>
+                    <a class="dropdown-item" href="/ERP/Index3" style="color:#000">View Detail</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-2">
+                <div class="callout callout-info">
+                    <label class="control-label" style="color: #FF5722;">Line Sản Xuất</label><br>
+                    @*<input type="text" class="form-control" id="nguoitao" name="nguoitao" />*@
+                    @Html.DropDownList("line", listLine, new { @class = "form-control select2" })
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="callout callout-info">
+                    <label class="control-label" style="color: #FF5722;">Công đoạn</label><br>
+                    @Html.DropDownList("oper", listOper, new { @class = "form-control select2" })
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="callout callout-info">
+                    <label class="control-label" style="color: #FF5722;">Ngày bắt đầu</label>
+                    <div class="row" style="padding-top: 0;">
+                        <div class="col-6">
+                            <div class="bootstrap-timepicker">
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <div class="input-group">
+                                        <label>Từ:</label><input type="text" id="ngay1" name="ngay1" class="time1 form-control" readonly="readonly" value="@ViewBag.ngay1"><br>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="bootstrap-timepicker">
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <div class="input-group">
+                                        <label>Đến:</label> <input type="text" id="ngay2" name="ngay2" class="time1 form-control" readonly="readonly" value="@ViewBag.ngay2"><br>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-1" style="padding: 40px 0 0 0;">
+                <a class="btn btn-primary" id="inbaocao">Tìm kiếm</a>
+            </div>
+
+            @*<div class="col-md-12 text-center">
+                    <div class="form-group">
+
+                    </div>
+                </div>*@
+        </div>
+        <script src="~/Scripts/jquery-1.9.1.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                var line = $("#line").val();
+                var oper = $("#oper").val();
+                var ngay1 = $('#ngay1').val();
+                var ngay2 = $('#ngay2').val();
+                $('#inbaocao').attr("href", '/ERP/Index4?line=' + line + '&oper=' + oper + '&ngay1=' + ngay1 + '&ngay2=' + ngay2);
+                $("#inbaocao").focus(function () {
+                    var line = $("#line").val();
+                    var oper = $("#oper").val();
+                    var ngay1 = $('#ngay1').val();
+                    var ngay2 = $('#ngay2').val();
+                    $('#inbaocao').attr("href", '/ERP/Index4?line=' + line + '&oper=' + oper + '&ngay1=' + ngay1 + '&ngay2=' + ngay2);
+                });
+            });
+        </script>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-success card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Kết quả</h3>              
+
+            </div>
+            <div class="card-body">
+                @if (temp != null)
+                {
+                     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+                    if (ViewBag.line != "RGS-ME")
+                    {                  
+
+                    <script type="text/javascript">
+                        google.charts.load("current", { packages: ["timeline"] });
+                        google.charts.setOnLoadCallback(drawChart);
+                        function drawChart() {
+                            var container = document.getElementById('example5');
+                            var chart = new google.visualization.Timeline(container);
+                            var dataTable = new google.visualization.DataTable();
+                            dataTable.addColumn({ type: 'string', id: 'Role' });
+                            dataTable.addColumn({ type: 'string', id: 'Name' });
+                            dataTable.addColumn({ type: 'string', id: 'style', role: 'style' });
+                            dataTable.addColumn({ type: 'string', role: 'tooltip' });
+                            dataTable.addColumn({ type: 'date', id: 'Start' });
+                            dataTable.addColumn({ type: 'date', id: 'End' });
+                            dataTable.addRows([
+
+                                @foreach (var item in temp)
+                            {
+                                if(item.SumOKQC*100 / item.Quantity<90)
+                                {
+                                  <text>
+                                      ['@item.ItemID', '@(Math.Round(item.SumOKQC*100 / item.Quantity))% -@item.Quantity', 'fill-color: #ff0000;stroke-color: #ff0000;fill-opacity:0.4;', '<div style="font-size:14px;padding10px;"><b>Sản phẩm:</b> @item.ItemName <br/><b>SL Kế hoạch:</b>  @item.Quantity <br/><b>SL SX OK:@item.SumOKOUT</b> <br/><b>SL QC OK:@item.SumOKQC</b> <br/><b>Tổng số NG:@item.SumNG</b><br/><b>Từ:</b> @item.StartDate.ToString("dd/MM/yyyy HH:mm") <br/><b>Đến:</b>@item.EndDate.ToString("dd/MM/yyyy HH:mm")</div>', new Date(@item.StartDate.Year, @item.StartDate.Month, @item.StartDate.Day, @item.StartDate.Hour, @item.StartDate.Minute, 0), new Date(@item.EndDate.Year, @item.EndDate.Month, @item.EndDate.Day, @item.EndDate.Hour, @item.EndDate.Minute, 0)],
+                                      </text>
+                                  }
+                                  else
+                                {
+                                     <text>
+                                      ['@item.ItemID', '@(Math.Round(item.SumOKQC*100 / item.Quantity))% -@item.Quantity', 'fill-color: #28a745;stroke-color: #ff0000;fill-opacity:0.4;', '<div style="font-size:14px;padding10px;"><b>Sản phẩm:</b> @item.ItemName <br/><b>SL Kế hoạch:</b>  @item.Quantity <br/><b>SL SX OK:@item.SumOKOUT</b> <br/><b>SL QC OK:@item.SumOKQC</b> <br/><b>Tổng số NG:@item.SumNG</b><br/><b>Từ:</b> @item.StartDate.ToString("dd/MM/yyyy HH:mm") <br/><b>Đến:</b>@item.EndDate.ToString("dd/MM/yyyy HH:mm")</div>', new Date(@item.StartDate.Year, @item.StartDate.Month, @item.StartDate.Day, @item.StartDate.Hour, @item.StartDate.Minute, 0), new Date(@item.EndDate.Year, @item.EndDate.Month, @item.EndDate.Day, @item.EndDate.Hour, @item.EndDate.Minute, 0)],
+                                      </text>
+                                }
+                            }
+                            ]);
+                            var options = { tooltip: { trigger: 'focus' } };
+                            chart.draw(dataTable, options);
+                        }
+                    </script>
+                    
+                    }
+                    else
+                    {
+                         <script type="text/javascript">
+                        google.charts.load("current", { packages: ["timeline"] });
+                        google.charts.setOnLoadCallback(drawChart);
+                        function drawChart() {
+                            var container = document.getElementById('example5');
+                            var chart = new google.visualization.Timeline(container);
+                            var dataTable = new google.visualization.DataTable();
+                            dataTable.addColumn({ type: 'string', id: 'Role' });
+                            dataTable.addColumn({ type: 'string', id: 'Name' });
+                            dataTable.addColumn({ type: 'string', id: 'style', role: 'style' });
+                            dataTable.addColumn({ type: 'string', role: 'tooltip' });
+                            dataTable.addColumn({ type: 'date', id: 'Start' });
+                            dataTable.addColumn({ type: 'date', id: 'End' });
+                            dataTable.addRows([
+
+                                @foreach (var item in temp)
+                            {
+                                if(item.SumOKQC*100 / item.Quantity<90)
+                                {
+                                  <text>
+                                      ['@item.Line', '@(Math.Round(item.SumOKQC*100 / item.Quantity))% -@item.Quantity.ToString("N0")', 'fill-color: #ff0000;stroke-color: #ff0000;fill-opacity:0.4;', '<div style="font-size:14px;padding10px;"><b>Sản phẩm:</b> @item.ItemName <br/><b>Mã Sản phẩm:</b> @item.ItemID <br/><b>SL Kế hoạch:</b>  @item.Quantity.ToString("N0") <br/><b>SL Sản phẩm OK:@item.SumOKQC.ToString("N0")</b> <br/><b>SL Sản phẩm NG:@item.SumNG.ToString("N0")</b><br/><b>Từ:</b> @item.StartDate.ToString("dd/MM/yyyy HH:mm") <br/><b>Đến:</b>@item.EndDate.ToString("dd/MM/yyyy HH:mm")</div>', new Date(@item.StartDate.Year, @item.StartDate.Month, @item.StartDate.Day, @item.StartDate.Hour, @item.StartDate.Minute, 0), new Date(@item.EndDate.Year, @item.EndDate.Month, @item.EndDate.Day, @item.EndDate.Hour, @item.EndDate.Minute, 0)],
+                                      </text>
+                                  }
+                                  else
+                                {
+                                     <text>
+                                      ['@item.Line', '@(Math.Round(item.SumOKQC*100 / item.Quantity))% -@item.Quantity.ToString("N0")', 'fill-color: #28a745;stroke-color: #ff0000;fill-opacity:0.4;', '<div style="font-size:14px;padding10px;"><b>Sản phẩm:</b> @item.ItemName <br/><b>Mã Sản phẩm:</b> @item.ItemID <br/><b>SL Kế hoạch:</b>  @item.Quantity.ToString("N0") <br/><b>SL Sản phẩm OK:@item.SumOKQC.ToString("N0")</b> <br/><b>SL Sản phẩm NG:@item.SumNG.ToString("N0")</b><br/><b>Từ:</b> @item.StartDate.ToString("dd/MM/yyyy HH:mm") <br/><b>Đến:</b>@item.EndDate.ToString("dd/MM/yyyy HH:mm")</div>', new Date(@item.StartDate.Year, @item.StartDate.Month, @item.StartDate.Day, @item.StartDate.Hour, @item.StartDate.Minute, 0), new Date(@item.EndDate.Year, @item.EndDate.Month, @item.EndDate.Day, @item.EndDate.Hour, @item.EndDate.Minute, 0)],
+                                      </text>
+                                }
+                            }
+                            ]);
+                            var options = { tooltip: { trigger: 'focus' } };
+                            chart.draw(dataTable, options);
+                        }
+                    </script>
+                    }
+                    <div id="example5" style="height: 5350px;"></div>
+                }
+                else
+                {
+                    <span>chưa có kết quả nào</span>
+                }
+            </div>
+
+
+
+            <div class="card-footer clearfix">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+        $(".abc").change(function () {
+            GetValueModel();
+        });
+        $(".checkall").change(function () {
+
+            if ($('.checkall:checked').val() !== undefined) {
+                $('.abc').prop('checked', 'checked');
+            }
+            else {
+                $('.abc').prop('checked', false);
+            }
+            GetValueModel();
+        });
+        function GetValueModel() {
+
+            var names = $('.parent input:checked').map(function () { return this.name; }).get();
+            $(".ketqua").text(names);
+            $(".ketqua").val(names);
+            if (names.length > 0) {
+                $(".muahang").attr("style", "display:inherit");
+                var arr = names;
+                var i = 0; var e = 1;
+                var oper = $("#oper").val();
+                $('#fileinput').html('');
+                $('#fileinput').html($('#fileinput').html() + '<input type="text" id="chuoi_' + 0 + '"  name="chuoi[' + 0 + ']" value="' + oper + '"/>');
+                for (i = 0; i < names.length; i++) {
+                    $('#fileinput').html($('#fileinput').html() + '<input type="text" id="chuoi_' + e + '"  name="chuoi[' + e + ']" value="' + arr[i] + '"/>');
+                    e = e + 1;
+                }
+            }
+            else {
+                $(".muahang").attr("style", "display:none");
+            }
+        };
+    });
+</script>

@@ -1,0 +1,76 @@
+﻿@model IEnumerable<Model.View.Meeting2>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme1.cshtml";
+    var roomName = (string)ViewBag.roomName;
+}
+
+
+<div class="row">
+
+    <div class="col-md-12">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Thông tin thời gian @roomName
+            </div>
+
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <p>Click vào tên phòng họp bên dưới để xem thông tin của phòng họp đó</p>
+                <div class="btn-group btn-group-justified">
+                    <a href="~/Meeting/MeetingRoom/1" class="btn btn-success">Phòng họp 1 Xưởng 1</a>
+                    <a href="~/Meeting/MeetingRoom/2" class="btn btn-success">Phòng họp 2 Xưởng 1</a>
+                    <a href="~/Meeting/MeetingRoom/3" class="btn btn-success">Phòng họp Xưởng 3</a>
+                    <a href="~/Meeting/MeetingRoom/4" class="btn btn-success">Phòng họp Xưởng 2</a>
+                </div>
+                <p></p>
+                <p style="color:red; font-size:16px;">Thông tin thời gian @roomName</p>
+                <script type="text/javascript" src="~/Scripts/TimeLineChart.js"></script>
+                <script type="text/javascript">
+                    google.charts.load("current", { packages: ["timeline"] });
+                    google.charts.setOnLoadCallback(drawChart);
+                    function drawChart() {
+
+                        var container = document.getElementById('example5.1');
+                        var chart = new google.visualization.Timeline(container);
+                        var dataTable = new google.visualization.DataTable();
+                        dataTable.addColumn({ type: 'string', id: 'Room' });
+                        dataTable.addColumn({ type: 'string', id: 'Name' });
+                        dataTable.addColumn({ type: 'date', id: 'Start' });
+                        dataTable.addColumn({ type: 'date', id: 'End' });
+                        //dataTable.addColumn({type: 'string', role: 'tooltip'});
+                        @foreach(var item in Model)
+                        {
+                            <text>
+                            dataTable.addRows([
+                              ['@item.TimeFrom.ToShortDateString()', '@item.Reason', new Date(0, 0, 0, @item.TimeFrom.Hour,@item.TimeFrom.Minute, 0), new Date(0, 0, 0, @item.TimeTo.Hour,@item.TimeTo.Minute, 0)]
+                            ]);
+                           </text>
+                        }
+
+                        var options = {
+                            timeline: { colorByRowLabel: true },
+                            timeline: { singleColor: '#8d8' },
+                            tooltip: {isHtml: true},
+                             legend: 'none',
+                        };
+                        //var chart = new google.visualization.ColumnChart(document.getElementById('col_chart_html_tooltip'));
+                        //chart.draw(dataTable, options);
+
+                        chart.draw(dataTable, options);
+                    }
+
+                </script>
+
+                <div id="example5.1" style="height: 900px;"></div>
+
+
+
+                <!-- /.table-responsive -->
+            </div>
+            <!-- /.panel-body -->
+        </div>
+    </div>
+</div>

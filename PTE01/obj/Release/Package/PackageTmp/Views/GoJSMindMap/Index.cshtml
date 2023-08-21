@@ -1,0 +1,47 @@
+﻿@model List<Model.EF.GoJSMindMap>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+}
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">List Mind Map</h3>
+        <div class="card-tools">
+            @using (Html.BeginForm("Index", "GoJSMindMap", FormMethod.Get))
+            {
+                <div style="float:left">
+                    <div class="input-group-append">
+
+                        <input type="text" value="@ViewBag.SearchString" name="SearchString" class="form-control float-right" placeholder="tìm kiếm">
+                        <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+
+                        <a class="float-right" href="/GoJSMindMap/Create"><i class="fa fa-plus-circle" style="font-size:36px; color:red"></i></a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-2" style="margin-bottom:10px">
+                    <a href="/GoJSMindMap/Edit/@item.ID">
+                        <div>
+                            <span class="mailbox-attachment-icon has-img">
+                                @Html.Raw(item.Img)
+                            </span>
+                            <div class="mailbox-attachment-info" style="background: #4caf50; border: 3px solid #0657a9; border-radius: 0 0 10px 10px; min-height: 80px;">
+                                <span class="mailbox-attachment-name" style="color: #f8f9fa; text-align:center">@item.Name</span>
+                            </div>
+                        </div>
+                    </a>
+
+                </div>
+            }
+        </div>
+    </div>
+    <div class="card-footer">
+
+    </div>
+</div>

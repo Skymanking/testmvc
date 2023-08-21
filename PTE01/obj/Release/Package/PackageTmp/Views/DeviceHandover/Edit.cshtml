@@ -1,0 +1,125 @@
+﻿@model Model.EF.DeviceHandover
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    var infodevice = (Model.EF.Device)ViewBag.infodevice;
+    var infopersonal = (string)ViewBag.infopersonal;
+    List<SelectListItem> tinhtrang = new List<SelectListItem>();
+    tinhtrang.Add(new SelectListItem
+         {
+             Text = "Đã bàn giao",
+             Value = "true",
+             Selected = true
+         });
+
+    tinhtrang.Add(new SelectListItem
+         {
+             Text = "Nhận lại thiết bị",
+             Value = "false",
+         });
+
+}
+@section jsFooter
+{
+    <script>
+        $(function () {
+            $('.select2').select2()
+            $(".date1").datepicker(
+                {
+                    dateFormat: 'mm/dd/yy',
+                    changeMonth: true,
+                    changeYear: true,
+                    numberOfYears: 1,
+                    numberOfMonths: 1,
+                    yearRange: "-90:+10",
+                    onSelect: function (selectedDate) {
+                    }
+                });
+            $(".date2").datepicker();
+            $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
+            //Money Euro
+            $('[data-mask]').inputmask()
+        })
+    </script>
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+
+<div class="row">
+
+    <div class="col-md-12">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Thông tin bàn giao</h3>
+            </div>
+            <div class="card-body">
+                <div class="tab-content">
+                    <div class="row">
+                        @using (Html.BeginForm("Edit", "DeviceHandover", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div style="display:none">
+                                        @Html.TextBoxFor(model => model.ID, new { @class = "form-control" })
+                                    </div>
+                                    <div class='col-md-3'>
+                                        <label class="control-label">Tên Thiết Bị</label>
+                                        <input class="form-control" type="text" value="@infodevice.Name" disabled>
+                                    </div>
+                                    <div class='col-md-3'>
+                                        <label class="control-label">Model</label>
+                                        <input class="form-control" type="text" value="@infodevice.Model" disabled>
+                                    </div>
+                                    <div class='col-md-3'>
+                                        <label class="control-label">SerialCode1</label>
+                                        <input class="form-control" type="text" value="@infodevice.SerialCode1" disabled>
+                                    </div>
+                                    <div class='col-md-3'>
+                                        <label class="control-label">SerialCode2</label>
+                                        <input class="form-control" type="text" value="@infodevice.SerialCode2" disabled>
+                                    </div>
+                                    <div class='col-md-3'>
+                                        <label class="control-label">Tên Nhân Viên</label>
+                                        <input class="form-control" type="text" value="@infopersonal" disabled>
+                                    </div>
+                                    <div class='col-md-3'>
+                                        <label class="control-label">Ngày bàn giao</label>
+                                        <input class="form-control" type="text" value='@Model.DeliveryDate.ToString("dd/MM/yyyy")' disabled>
+                                    </div>
+                                    <div class='col-md-3'>
+                                        <label class="control-label">Người tạo</label>
+                                        <input class="form-control" type="text" value="@Model.CreateBy" disabled>
+                                    </div>
+                                    <div class='col-md-3'>
+                                        <label class="control-label">Ngày tạo</label>
+                                        <input class="form-control" type="text" value='@Model.CreateDate.ToString("dd/MM/yyyy")' disabled>
+                                    </div>
+                                    <div class='col-md-3'>
+                                        <label class="control-label">Tình trạng</label>
+                                        @Html.DropDownListFor(model => model.Status, tinhtrang, new { @class = "form-control select2", @style = "width: 100%;" })
+                                    </div>
+                                    <div class='col-md-9'>
+                                        <label class="control-label">Lý do</label>
+                                        @Html.TextBoxFor(model => model.Reason, new { @class = "form-control" })
+                                    </div>
+                                    <div class='col-md-12'>
+                                        <label class="control-label">Ghi chú</label>
+                                        @Html.TextAreaFor(model => model.Note, new { @class = "form-control", @rows = "8" })
+                                    </div>  
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <button type="submit" class="nutsave btn btn-primary" onclick="openNav()">Lưu thông tin</button>
+                                </div>
+
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

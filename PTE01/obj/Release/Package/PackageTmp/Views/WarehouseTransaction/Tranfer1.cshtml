@@ -1,0 +1,240 @@
+﻿@model Model.EF.FullWareHouse
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    var listW = (List<Model.EF.Warehouse>)ViewBag.ListW;
+    var lenght = Model.detail.Count();
+    var i = 0;
+    List<SelectListItem> listVT = new List<SelectListItem>();
+    List<SelectListItem> listLocation = new List<SelectListItem>();
+    var kho = new List<SelectListItem>();
+    listLocation.Add(new SelectListItem
+    {
+        Text = "Chưa chọn",
+        Value = "Null",
+    }); ;
+    foreach (var item in listW)
+    {
+
+        kho.Add(new SelectListItem
+        {
+            Text = item.Name,
+            Value = item.ID.ToString(),
+        });
+    }
+    List<SelectListItem> Loaiphieu = new List<SelectListItem>();
+    Loaiphieu.Add(new SelectListItem
+    {
+        Text = "Nhập nội bộ",
+        Value = "1",
+    });
+
+}
+@section jsFooter
+{
+    <script src="/Assets/theme3/plugins/ionslider/ion.rangeSlider.min.js"></script>
+    <script src="/Assets/plugin/ckfinder/ckfinder.js"></script>
+    <script src="/Assets/theme3/plugins/datepicker/js/bootstrap-datetimepicker.js"></script>
+    <script src="/Assets/theme3/plugins/datepicker/js/locales/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
+    <!-- Bootstrap slider -->
+    <script src="/Assets/theme3/plugins/bootstrap-slider/bootstrap-slider.js"></script>
+    <script>
+        $(function () {
+            $('.form_datetime').datetimepicker({
+                format: 'mm/dd/yyyy hh:ii',
+                todayBtn: 1,
+                autoclose: 1,
+                todayHighlight: 1,
+                startDate: new Date,
+            });
+            $('.select2').select2()
+
+        })
+    </script>
+    <script src="~/Scripts/CreateChecklistItem.js"></script>
+    <script>
+        $(function () {
+
+            $('input[type="checkbox"].flat-green, input[type="radio"].flat-green').iCheck({
+                checkboxClass: 'icheckbox_flat-green',
+                radioClass: 'iradio_flat-green'
+            })
+            $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+                checkboxClass: 'icheckbox_flat-red',
+                radioClass: 'iradio_flat-red'
+            })
+        })
+    </script>
+    <style>
+        input, label {
+            vertical-align: middle;
+        }
+
+        .qrcode-text {
+            padding-right: 1.7em;
+            margin-right: 0;
+            width: 95%;
+        }
+
+        .qrcode-text-btn {
+            display: inline-block;
+            background: url(/Assets/theme3/dist/img/qr_icon.svg) 50% 50% no-repeat;
+            height: 30px;
+            width: 30px;
+            margin-left: -40px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+            .qrcode-text-btn > input[type=file] {
+                position: absolute;
+                overflow: hidden;
+                width: 1px;
+                height: 1px;
+                opacity: 0;
+            }
+    </style>
+
+    <script src="/Scripts/FindNameQRCode4.js"></script>
+    <script src="/Scripts/FindNameLocation.js"></script>
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/instascan.min.js"></script>
+<div class="card card-primary">
+    <div class="card-header">
+        <a href="~/Warehouse/WMS"><img src="~/Assets/theme3/dist/img/home6.png" style="width: 48px; float: left; margin: -10px 10px -10px -10px; " /></a>   <h3 class="card-title">Tạo Mới Phiếu Nhập/Xuất Vật Tư</h3>
+    </div>
+    @using (Html.BeginForm("Create", "WarehouseTransaction", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <label class="control-label col-md-12">Lý do</label>
+                    @Html.TextBoxFor(model => model.item.Name, new { @class = "form-control", @ID = "name", @Readonly = true })
+
+
+                </div>
+
+                <div class="col-md-4 col-6">
+                    <label>Ngày nhập</label>
+                    <div class="input-group date form_datetime" data-link-field="item.LimitedDate">
+                        <input class="form-control" id="item_LimitedDate" name="item.LimitedDate" type="text" value="@DateTime.Now.Date" readonly>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                        </div>
+                    </div>
+                    <input type="hidden" id="item_LimitedDate" name="item.LimitedDate" value="@DateTime.Now" /><br />
+                </div>
+                <div class="col-md-4 col-6">
+                    <div class="form-group">
+                        <label class="control-label col-md-12">Loại phiếu<span style="font-weight:bold;color:red">*</span></label>
+                        @Html.DropDownListFor(model => model.item.Type, Loaiphieu, new { @class = "form-control select2", @style = "width: 100%;", @ID = "type" })
+                    </div>
+                </div>
+                <div class="col-md-4 col-6">
+                    <label class="control-label col-md-12">Kho<span style="font-weight:bold;color:red">*</span></label>
+                    <div class="form-group">
+                        @Html.DropDownListFor(model => model.item.IDWH, kho, new { @class = "form-control select2", @style = "width: 100%;", @ID = "kho" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            $(document).ready(function () {
+                $(window).keydown(function (event) {
+                    if (event.keyCode == 13) {
+                        event.preventDefault();
+                        return false;
+                    }
+                });
+            });
+        </script>
+
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover" id="gvCustomers">
+                    <thead>
+                        <tr>
+                            <th>Xóa</th>
+                            <th>Thông tin</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+                        @for (int e = 0; e < lenght; e++)
+                        {
+
+                            <tr id="dong_@e">
+                                <td> <button type="button" data-sodong="e" class="xoadongR" style="color: red; width: 30px; height: 30px; border-radius: 50%;"><span class="fa fa-trash"></span></button></td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.detail[e].MaterialCode, new { @class = "form-control", @readonly = "true", @style = "width:130px;float:left;" })
+                                    @Html.TextBoxFor(model => model.detail[e].Amount, new { @class = "form-control", @style = "width:100px;float:left; background:#f798c4", @value = "30", @Readonly = true })
+                                    @Html.TextBoxFor(model => model.detail[e].MaterialUnit, new { @class = "form-control", @readonly = "true", @style = "width:70px;float:left;" })
+                                    @Html.TextBoxFor(model => model.detail[e].MaterialName, new { @class = "form-control", @readonly = "true", @style = "width:300px;float:left;" })
+
+                                    <div style=" width: 300px; float: left;">
+                                        <div class="row" style="padding-left: 10px;">
+                                            @Html.TextBoxFor(model => model.detail[e].IDLocation, new { @class = "qrcode-text form-control change", @size = "16" })
+                                            @*<input id="detail_@e _IDLocation" name="detail[@e].IDLocation" type=text size=16 class="qrcode-text form-control change" \\>*@
+                                            <label class=qrcode-text-btn>
+                                                <input type=file accept=" image />*" capture=environment onchange="openQRCamera(this);" tabindex=-1 class="form-control">
+
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @Html.TextBoxFor(model => model.detail[e].Note, new { @class = "form-control", @style = "width:300px;float:left;", @placeholder = "Note" })
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        <div class="datcom d-flex justify-content-center" @*style="display:none"*@>
+            <button type="submit" class="btn btn-primary" id="luulai">Xác nhận</button>
+            <span id="fileinput" style="display:none"></span>
+        </div>
+    }
+</div>
+<script>
+    $(document).ready(function () {
+        $("form").on('submit', function (e) {
+            var start1 = $('#item_LimitedDate').val();
+            var name = $('#name').val();
+            if (count == 0 || start1 == "" || name == "") {
+                alert("Chưa nhập đủ thông tin");
+                return false;
+            }
+            else {
+                return true;
+            }
+        });
+    });
+</script>
+<script src="~/Scripts/qr_packed.js"></script>
+
+<script>
+    function openQRCamera(node) {
+        var reader = new FileReader();
+        reader.onload = function () {
+            node.value = "";
+            qrcode.callback = function (res) {
+                if (res instanceof Error) {
+                    alert("Không tìm thấy QR Code. Hãy thử lại và canh chỉnh camera nhìn rõ nét QR Code cần quét.");
+                } else {
+                    node.parentNode.previousElementSibling.value = res;
+                }
+            };
+            qrcode.decode(reader.result);
+        };
+        reader.readAsDataURL(node.files[0]);
+    }
+</script>
+

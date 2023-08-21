@@ -1,0 +1,95 @@
+﻿@model PagedList.IPagedList<Model.View.Vendor1>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme1.cshtml";
+    bool quyen = ViewBag.quyen;
+    
+}
+@if(quyen)
+{ 
+<div class="row">
+
+    <div class="col-md-12">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Tổng số Nhân Viên hiện tại là 
+            </div>
+
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                @using (Html.BeginForm("Index", "Vendor", FormMethod.Get))
+                {
+                    <div class="row form-group">
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <input type="text" value="@ViewBag.SearchString" class="form-control" name="searchString" />
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-default" type="submit" style="padding-left:30px;padding-right:50px;"><i class="glyphicon glyphicon-search"></i> </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <a class="btn btn-primary" href="/Vendor/Create">Thêm mới</a>
+                                @*<div class="btn-group">
+                                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="padding-right: 80px;">
+                                        Thống Kê <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a class="btn" href="/Vendor/BirthDay?month=@DateTime.Now.Month">DS Sinh Nhật Tháng</a></li>
+                                        <li><a class="btn" href="/Vendor/HumanResource?month=@DateTime.Now.Month&year=@DateTime.Now.Year">Tăng Giảm Nhân Sự</a></li>
+                                        <li><a class="btn" href="/Vendor/Report1">Biến Động Nhân Sự</a></li>
+                                        <li><a class="btn" href="/Vendor/AcademicLevel">Trình Độ Học Vấn</a></li>
+                                        <li><a class="btn" href="/Vendor/GroupID2">Thống Kê Phân Nhóm</a></li>
+                                        <li><a class="btn" href="/Vendor/GroupID">Thống Kê Bộ Phận</a></li>
+                                    </ul>
+                                </div>*@
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Mã NCC</th>
+                                <th>Tên Nhà Cung Cấp</th>
+                                <th>Mã số Thuế</th>
+                                <th>Điện thoại</th>
+                                <th>Email</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+
+                                    <tr>
+                                        <td>@item.ID</td>
+                                        <td>@item.Name</td>
+                                        <td>@item.AccountCode</td>
+                                        <td>@item.Phone</td>
+                                        <td>@item.Mail</td>
+                                        <td>@Html.ActionLink("|Xem Chi Tiết|", "Edit", new { ID = item.ID })</td>
+                                    </tr>
+                            }
+                        </tbody>
+                    </table>
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, @searchString = @ViewBag.SearchString }))
+                </div>
+                <!-- /.table-responsive -->
+            </div>
+            <!-- /.panel-body -->
+        </div>
+    </div>
+</div>
+
+}
+else
+{
+    <p>bạn không có quyền sử dụng chức năng này</p>
+}

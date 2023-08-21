@@ -1,0 +1,148 @@
+﻿@model Model.EF.Task
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    var listU = (IEnumerable<Model.View.UserView2>)ViewBag.listUser;
+    var nguoinhan = new List<SelectListItem>();
+    nguoinhan.Add(new SelectListItem
+    {
+        Text = "Chọn Người Thực Hiện",
+        Value = "none",
+        Selected = true
+    });
+    foreach (var item in listU)
+    {
+        nguoinhan.Add(new SelectListItem
+        {
+            Text = item.FullName,
+            Value = item.UserName,
+        });
+    }
+}
+@section jsFooter
+{
+
+    <script src="/Scripts/TaskUpdateDeadline.js"></script>
+    <script src="/Assets/theme3/plugins/datepicker/js/bootstrap-datetimepicker.js"></script>
+    <script src="/Assets/theme3/plugins/datepicker/js/locales/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
+    <script src="/Assets/theme3/plugins/ionslider/ion.rangeSlider.min.js"></script>
+    <!-- Bootstrap slider -->
+    <script src="/Assets/theme3/plugins/bootstrap-slider/bootstrap-slider.js"></script>
+    <script>
+        $(function () {
+
+            $('.form_datetime').datetimepicker({
+                format: 'mm/dd/yyyy hh:ii',
+                todayBtn: 1,
+                autoclose: 1,
+                todayHighlight: 1,
+            });
+            $('.select2').select2()
+            $('input[type="checkbox"].flat-green, input[type="radio"].flat-green').iCheck({
+                checkboxClass: 'icheckbox_flat-green',
+                radioClass: 'iradio_flat-green'
+            })
+            $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+                checkboxClass: 'icheckbox_flat-red',
+                radioClass: 'iradio_flat-red'
+            })
+            $('#Rate').ionRangeSlider({
+                min: 0,
+                from: @Model.Rate,
+                max: 100,
+                type: 'single',
+                step: 10,
+                postfix: ' %',
+
+            })
+
+        })
+    </script>
+
+}
+<link rel="stylesheet" href="/Assets/theme3/plugins/ionslider/ion.rangeSlider.css">
+<!-- ion slider Nice -->
+<link rel="stylesheet" href="/Assets/theme3/plugins/ionslider/ion.rangeSlider.skinNice.css">
+<!-- bootstrap slider -->
+<link rel="stylesheet" href="/Assets/theme3/plugins/bootstrap-slider/slider.css">
+
+@using (Html.BeginForm("Create", "Task", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Nội dung nhiệm Vụ</h3>
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label class="control-label col-md-12">Tên Công Việc</label>
+                                @Html.TextBoxFor(model => model.Subject, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label col-md-12">Owner</label>
+                                @Html.DropDownListFor(model => model.Owner, nguoinhan, new { @class = "form-control select2",@style="width: 100%;"  })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Ngày bắt đầu:</label>
+                                <div class="input-group date form_datetime" data-link-field="StartDate">
+                                    @if (@Model.StartDate != null)
+                                    { <input class="form-control" type="text" value='@Model.StartDate.Value.ToString("MM/dd/yyyy HH:mm")' readonly>}
+                                    else
+                                    { <input class="form-control" type="text" value='' readonly>}
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                </div>
+                                @Html.TextBoxFor(model => model.StartDate, new { @class = "form-control", @type = "hidden" })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Ngày kết thúc:</label>
+                                <div class="input-group date form_datetime" data-link-field="Deadline">
+                                    @if (@Model.Deadline != null)
+                                    { <input class="form-control" type="text" value='@Model.Deadline.ToString("MM/dd/yyyy HH:mm")' readonly>}
+                                    else
+                                    { <input class="form-control" type="text" value='' readonly>}
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                </div>
+                                @Html.TextBoxFor(model => model.Deadline, new { @class = "form-control", @type = "hidden" })
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label col-md-12">Diễn giải chi tiết</label>
+                                @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @rows = "8" })
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Lưu thông tin</button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+}

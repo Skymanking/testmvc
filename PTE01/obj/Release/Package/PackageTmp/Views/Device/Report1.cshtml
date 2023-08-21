@@ -1,0 +1,150 @@
+﻿@model IEnumerable<Model.View.Device3>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    string ngaythangnam = "ReportDe" + DateTime.Now.ToUniversalTime();
+    int stt = 0;
+
+}
+
+<script>
+    function exportTableToExcel(tableID, filename) {
+        var downloadLink;
+        var dataType = 'application/vnd.ms-excel';
+        var tableSelect = document.getElementById(tableID);
+        var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+        filename = filename ? filename + '.xls' : 'egbbbb.xls';
+        downloadLink = document.createElement("a");
+        document.body.appendChild(downloadLink);
+        if (navigator.msSaveOrOpenBlob) {
+            var blob = new Blob(['\ufeff', tableHTML], {
+                type: dataType
+            });
+            navigator.msSaveOrOpenBlob(blob, filename);
+        } else {
+            downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+            downloadLink.download = filename;
+            downloadLink.click();
+        }
+    }
+</script>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-success card-outline">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fa fa-clipboard"></i>Report Thiết Bị</h3>
+
+                <div class="card-tools">
+
+                    <div class="btn-group" style="height:40px;">
+                        <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-external-link"></i>
+                        </button>
+                        <div class="dropdown-menu float-right" role="menu">
+                            <a href="/Device/Index" style="color:black;" class="dropdown-item">DS Thiết bị</a>
+                            <a href="/DeviceHandover/Index" style="color:black;" class="dropdown-item">Bàn Giao Thiết bị</a>
+                            <a href="/Device/Report1" style="color:black;" class="dropdown-item">Report1</a>
+                        </div>
+                    </div>
+                    <div class="btn-group" style="height:40px">
+                        <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                            Tool
+                        </button>
+                        <div class="dropdown-menu float-right" role="menu">
+                            <span class="dropdown-item" onclick="exportTableToExcel('inputdata', '@ngaythangnam')">Export to Excel</span>
+                        </div>
+                    </div>
+                    
+                   
+                </div>
+            </div>
+            <div class="card-body">
+                    <table class="table table-bordered" id="inputdata">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>ID</th>
+                                <th>Device Name</th>
+                                <th>Model</th>
+                                <th>Type</th>
+                                <th>purchase date</th>
+                                <th>Device Status</th>
+                                <th>Serial1</th>
+                                <th>Serial2</th>
+                                <th>User ID</th>
+                                <th>End user</th>
+                                <th>Department</th>
+                                <th>Delivery date</th>
+                                <th>User Status</th>
+                                <th>Owner</th>
+                                <th>Vị trí</th>
+                                <th>Mục đích SD</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    @{stt = stt + 1;}
+                                    <td>@stt</td>
+                                    <td>@item.ID</td>   
+                                    <td>@item.Name</td>                                    
+                                    <td>@item.Model</td>
+                                    <td>@item.Type</td>
+                                   
+                                        @if (item.DateofPur != null)
+                                        { <td>@item.DateofPur.Value.ToString("dd/MM/yyyy")</td>}
+                                                                                                   else
+                                        { <td>null</td>}
+                                   
+
+                                    @if (@item.Status == "3")
+                                    {
+                                        <td>Tốt > 80%</td> }
+                                    else
+                                    {
+                                        if (@item.Status == "2")
+                                        {
+                                            <td>Khá 60%-80%</td> }
+                                        else
+                                        {
+                                            if (@item.Status == "1")
+                                            {
+                                                <td>Tệ nên thay 30%-60%</td> }
+                                            else
+                                            {
+                                                if (@item.Status == "0")
+                                                {
+                                                    <td>Hư hỏng < 30%</td> }
+                                                else
+                                                {
+                                                    <td> </td>  }
+                                            }
+
+                                        }
+                                    }
+
+                                    <td>@item.SerialCode1</td>   
+                                    <td>@item.SerialCode2 </td>                                    
+                                    <td>@item.PerID </td>
+                                    <td>@item.PerName</td>
+                                    <td>@item.PerDept </td>
+                                    <td>@item.PerDateHOV </td>
+                                    <td>@item.PerStatus </td>
+                                    <td>@item.Owner </td>
+                                    <td>@item.ItemCode </td>
+                                    <td>@item.GroupDevice </td>
+
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+
+                  </div>
+           
+        </div>
+
+    </div>
+</div>

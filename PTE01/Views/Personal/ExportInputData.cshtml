@@ -1,0 +1,140 @@
+﻿
+@{
+    ViewBag.Title = "ExportInputData";
+    List<Model.View.PersonalAll> report = ViewBag.reportCom;
+    bool checkPermission = ViewBag.checkPermission;
+    int stt = 1;
+    string ngaythangnam ="INPUTDATA"+ DateTime.Now.ToUniversalTime();
+}
+
+@if(checkPermission)
+{
+<script>
+    function exportTableToExcel(tableID, filename)
+        {
+        var downloadLink;
+        var dataType = 'application/vnd.ms-excel';
+        var tableSelect = document.getElementById(tableID);
+        var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+        filename = filename?filename+'.xls':'excel_data.xls';
+        downloadLink = document.createElement("a");
+        document.body.appendChild(downloadLink);
+        if(navigator.msSaveOrOpenBlob){
+            var blob = new Blob(['\ufeff', tableHTML], {
+                type: dataType
+            });
+            navigator.msSaveOrOpenBlob( blob, filename);
+        }else{
+            downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+            downloadLink.download = filename;
+            downloadLink.click();
+        }
+    }
+</script>
+
+<center>
+    <button type="button" class="btn btn-link" style="background: #F44336; padding: 8px; color: white;" onclick="exportTableToExcel('inputdata', '@ngaythangnam')">Export To Excel File</button>
+</center>
+    
+    <table id="inputdata">
+
+        <tbody>
+            <tr style=" background: red;">
+                <th>STT</th>
+                <th>Mã NV</th>
+                <th>Họ Tên</th>
+                <th>Tình Trạng</th>
+                <th>Phòng Ban</th>
+                <th>Nhóm</th>
+                <th>Chức Vụ</th>
+                <th>Nhóm PL</th>
+                <th>Trình Độ</th>
+                <th>Ngày vào làm</th>
+                <th>Ngày chính thức</th>
+                <th>Giới tính</th>
+                <th>Điện Thoại</th>
+                <th>Địa Chỉ</th>
+                <th>Ngày Sinh</th>
+                <th>Số BHXH</th>
+                <th>Số CMND</th>
+                <th>Ngày Cấp</th>
+                <th>Nơi Cấp</th>
+                <th>MST</th>
+                <th>Ngày nghỉ</th>
+                <th>Nghỉ chế độ</th>
+                <th>Chỉ có Năm Sinh</th>
+            </tr>
+            @foreach (var item in report)
+            {
+
+                <tr>
+                    <td>@stt</td>
+                    <td>@item.ID</td>
+                    <td>@item.HoTen</td>
+                    @if(item.TinhTrang==true)
+                    { <td>đang làm</td>}
+                    else
+                    { <td>đã nghỉ</td>}
+                    <td>@item.BoPhanCha</td>
+                    <td>@item.BoPhan</td>
+                    <td>@item.ChucVu</td>
+                    <td>@item.NhomPL</td>
+                    <td>@item.TrinhDo</td>
+                    <td>@item.NgayVaoLam.Value.ToString("dd/MM/yyyy")</td>
+                    @if (@item.NgayChinhThuc != null)
+                    {
+                        <td>@item.NgayChinhThuc.Value.ToString("dd/MM/yyyy")  </td>}
+                    else
+                    {
+                        <td>chưa cập nhật</td>}
+                    @if (@item.GioiTinh == true)
+                    {
+                        <td>Nam</td>}
+                    else
+                    {
+                        <td>Nữ</td> }
+                    <td>'@item.DienThoai</td>
+                    <td>@item.DiaChi</td>
+                    @if (@item.NgaySinh != null)
+                    {
+                        <td>@item.NgaySinh.Value.ToString("dd/MM/yyyy")  </td>}
+                    else
+                    {
+                        <td>chưa cập nhật</td>}
+                    <td>'@item.SoBHXH</td>
+                    <td>'@item.SoCMND</td>
+                    @if (@item.NgayCap != null)
+                    {
+                        <td>@item.NgayCap.Value.ToString("dd/MM/yyyy")  </td>}
+                    else
+                    {
+                        <td>chưa cập nhật</td>}
+                    <td>@item.NoiCap</td>
+                    <td>'@item.MaSoThue</td>
+                    @if (@item.NgayNghiViec != null)
+                    {
+                        <td>@item.NgayNghiViec.Value.ToString("dd/MM/yyyy")  </td>}
+                    else
+                    {
+                        <td>còn làm</td>}
+                    <td>@item.NghiCheDo</td>
+                    @if (@item.OnlyYear ==true)
+                    {
+                        <td>1 </td>}
+                    else
+                    {
+                        <td>0</td>}
+                </tr>
+                    stt = stt + 1;
+            }
+
+
+        </tbody>
+
+        
+    </table>
+}
+else
+{
+<p>bạn không có cấp quyền sử dụng chức năng này</p>
+}

@@ -1,0 +1,50 @@
+﻿@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_Theme1.cshtml";
+    var detail = (Model.EF.Comment)ViewBag.detail;
+    long DeID = ViewBag.DeID;
+}
+@if(DeID==1 || DeID==6)
+{
+<div class="row">
+    <!-- Cot ben trai -->
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                Thông Tin Phản Hồi / Góp Ý của Nhân Viên số: <strong>@detail.ID</strong>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p>Người tạo: <strong>@detail.CreateBy</strong> - Vào lúc:<strong>@detail.CreateDate.ToString("dd/MM/yyyy")</strong> </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p>Chủ Đề: @detail.Subject</p>
+                            </div>
+                            <div class="col-md-12">
+                                <p>Nội Dung: </p>
+                                <p>@detail.Description </p>
+                            </div>
+                        </div>                       
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <p></p>
+    <p></p>
+</div>
+}
+
+
+<p>Chức năng này chỉ dành cho Ban Giám Đốc</p>
+<p></p>

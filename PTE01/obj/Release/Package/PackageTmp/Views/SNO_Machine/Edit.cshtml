@@ -1,0 +1,63 @@
+﻿@model Model.EF.SNO_Machine
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+}
+@section jsFooter
+{
+    <script src="/Assets/plugin/ckfinder/ckfinder.js"></script>
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Edit Setup Machine</h3>
+    </div>
+    @using (Html.BeginForm("Edit", "SNO_Machine", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row" style="background: #f6fcfd; padding-bottom: 15px;">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label class="control-label col-md-12">Máy</label>
+                                <input class="form-control" value="@Model.MachineID: @Model.MachineName" readonly/>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group ">
+                                <label class="control-label col-md-12">Item</label>
+                                <input class="form-control" value="@Model.Item: @Model.ItemName" readonly />
+
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="control-label col-md-12">Cycle Time</label>
+                                @Html.TextBoxFor(model => model.CycleTime, new { @ID = "CycleTime", @type = "number", @class = "form-control", @required = true, @min = 0 })
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label col-md-12">Ghi chú</label>
+                                @Html.TextAreaFor(model => model.Note, new { @ID = "Note", @class = "form-control", @rows = 3 })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="col-md-4">
+                <input type="submit" value="Update" class="btn btn-primary" />
+            </div>
+        </div>
+    }
+</div>
+
+
+

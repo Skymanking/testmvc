@@ -1,0 +1,738 @@
+﻿@model Model.View.FullPTB
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    var infoCreateBy = (Model.View.UserView1)ViewBag.ngtao;
+    var lenght = Model.detail.Count();
+    var lydo = "";
+
+    List<SelectListItem> listVD = new List<SelectListItem>();
+    List<SelectListItem> listVDT = new List<SelectListItem>();
+    listVD.Add(new SelectListItem
+    {
+        Text = "chưa có giá",
+        Value = "0000000",
+        Selected = true
+    });
+    foreach (var item in Model.listvendor)
+    {
+        listVD.Add(new SelectListItem
+        {
+            Text = item.Name + " $" + item.Price + "# - " + item.ItemID,
+            Value = item.ID,
+        });
+    }
+    bool kqVendor = false;
+    List<SelectListItem> listVT = new List<SelectListItem>();
+    List<SelectListItem> listVDD = new List<SelectListItem>();
+    List<Model.View.ItemPrice2> histItemP = ViewBag.histItemP;
+    List<Model.View.ItemPriceKH1> histItemKH = ViewBag.histItemKH;
+
+}
+@section jsFooter
+{
+<script src="/Assets/theme3/plugins/datepicker/js/bootstrap-datetimepicker.js"></script>
+<script src="/Assets/theme3/plugins/datepicker/js/locales/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
+    <script src="/Scripts/CancelBuy.js"></script>
+    <script src="/Scripts/FindVendor.js"></script>
+    <script src="/Scripts/CreateItemPrice.js"></script>
+    <script src="/Scripts/FindNameVT2.js"></script>
+    <script src="/Scripts/FindNameVD2.js"></script>
+    @*<script src="/Scripts/FindNameVDE.js"></script>*@
+<script src="/Scripts/FindNameVTFAST.js"></script>
+<script src="/Scripts/UpdateNvMH.js"></script>
+<script>
+    $(function () {
+        $('.form_datetime').datetimepicker({
+            format: 'mm/dd/yyyy hh:ii',
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+        });
+        $('.select2').select2()
+
+    })
+</script>
+
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Thông Tin Phiếu Yêu Cầu Mua Vật Tư (ngày tạo: @Model.item.CreateDate.ToString("dd/MM/yyyy") )</h3>
+        <div class="card-tools">           
+            <i class="fa fa-download" style="color: #ffc107; font-size: 24px;" onclick="exportTableToExcel('inputdata', '@Model.item.ID')"></i>            
+        </div>
+
+    </div>
+    @using (Html.BeginForm("Edit", "ProposalToBuy", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <div style="display:block">
+                        @Html.TextBoxFor(model => model.item.ID, new { @class = "form-control", @style = "display: none; visibility: hidden;" })
+                    </div>
+                    <label class="control-label col-md-12">Lý do</label>
+                    @Html.TextBoxFor(model => model.item.Reason, new { @class = "form-control" })
+
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Deadline(Creator):</label>
+                        <div class="input-group date form_datetime" data-link-field="item_LimitedDate2">
+                            <input class="form-control" type="text" value='@Model.item.LimitedDate2.ToString("MM/dd/yyyy HH:mm")' readonly>
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                            </div>
+                        </div>
+                        @Html.TextBoxFor(model => model.item.LimitedDate2, new { @class = "form-control", @type = "hidden" })
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label>Deadline(Buyer):</label>
+                    <div class="input-group date form_datetime" data-link-field="item_LimitedDate">
+                        <input class="form-control" type="text" value='@Model.item.LimitedDate.ToString("MM/dd/yyyy HH:mm")' readonly>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                        </div>
+                    </div>
+                    @Html.TextBoxFor(model => model.item.LimitedDate, new { @class = "form-control", @type = "hidden" })
+                </div>
+            </div>
+
+            <script>
+                $(document).ready(function () {
+                    $(window).keydown(function (event) {
+                        if (event.keyCode == 13) {
+                            event.preventDefault();
+                            return false;
+                        }
+                    });
+                });
+            </script>
+
+            <div class="row">
+                <div class="table-responsive">
+
+                    <table class="table table-striped table-bordered table-hover" id="gvCustomers">
+                        <thead>
+                            <tr>
+                                <th style="min-width: 60px;width: 60px;">Xóa </th>
+                                <th style="min-width: 400px;width:400px">Thông tin vật tư</th>
+                                <th style="min-width: 400px;width:400px">Thông tin mua hàng</th>
+                                <th style="min-width:400px">Ghi chú</th>
+                                <th style="min-width:200px">Mua Hàng ghi chú</th>
+
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @for (int i = 0; i < lenght; i++)
+                            {
+                                kqVendor = false;
+                                bool tamthoi = false; bool tamthoi2 = false;
+                                <tr id="row">
+                                    <td>
+                                        <span style="display:none">  @Html.TextBoxFor(model => model.detail[i].No, new { @class = "form-control" })</span> 
+                                        <button type="button" data-sodong="@i" class="xoadongR" style="color: red; width: 30px; height: 30px; border-radius: 50%;"><span class="fa fa-trash"></span></button><span>@Model.detail[i].No </span>
+                                       
+                                        @foreach (var item in histItemP)
+                                        {
+                                            if (Model.detail[i].ItemID == item.IDItem && item.Price != null && item.ImportDate != null && item.Price < Model.detail[i].Price)
+                                            {
+                                                tamthoi = true;
+                                            }
+                                        }
+                                        @foreach (var item in histItemKH)
+                                        {
+                                            if (Model.detail[i].ItemID == item.ItemID && item.Price < Model.detail[i].Price)
+                                            {
+                                                tamthoi2 = true;
+                                            }
+                                        }
+                                        <div class="btn-group">
+                                            @if (tamthoi == true)
+                                            {
+                                                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" style="width: 100%;">
+                                                    LS mua <span class="caret"></span>
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" style="width: 100%;">
+                                                    LS mua <span class="caret"></span>
+                                                </button>
+                                            }
+
+                                            <ul class="dropdown-menu" role="menu">
+                                                @foreach (var item in histItemP)
+                                                {
+                                                    if (Model.detail[i].ItemID == item.IDItem && item.Price != null && item.ImportDate != null)
+                                                    {
+                                                        <li><a class="btn">Giá: @item.Price.Value.ToString("N0").Replace(',', '.') vnđ - Ngày nhập: @item.ImportDate.Value.ToString("dd/MM/yyyy") - NCC: @item.VendorName</a></li>
+                                                    }
+                                                }                                               
+                                            </ul>
+                                        </div>
+                                        <div class="btn-group">
+                                            @if (tamthoi2 == true)
+                                            {
+                                                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" style="width: 100%;">
+                                                    LS bán <span class="caret"></span>
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" style="width: 100%;">
+                                                    LS bán <span class="caret"></span>
+                                                </button>
+                                            }
+
+                                            <ul class="dropdown-menu" role="menu">
+                                                @foreach (var item in histItemKH)
+                                                {
+                                                    if (Model.detail[i].ItemID == item.ItemID && item.Price != null && item.EffectiveDate != null)
+                                                    {
+                                                        <li><a  href="/ItemPriceKH/Edit/@item.ID" class="btn">Giá: @item.Price.ToString("N0").Replace(',', '.') vnđ - Ngày: @item.EffectiveDate.ToString("dd/MM/yyyy") - Khách hàng: @item.CusName - Số Hồ Sơ: @item.IDDocument</a></li>
+                                                    }
+                                                }
+
+                                            </ul>
+                                        </div>
+
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.detail[i].ItemID, new { @class = "form-control", @readonly = "true", @style = "width:150px;float:left;" })
+                                        @Html.TextBoxFor(model => model.detail[i].Quantity, new { @class = "form-control", @type = "number", @style = "width:170px;float:left; background:#f798c4" })
+                                        @Html.TextBoxFor(model => model.detail[i].Unit, new { @class = "form-control", @readonly = "true", @style = "width:50px;float:left;" })                                       
+                                        @Html.TextBoxFor(model => model.detail[i].MaterialName, new { @class = "form-control", @readonly = "true" })
+                                        <span class='updatenvmh' data-id="@Model.item.ID" data-no="@Model.detail[i].No">nhân viên MH Phụ trách <i class='fa fa-user-secret' style='color:blue'></i>: @Model.detail[i].NvMH</span>
+                                        
+                                    </td>
+                                   
+                                    <td>
+                                        @*<div class='input-group date' id='datetimepicker_@i'>
+                                            @Html.TextBoxFor(model => model.detail[i].ExpectedDate, new { @class = "form-control", @placeholder = "ngày giao" })
+                                            <div class="input-group-append">
+                                                <span class="btn btn-default" data-toggle="tooltip" title="Ngày NCC hẹn giao hàng"><i class="fa fa-calendar"></i></span>
+                           
+                                            </div>
+                                            
+                                        </div>*@
+                                        @{ var temp1 = "detail_"+ @i+"__ExpectedDate";}
+                                        <div class="input-group date form_datetime" data-link-field="@temp1">
+                                            @if (Model.detail[i].ExpectedDate != null)
+                                            {
+                                                <input class="form-control" type="text" value='@Model.detail[i].ExpectedDate.Value.ToString("MM/dd/yyyy HH:mm")' >
+                                            }
+                                            else
+                                            {
+                                                <input class="form-control" type="text" value='' >
+                                            }
+
+                                            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                            <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                        @*<input type="hidden" id="item.LimitedDate" name="item.LimitedDate" value="" />*@
+                                        @Html.TextBoxFor(model => model.detail[i].ExpectedDate, new { @class = "form-control", @type = "hidden" })
+                                        @foreach (var item in listVD)
+                                        {
+                                            if (item.Value == Model.detail[i].VendorID)
+                                            {
+                                                item.Selected = true;
+                                                kqVendor = true;
+                                            }
+                                            else
+                                            { item.Selected = false; }
+                                        }
+                                       
+                                        <div class='input-group'>
+                                            @Html.DropDownListFor(model => model.detail[i].VendorID, listVD.Where(x => x.Text.Contains(Model.detail[i].ItemID)), new { @class = "form-control", @onchange = "myFunction()", @id = "detailVendor_" + @i })
+
+                                            <div class="input-group-append">
+                                                <a href="#" class="themgia btn btn-default" data-itemid="@Model.detail[i].ItemID" data-itemname="@Model.detail[i].MaterialName" data-toggle="modal" data-target="#myModalP" title="Thêm giá cho sản phẩm"> <span class="fa fa-shopping-cart"></span></a>
+                                            </div>
+                                        </div>
+                                        @*}*@
+                                        <div class="input-group">
+                                            @Html.TextBoxFor(model => model.detail[i].Price, new { @class = "form-control detail[" + @i + "].Price", @placeholder = "giá", @readonly = "true", @type = "number", @id = "detailPrice_" + @i })
+                                            <div class="input-group-append">
+                                                <span class="btn btn-default" data-toggle="tooltip" title="Giá sản phẩm của NCC trên"><i class="fa fa-money"></i></span>
+                                            </div>
+                                        </div>
+
+
+                                    </td>
+                                    <td>@Html.TextAreaFor(model => model.detail[i].Note, new { @class = "form-control", @rows = "4" })</td>
+                                    <td>@Html.TextAreaFor(model => model.detail[i].NoteMH, new { @class = "form-control", @rows = "4" })</td>
+                                </tr>
+                                <script type="text/javascript">
+                                    $(function () {
+                                        $('#datetimepicker_@i').datetimepicker({
+                                            format: 'MM/DD/YYYY HH:mm A'
+                                        });
+                                    });
+
+
+                                </script>
+                                <script type="text/javascript">
+
+
+
+                                    $(document).ready(function () {
+                                        //var giaitem = $("#detailVendor_@i option:selected").text().substring($("#detailVendor_@i option:selected").text().indexOf('$') + 1, $("#detailVendor_@i option:selected").text().indexOf('#'));
+                                        var giaitem = $("#detailPrice_@i").val();
+                                        var fullvalue = $("#detailVendor_@i").text();
+                                        var temp = fullvalue;
+                                        var chuoigia = new Array(30);
+                                        while (fullvalue.indexOf('#') > 0) {
+                                            var dem1 = fullvalue.indexOf('$');
+                                            var dem2 = fullvalue.indexOf('#');
+                                            var gia = fullvalue.substring(dem1 + 1, dem2);
+                                            chuoigia.push(gia);
+                                            fullvalue = fullvalue.substring(dem2 + 1);
+                                        }
+                                        var mingia = chuoigia.sort()[0];
+                                        if (giaitem == "") {
+                                            $("#detailPrice_@i").attr("style", "background:#FFEB3B");
+                                            $("#detailPrice_@i").attr("data-toggle", "tooltip");
+                                            $("#detailPrice_@i").attr("placeholder", "chưa có giá");
+                                        }
+                                        else {
+                                            if (giaitem > mingia) {
+                                                $("#detailPrice_@i").attr("style", "background:#FF5722");
+                                                $("#detailPrice_@i").attr("data-toggle", "tooltip");
+                                                $("#detailPrice_@i").attr("title", "giá chưa phải là giá tốt nhất");
+                                            }
+                                            else {
+                                                $("#detailPrice_@i").attr("style", "background:#8BC34A");
+                                                $("#detailPrice_@i").attr("data-toggle", "tooltip");
+                                                $("#detailPrice_@i").attr("title", "giá đang là giá tốt nhất");
+                                            }
+                                        }
+
+                                        $("#detailVendor_@i").click(function () {
+                                            giaitem = $("#detailVendor_@i option:selected").text().substring($("#detailVendor_@i option:selected").text().indexOf('$') + 1, $("#detailVendor_@i option:selected").text().indexOf('#'));
+                                            $("#detailPrice_@i").val(giaitem);
+
+
+                                            if (giaitem > mingia) {
+                                                $("#detailPrice_@i").attr("style", "background:#FF5722");
+                                                $("#detailPrice_@i").attr("data-toggle", "tooltip");
+                                                $("#detailPrice_@i").attr("title", "giá chưa phải là giá tốt nhất");
+                                            }
+                                            else {
+                                                $("#detailPrice_@i").attr("style", "background:#8BC34A");
+                                                $("#detailPrice_@i").attr("data-toggle", "tooltip");
+                                                $("#detailPrice_@i").attr("title", "giá đang là giá tốt nhất");
+                                            }
+
+                                        });
+                                    });
+
+                                    $('.table tbody').on('click', '.xoadongR', function () {
+
+                                        var sodong = $(this).attr("data-sodong");
+                                        $('#detail_' + sodong + '__ItemID').attr("value", "");
+                                        $(this).closest('tr').hide();
+
+
+                                    });
+                                </script>
+
+                            }
+                            @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>*@
+
+                        </tbody>
+                    </table>
+
+
+
+
+
+                    <div id="upload" style="margin-top: 10px; border: 1px solid #f2dede; padding: 10px; background: #fcf8e3; " class="col-md-12">
+
+                        @if (Model.item.Files != null)
+                        {
+                            @Html.ActionLink("Xem file giải trình, thiết kế ...được đính kèm theo", "DownloadFile", new { fileName = @Model.item.Files })
+                        }
+                        else
+                        {
+                            @Html.DisplayText("Không có file đính kèm")
+                        }
+
+                    </div>
+                    <script>
+                        $(document).ready(function () {
+                            $("#files").change(function () {
+                                if ($("#files").val().substring(12, 400).length > 2) {
+                                    var linktext = "/ProposalToBuy/DownloadFile?fileName=" + $("#files").val().substring(12, 400);
+                                    $("#linkfile").attr("href", linktext);
+                                    $("#linkfile").show();
+                                }
+                                else { $("#linkfile").hide(); }
+                            });
+                        });
+                    </script>
+
+                    <script>
+                                    $body = $("body");
+                                    $(document).on({
+                                        ajaxStart: function () { $body.addClass("loading"); },
+                                        ajaxStop: function () { $body.removeClass("loading"); }
+                                    });
+
+                                    $(document).ready(function () {
+                                        $("#upload").click(function () {
+                                            var data = new FormData();
+
+                                            //Add the Multiple selected files into the data object
+                                            var files = $("#files").get(0).files;
+                                            for (i = 0; i < files.length; i++) {
+                                                data.append("files" + i, files[i]);
+                                            }
+
+                                            //Post the data (files) to the server
+                                            if (files.length > 0) {
+                                                $.ajax({
+                                                    type: 'POST',
+                                                    url: "@Url.Action("Upload")",
+                                                    data: data,
+                                                    contentType: false,
+                                                    processData: false,
+                                                    success: function (data) {
+                                                        alert("Up file thanh cong!");
+                                                    },
+                                                    error: function () {
+                                                        alert("Qua trinh thanh cong!");
+                                                    },
+                                                });
+                                            }
+                                        });
+                                    });
+                    </script>
+
+                    <script>
+                        var count = $('#gvCustomers tr').length - 1;
+                        $(document).ready(function () {
+
+
+                            function addRow() {
+                                var html =
+                                '<tr id="row_1">' +
+                                '<td width="80px"> ' + (count + 1) + '</td>' +
+                                '<td> <input class="form-control" data-val="true" data-val-length="The field MaterialName must be a string with a maximum length of 250." data-val-length-max="250" data-val-required="The MaterialName field is required." id="detail_' + count + '__MaterialName" name="detail[' + count + '].MaterialName" placeholder="tên vật tư" type="text" value=""> </td>' +
+                               '<td> <input class="form-control" data-val="true" data-val-length="The field Note must be a string with a maximum length of 250." data-val-length-max="250" id="detail_' + count + '__Note" name="detail[' + count + '].Note" placeholder="ghi chú" type="text" value=""></td>' +
+                                '<td width="110px"><input class="form-control" data-val="true" data-val-length="The field Unit must be a string with a maximum length of 50." data-val-length-max="50" id="detail_' + count + '__Unit" name="detail[' + count + '].Unit" placeholder="đơn vị tính" type="text" value=""></td>' +
+                                '<td width="100px"><input class="form-control" data-val="true" data-val-number="The field Quantity must be a number." data-val-required="The Quantity field is required." id="detail_' + count + '__Quantity" name="detail[' + count + '].Quantity" placeholder="số lượng" type="text" value=""></td>' +
+                                 '</tr>'
+                                count = count + 1;
+                                $(html).appendTo($("#gvCustomers"))
+                            };
+                            $("#btnAdd").click(addRow);
+
+                            function addRowVT() {
+                                if ($("#abc").val() != null) {
+                                    var html =
+                                    '<tr id="dong_' + (count + 1) + '">' +
+                                    '<td> <button type="button" data-sodong="' + (count + 1) + '" class="xoadongR"style="color: red; width: 30px; height: 30px; border-radius: 50%;"><span class="fa fa-trash"></span></button></td>' +
+                                    '<td> <input class="form-control" data-val="true" style="width:120px;float:left;" readonly = "true" id="detail_' + count + '__ItemID" name="detail[' + count + '].ItemID" placeholder="mã vt" type="text" value="' + $("#abc").val() + '">' +
+                                    '<input class="form-control" data-val="true" style="width:170px;float:left; background:#f798c4"type="number" id="detail_' + count + '__Quantity" name="detail[' + count + '].Quantity" placeholder="số lượng" type="text" value="">' +
+                                    '<input class="form-control" data-val="true" style="width:80px;float:left;" readonly = "true" id="detail_' + count + '__Unit" name="detail[' + count + '].Unit" placeholder="đơn vị tính" type="text" value="' + $("#abc option:selected").text().substring($("#abc option:selected").text().indexOf('('), 1000) + '">' +
+                                    '<input class="form-control" data-val="true"  readonly = "true" data-val-required="The MaterialName field is required." id="detail_' + count + '__MaterialName" name="detail[' + count + '].MaterialName" placeholder="tên vật tư" type="text" value="' + $("#abc option:selected").text().substring(0, $("#abc option:selected").text().indexOf('(')) + '"></td>' +
+                                    '<td><textarea class="form-control" data-val="true"  id="detail_' + count + '__Note" name="detail[' + count + '].Note" placeholder="ghi chú" type="text" rows="2" ></textarea></td>' +
+                                    '<td><textarea class="form-control" data-val="true"  id="detail_' + count + '__NoteMH" name="detail[' + count + '].NoteMH" placeholder="ghi chú" type="text" rows="2" ></textarea></td>' +
+                                     '</tr>'
+                                    count = count + 1;
+                                    $(html).appendTo($("#gvCustomers"))
+                                }
+                            };
+                            $("#btnAddVT").click(addRowVT);
+
+                            $('.table tbody').on('click', '.xoadongR', function () {
+
+                                var sodong = $(this).attr("data-sodong");
+                                $('#detail_' + sodong + '__ItemID').attr("value", "");
+                                $(this).closest('tr').hide();
+
+
+                            });
+
+
+                        });
+                    </script>
+
+
+                </div>
+            </div>
+                        <script>
+                function exportTableToExcel(tableID, filename) {
+                    var downloadLink;
+                    var dataType = 'application/vnd.ms-excel';
+                    var tableSelect = document.getElementById(tableID);
+                    var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+                    filename = filename ? filename + '.xls' : 'excel_data.xls';
+                    downloadLink = document.createElement("a");
+                    document.body.appendChild(downloadLink);
+                    if (navigator.msSaveOrOpenBlob) {
+                        var blob = new Blob(['\ufeff', tableHTML], {
+                            type: dataType
+                        });
+                        navigator.msSaveOrOpenBlob(blob, filename);
+                    } else {
+                        downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+                        downloadLink.download = filename;
+                        downloadLink.click();
+                    }
+                }
+            </script>
+                <div class="row" style="display:none;">
+                    <div class="table-responsive">
+
+                        <table class="table" id="inputdata">
+                            <thead>
+                                <tr>
+                                    <th>Số Phiếu Đề Nghị </th>
+                                    <th>STT </th>
+                                    <th>Mã VT </th>
+                                    <th>Tên vật tư</th>
+                                    <th>Số lượng</th>
+                                    <th>DVT</th>
+                                    <th>Ghi chú</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @for (int i = 0; i < lenght; i++)
+                                {
+                                <tr>
+                                    <td>@Model.item.ID</td>
+                                    <td>@Model.detail[i].No</td>
+                                    <td>@Model.detail[i].ItemID</td>
+                                    <td>@Model.detail[i].MaterialName</td>
+                                    <td>@Model.detail[i].Quantity</td>
+                                    <td>@Model.detail[i].Unit</td>
+                                    <td>@Model.detail[i].Note</td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="control-label col-md-12">Ý kiến của Giám Đốc</label>
+                        @Html.TextBoxFor(model => model.item.Confirm, new { @class = "form-control" })
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="col-md-3" style="width:20%;">TBP duyệt</th>
+                                    <th class="col-md-3" style="width:20%;">PGD duyệt</th>
+                                    <th class="col-md-3" style="width:20%;">GĐ duyệt lần 1</th>
+                                    <th class="col-md-3" style="width:20%;">BP MH duyệt</th>
+                                    <th class="col-md-3" style="width:20%;">GĐ duyệt lần 2</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr id="row_0">
+                                    <td style="background: #f2fbe9;">@Html.CheckBoxFor(model => model.item.HODApproval, new { @style = "height:60px; width:60px;" })</td>
+                                    <td style="background: #d7f5ba;">@Html.CheckBoxFor(model => model.item.BGDApproval, new { @style = "height:60px; width:60px;" })</td>
+                                    <td style="background: #baf77e;">@Html.CheckBoxFor(model => model.item.BOSSApproval1, new { @style = "height:60px; width:60px;" })</td>
+                                    <td style="background: #9cf148;">@Html.CheckBoxFor(model => model.item.PDApproval, new { @style = "height:60px; width:60px;" })</td>
+                                    <td style="background: #79ec05;">@Html.CheckBoxFor(model => model.item.BOSSApproval, new { @style = "height:60px; width:60px;" })</td>
+                                </tr>
+                                <tr id="row_0">
+                                    <td>
+                                        @if (Model.item.HODDate != null)
+                                        {<span> @Model.item.NameApproval1 duyệt @Model.item.HODDate.Value.ToString("dd/MM/yyyy")</span>}
+                                    </td>
+                                    <td>
+                                        @if (Model.item.BGDDate != null)
+                                        {<span> @Model.item.NameApproval duyệt @Model.item.BGDDate.Value.ToString("dd/MM/yyyy")</span>}
+                                </td>
+                                <td>@if (Model.item.BOSSDate != null)
+    {<span> @Model.item.NameApproval3 duyệt @Model.item.BOSSDate.Value.ToString("dd/MM/yyyy")</span>}</td>
+                                    <td>
+                                        @if (Model.item.PURDate != null)
+                                        {<span> @Model.item.NameApproval2 duyệt @Model.item.PURDate.Value.ToString("dd/MM/yyyy")</span>}
+                                </td>
+                                    <td>
+                                        @if (Model.item.BOSSDate2 != null)
+                                        {<span> @Model.item.NameApproval4 duyệt @Model.item.BOSSDate2.Value.ToString("dd/MM/yyyy")</span>}
+                                </td>
+
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    </div>
+
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-primary">Lưu thông tin</button>
+                <button type="button" class="btn btn-danger float-right" data-toggle="modal" data-target="#myModal">Xóa Phiếu Yêu Cầu </button>
+
+            </div>
+        }
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <form id="myForm" method="post">
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
+
+                Modal content
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <span class="float-left"><h4 class="modal-title">Lý do xóa phiếu</h4></span>
+                        <span class="float-right"><button type="button" class="close" data-dismiss="modal" style="width:20px">&times;</button></span>
+                    </div>
+                    <div class="modal-body">
+                        <input class="form-control" data-val="true" id="lydo" name="lydo" placeholder="điền lý do hủy phiếu " type="text" value="">
+                    </div>
+                    <script>
+                        $(document).ready(function () {
+                            $("#lydo").keypress(function () {
+                                var lydos = $('#lydo').val();
+                                var abc = $('#huyphieu').attr("data-lydo", lydos);
+
+                            });
+                        });
+                    </script>
+
+                    <div class="modal-footer">
+                        <a href="#" id="huyphieu" class="btn-cancel" data-id="@Model.item.ID" style="background: red;    padding: 7px;  color: white;">Hủy Phiếu</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+
+
+
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <form id="myForm" method="post">
+        <div class="modal fade" id="myModalP" role="dialog">
+            <div class="modal-dialog">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <span class="float-left"><h4 class="modal-title">Thêm giá vật tư</h4></span>
+                        <span class="float-right"><button type="button" class="close" data-dismiss="modal" style="width:20px">&times;</button></span>
+
+
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+
+                                <div class="col-md-6">
+                                    <label class="control-label">Tìm tên vật tư</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control tenvt" id="tenvt" placeholder="chỉ hiện 20 kết quả gần giống nhất">
+
+                                        <div class="input-group-append btnFindVTFAST" id="btnFindVT">
+                                            <span class="btn btn-default"><i class="fa fa-search"></i></span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class=" col-md-6">
+                                    <label class="control-label">Chọn vật tư</label>
+                                    <div class='input-group'>
+                                        @Html.DropDownList("itemid", listVT, new { @class = "form-control" })
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="control-label">Tìm tên nhà cung cấp</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control tenvd" id="tenvd" placeholder="chỉ hiện 20 kết quả gần giống nhất">
+
+                                        <div class="input-group-append btnFindVD" id="btnFindVD">
+                                            <span class="btn btn-default"><i class="fa fa-search"></i></span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class=" col-md-6">
+                                    <label class="control-label">Chọn nhà cung cấp</label>
+                                    <div class='input-group'>
+                                        @Html.DropDownList("vendorid", listVDD, new { @class = "form-control" })
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class='row'>
+                                <label class="control-label">Giá</label>
+                                <input class="form-control" data-val="true" id="price" name="price" placeholder=" " type="number" value="">
+                            </div>
+
+                    </div>
+                    <script>
+                        $(document).ready(function () {
+                            $("#vendorid").blur(function () {
+                                $('#createBB').attr("data-vendorid", $("#vendorid option:selected").val());
+                            });
+                            $("#price").blur(function () {
+                                $('#createBB').attr("data-price", $('#price').val());
+                            });
+                            $("#itemid").blur(function () {
+                                $('#createBB').attr("data-itemname", $("#itemid option:selected").text());
+                            });
+                            $("#itemid").blur(function () {
+                                $('#createBB').attr("data-itemid", $('#itemid').val());
+                            });
+                            $(".themgia").click(function () {
+                                $('#tenvt').val($(this).attr("data-itemname"));
+                                $("#itemid").find("option").remove();
+                                $("#itemid").append($("<option></option>").val($(this).attr("data-itemid")).html($(this).attr("data-itemname")));
+                                $('#createBB').attr("data-itemid", $(this).attr("data-itemid"));
+                                $('#createBB').attr("data-itemname", $(this).attr("data-itemname"));
+                            });
+
+                        });
+                    </script>
+
+
+                    <div class="modal-footer">
+                        <a href="#" id="createBB" class="btn-cancel1" data-id="Model.item.ID" style="background: red;    padding: 7px;  color: white;">Lưu thông tin</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>

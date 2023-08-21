@@ -1,0 +1,165 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme2.cshtml";
+    var temp = (List<Model.View.RecordPro4>)ViewBag.temp;
+}
+@section jsFooter
+        {
+    <script src="~/Scripts/CreateRecordProductionOuXi.js"></script>
+    <script src="/Assets/theme3/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+    <script>
+        $(function () {
+            $("#dates").datepicker();
+            $("#end").datepicker();
+            $("#StartDate").datepicker();
+            $("#EndDate").datepicker();
+            $('input[type="checkbox"].flat-green, input[type="radio"].flat-green').iCheck({
+                checkboxClass: 'icheckbox_flat-green',
+                radioClass: 'iradio_flat-green'
+            })
+            $('.select2').select2()
+        })
+    </script>
+}
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+
+        <div class="row" style="padding:3px">
+    <div class="input-group" style="height: 50px;">
+        <div class="input-group-prepend">
+            <span class="input-group-text" style="font-size: 22px;"><i class="fa fa-credit-card" aria-hidden="true"></i></span>
+        </div>
+        <input class="form-control" id="idtag" placeholder="quét thẻ input" type="text" autofocus="autofocus" style="font-size: 22px;">
+        <div class="input-group-prepend">
+            <a class="input-group-text" id="inbaocao" style="font-size: 22px;"> <i class="fa fa-search" aria-hidden="true"></i>Tìm kiếm</a>
+        </div>
+    </div>
+
+    <script src="~/Scripts/jquery-1.9.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            $("#inbaocao").click(function () {
+                var idtag = $("#idtag").val();
+                if (idtag == "") {
+                    alert("hãy quét thẻ cầu");
+                    $('#inbaocao').attr("href", '#');
+                }
+                else { $('#inbaocao').attr("href", '/RecordProduction/Index2OuXi?idtag=' + idtag); }
+
+            });
+        });
+
+    </script>
+</div>
+
+
+
+@if (temp != null && temp.Count>0)
+{
+
+    <div class="row" style="padding:3px">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th style="padding:3px">Thông tin thẻ</th>
+                        <th style="padding:3px">Cập Nhật</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in temp)
+                    {
+
+
+                        <tr>
+                            <td>
+                                <img class="img-fluid pad" src="~/Assets/theme3/dist/img/sanxuat.jpg">
+                                @*<img class="img-fluid pad" src="@item.ItemImage">*@
+
+                                <p style="font-size: 18px; margin-bottom: 1px;">  @item.ItemName </p>
+                                <p style="font-size: 16px; color: red; margin-bottom: 1px;"> @item.ItemID - SL:<strong> @item.SumOK</strong></p>
+                                <p style="font-size: 16px; margin-bottom: 1px;">NV @item.CreateBy: @item.CreateDate.ToString("dd/MM/yyyy HH:mm")</p>
+                                <p style="font-size: 16px; margin-bottom: 1px;">Line: @item.LineID - @item.Step</p>
+                               
+                            </td>
+                            <td>
+                                <div class="input-group" style="height: 50px; margin-bottom: 20px;">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="font-size: 22px;" id="Tok_@item.PlanID"><i class="fa fa-minus" aria-hidden="true"></i></span>
+                                    </div>
+                                    <input class="form-control" id="slok_@item.PlanID" placeholder="SL OK" type="number" value="@item.SumOK" style=" font-size: 30px; color: green;">
+                                    <div class="input-group-prepend">
+                                        <a class="input-group-text" style="font-size: 22px;" id="Cok_@item.PlanID"> <i class="fa fa-plus" aria-hidden="true"></i></a>
+                                    </div>
+                                </div>
+                                <div class="input-group" style="height: 50px; margin-bottom: 20px;">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="font-size: 22px;" id="Tng_@item.PlanID"><i class="fa fa-minus" aria-hidden="true"></i></span>
+                                    </div>
+                                    <input class="form-control" id="slng_@item.PlanID" placeholder="SL NG" type="number" value="0" style=" font-size: 30px; color: red;">
+                                    <div class="input-group-prepend">
+                                        <a class="input-group-text" style="font-size: 22px;" id="Cng_@item.PlanID"> <i class="fa fa-plus" aria-hidden="true"></i></a>
+                                    </div>
+                                </div>
+                                <div class="input-group" style="height: 50px; margin-bottom: 20px;">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="font-size: 22px;"><i class="fa fa-credit-card" aria-hidden="true"></i></span>
+                                    </div>
+                                    <input class="form-control" id="tagid_@item.PlanID" placeholder="quẹt thẻ" type="text" style=" font-size: 22px; color: black;">
+
+                                </div>
+
+
+                                <a class="btn-saveitem btn btn-app" data-slok="" data-slng="" data-tagid="" data-tagidold="@ViewBag.idtags" id="save_@item.PlanID" style="color: #dc3545; background: #c0daf7; font-weight: bold; height: 60px; width: 100%; margin-left: 0; padding-top: 10px;">
+                                    <i class="fa fa-save"></i> Lưu thông tin
+                                </a>
+                                @if (item.Step != "input")
+                                {<p style="font-size: 22px; font-weight: bold; color:red; margin-bottom: 1px;">Cảnh báo: Thẻ này không phải từ khâu Gắn Hàng</p>}
+                            </td>
+
+                        </tr>
+                        <script>
+                            $(document).ready(function () {
+                                $('#save_@item.PlanID').hover(function () {
+                                    $('#save_@item.PlanID').attr("data-slok", $('#slok_@item.PlanID').val());
+                                    $('#save_@item.PlanID').attr("data-slng", $('#slng_@item.PlanID').val());
+                                    $('#save_@item.PlanID').attr("data-tagid", $('#tagid_@item.PlanID').val());
+                                });
+                                $('#Cok_@item.PlanID').click(function () {
+                                    var slok = parseInt($('#slok_@item.PlanID').val()) + 1;
+                                    $('#slok_@item.PlanID').val(slok);
+                                });
+                                $('#Tok_@item.PlanID').click(function () {
+                                    var slok = parseInt($('#slok_@item.PlanID').val()) - 1;
+                                    $('#slok_@item.PlanID').val(slok);
+                                });
+                                $('#Cng_@item.PlanID').click(function () {
+                                    var slng = parseInt($('#slng_@item.PlanID').val()) + 1;
+                                    $('#slng_@item.PlanID').val(slng);
+                                    var slok = parseInt($('#slok_@item.PlanID').val()) - 1;
+                                    $('#slok_@item.PlanID').val(slok);
+                                });
+                                $('#Tng_@item.PlanID').click(function () {
+                                    var slng = parseInt($('#slng_@item.PlanID').val()) - 1;
+                                    $('#slng_@item.PlanID').val(slng);
+                                    var slok = parseInt($('#slok_@item.PlanID').val()) + 1;
+                                    $('#slok_@item.PlanID').val(slok);
+                                });
+                            });
+
+                        </script>
+
+                    }
+                </tbody>
+            </table>
+            <p style="padding-bottom:300px;"></p>
+        </div>
+    </div>
+
+}
+else
+{
+    <span style="font-size:28px; font-weight:bold; color:red;">không tìm được dữ liệu trong thẻ này, Hãy lấy thẻ khác quét để tiếp tục</span>
+}

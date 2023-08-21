@@ -1,0 +1,436 @@
+﻿@model Model.EF.RFQuotation
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    string tNote00 = (string)ViewBag.TNote00;
+    string tNote01 = (string)ViewBag.TNote01;
+    string tNote02 = (string)ViewBag.TNote02;
+    string tNote03 = (string)ViewBag.TNote03;
+    string tNote04 = (string)ViewBag.TNote04;
+    string tNote05 = (string)ViewBag.TNote05;
+    string tNote06 = (string)ViewBag.TNote06;
+    string tNote07 = (string)ViewBag.TNote07;
+    string tNote08 = (string)ViewBag.TNote08;
+    string tNote09 = (string)ViewBag.TNote09;
+    
+    var trangthai = new List<SelectListItem>();
+    trangthai.Add(new SelectListItem
+    {
+        Text = "Available",
+        Value = "1",
+        Selected = true
+    });
+    trangthai.Add(new SelectListItem
+    {
+        Text = "Paused",
+        Value = "2",
+    });
+    trangthai.Add(new SelectListItem
+    {
+        Text = "Canceled",
+        Value = "0",
+    });
+    var uutien = new List<SelectListItem>();
+    uutien.Add(new SelectListItem
+    {
+        Text = "Low",
+        Value = "1",
+        Selected = true
+    });
+    uutien.Add(new SelectListItem
+    {
+        Text = "Medium",
+        Value = "2",
+    });
+    uutien.Add(new SelectListItem
+    {
+        Text = "High",
+        Value = "3",
+    });
+
+}
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+
+<script src="/Assets/theme3/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+<script>
+    $(function () {
+        $(".date").datepicker();
+        $('.select2').select2()
+        $('input[type="checkbox"].flat-green, input[type="radio"].flat-green').iCheck({
+            checkboxClass: 'icheckbox_flat-green',
+            radioClass: 'iradio_flat-green'
+        })
+        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+            checkboxClass: 'icheckbox_flat-red',
+            radioClass: 'iradio_flat-red'
+        })
+
+    })
+</script>
+
+
+
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">YCBG <i class="fa fa-history" aria-hidden="true" data-toggle="tooltip" title="@Model.Note"></i></h3>
+    </div>
+    @using (Html.BeginForm("Edit", "RFQuotation", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="control-label col-md-12">Tên YCBG</label>
+                    @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                </div>
+                <div class='col-md-2'>
+                    <label>Deadline:</label>
+                    <div class="input-group mb-3">
+                        @Html.TextBoxFor(model => model.Deadline, new { @class = "date form-control", @autocomplete = "off" })
+                        <div class=" input-group-append">
+                            <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-md-2'>
+                    <label class="control-label">Priority</label>
+                    @Html.DropDownListFor(model => model.Priority, uutien, new { @class = "form-control", })
+                </div>
+                <div class='col-md-2'>
+                    <label class="control-label">Status</label>
+                    @Html.DropDownListFor(model => model.Status, trangthai, new { @class = "form-control", })
+                </div>
+
+                <div class="col-md-12">
+                    <label class="control-label col-md-12">Ghi chú</label>
+                    @Html.TextAreaFor(model => model.Idea, new { @class = "form-control", @rows = "4" })
+                </div>
+            </div>
+            <div class="rows">
+                <div class="form-group" style="padding-top:20px;">
+                    <table class="table table-striped table-bordered table-hover" id="gvCustomers">
+                        <thead>
+                            <tr>
+
+                                <th style="width:250px">CÔNG ĐOẠN BÁO GIÁ</th>
+                                <th style="width:150px">OWNER</th>
+                                <th style="width:170px">DEADLINE</th>
+                                <th style="width:170px">HOÀN THÀNH</th>
+                                <th>BP BG GHI CHÚ</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Process01 == true)
+                            {
+                                <tr>
+                                    <td><label> @Html.TextBoxFor(model => model.Quantity01, new { @class = "form-control", @type = "number", @style = "font-size:20px;font-weight:bold;width:70px;display: inherit;background: #6cf98c;" })<span style="font-size:20px; font-weight:bold;color:red;">KHUÔN</span></label> </td>
+                                    @if (Model.Owner01 == null)
+                                    {
+                                        <td style=" font-size: 40px; color: #007bff;" data-toggle="tooltip" title="@tNote01"><i class="fa fa-user-circle-o" aria-hidden="true"></i>?</td> }
+                                    else
+                                    {
+                                        <td><span>@Model.Owner01</span> <i class="fa fa-history" aria-hidden="true" data-toggle="tooltip" title="@Model.Note01"></i></td>}
+
+                                    <td>
+                                        <div class="input-group mb-3">
+                                            @Html.TextBoxFor(model => model.Deadline01, new { @class = "date form-control", @autocomplete = "off" })
+                                            <div class=" input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group mb-3">
+                                            @Html.TextBoxFor(model => model.FinishDate01, new { @class = "date form-control", @autocomplete = "off" })
+                                            <div class=" input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>@Html.TextAreaFor(model => model.Idea01, new { @class = "form-control", @rows = "2" })</td>
+                                </tr>
+                            }
+                            @if (Model.Process02 == true)
+                            {
+                                <tr>
+                                    <td><label> @Html.TextBoxFor(model => model.Quantity02, new { @class = "form-control", @type = "number", @style = "font-size:20px;font-weight:bold;width:70px;display: inherit;background: #6cf98c;" })<span style="font-size:20px; font-weight:bold;color:red;">ÉP NHỰA</span></label> </td>
+                                    @if (Model.Owner02 == null)
+                                    {
+                                        <td style=" font-size: 40px; color: #007bff;" data-toggle="tooltip" title="@tNote02"><i class="fa fa-user-circle-o" aria-hidden="true"></i>?</td> }
+                                    else
+                                    {
+                                        <td><span>@Model.Owner02</span><i class="fa fa-history" aria-hidden="true" data-toggle="tooltip" title="@Model.Note02"></i></td>}
+                                    <td>
+                                        <div class="input-group mb-3">
+                                            @Html.TextBoxFor(model => model.Deadline02, new { @class = "date form-control", @autocomplete = "off" })
+                                            <div class=" input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group mb-3">
+                                            @Html.TextBoxFor(model => model.FinishDate02, new { @class = "date form-control", @autocomplete = "off" })
+                                            <div class=" input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>@Html.TextAreaFor(model => model.Idea02, new { @class = "form-control", @rows = "2" })</td>
+                                </tr>
+                            }
+                            @if (Model.Process03 == true)
+                            {
+                                <tr>
+                                    <td><label> @Html.TextBoxFor(model => model.Quantity03, new { @class = "form-control", @type = "number", @style = "font-size:20px;font-weight:bold;width:70px;display: inherit;background: #6cf98c;" })<span style="font-size:20px; font-weight:bold;color:red;">XI MẠ</span></label> </td>
+                                    @if (Model.Owner03 == null)
+                                    {
+                                        <td style=" font-size: 40px; color: #007bff;" data-toggle="tooltip" title="@tNote03"><i class="fa fa-user-circle-o" aria-hidden="true"></i>?</td> }
+                                    else
+                                    {
+                                        <td><span>@Model.Owner03</span><i class="fa fa-history" aria-hidden="true" data-toggle="tooltip" title="@Model.Note03"></i></td>}
+                                    <td>
+                                        <div class="input-group mb-3">
+                                            @Html.TextBoxFor(model => model.Deadline03, new { @class = "date form-control", @autocomplete = "off" })
+                                            <div class=" input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group mb-3">
+                                            @Html.TextBoxFor(model => model.FinishDate03, new { @class = "date form-control", @autocomplete = "off" })
+                                            <div class=" input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>@Html.TextAreaFor(model => model.Idea03, new { @class = "form-control", @rows = "2" })</td>
+                                </tr>
+                            }
+                            @if (Model.Process04 == true)
+                            {
+                                <tr>
+                                    <td><label> @Html.TextBoxFor(model => model.Quantity04, new { @class = "form-control", @type = "number", @style = "font-size:20px;font-weight:bold;width:70px;display: inherit;background: #6cf98c;" })<span style="font-size:20px; font-weight:bold;color:red;">SƠN</span></label> </td>
+                                    @if (Model.Owner04 == null)
+                                    {
+                                        <td style=" font-size: 40px; color: #007bff;" data-toggle="tooltip" title="@tNote04"><i class="fa fa-user-circle-o" aria-hidden="true"></i>?</td> }
+                                    else
+                                    {
+                                        <td><span>@Model.Owner04</span><i class="fa fa-history" aria-hidden="true" data-toggle="tooltip" title="@Model.Note04"></i></td>}
+                                    <td>
+                                        <div class="input-group mb-3">
+                                            @Html.TextBoxFor(model => model.Deadline04, new { @class = "date form-control", @autocomplete = "off" })
+                                            <div class=" input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group mb-3">
+                                            @Html.TextBoxFor(model => model.FinishDate04, new { @class = "date form-control", @autocomplete = "off" })
+                                            <div class=" input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>@Html.TextAreaFor(model => model.Idea04, new { @class = "form-control", @rows = "2" })</td>
+                                </tr>
+                            }
+                            @if (Model.Process05 == true)
+                            {
+                                <tr>
+                                    <td><label> @Html.TextBoxFor(model => model.Quantity05, new { @class = "form-control", @type = "number", @style = "font-size:20px;font-weight:bold;width:70px;display: inherit;background: #6cf98c;" })<span style="font-size:20px; font-weight:bold;color:red;">IN</span></label> </td>
+                                    @if (Model.Owner05 == null)
+                                    {
+                                        <td style=" font-size: 40px; color: #007bff;" data-toggle="tooltip" title="@tNote05"><i class="fa fa-user-circle-o" aria-hidden="true"></i>?</td> }
+                                    else
+                                    {
+                                        <td><span>@Model.Owner05</span><i class="fa fa-history" aria-hidden="true" data-toggle="tooltip" title="@Model.Note05"></i></td>}
+                                    <td>
+                                        <div class="input-group mb-3">
+                                            @Html.TextBoxFor(model => model.Deadline05, new { @class = "date form-control", @autocomplete = "off" })
+                                            <div class=" input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group mb-3">
+                                            @Html.TextBoxFor(model => model.FinishDate05, new { @class = "date form-control", @autocomplete = "off" })
+                                            <div class=" input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>@Html.TextAreaFor(model => model.Idea05, new { @class = "form-control", @rows = "2" })</td>
+                                </tr>
+                            }
+                            @if (Model.Process06 == true)
+                            {
+                                <tr>
+                                    <td><label> @Html.TextBoxFor(model => model.Quantity06, new { @class = "form-control", @type = "number", @style = "font-size:20px;font-weight:bold;width:70px;display: inherit;background: #6cf98c;" })<span style="font-size:20px; font-weight:bold;color:red;">MASKING</span></label> </td>
+                                    @if (Model.Owner06 == null)
+                                    {
+                                        <td style=" font-size: 40px; color: #007bff;" data-toggle="tooltip" title="@tNote06"><i class="fa fa-user-circle-o" aria-hidden="true"></i>?</td> }
+                                    else
+                                    {
+                                        <td><span>@Model.Owner06</span><i class="fa fa-history" aria-hidden="true" data-toggle="tooltip" title="@Model.Note06"></i></td>}
+                                    <td>
+                                        <div class="input-group mb-3">
+                                            @Html.TextBoxFor(model => model.Deadline06, new { @class = "date form-control", @autocomplete = "off" })
+                                            <div class=" input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group mb-3">
+                                            @Html.TextBoxFor(model => model.FinishDate06, new { @class = "date form-control", @autocomplete = "off" })
+                                            <div class=" input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>@Html.TextAreaFor(model => model.Idea06, new { @class = "form-control", @rows = "2" })</td>
+                                </tr>
+                            }
+                            @if (Model.Process07 == true)
+                            {
+                                <tr>
+                                    <td><label> @Html.TextBoxFor(model => model.Quantity07, new { @class = "form-control", @type = "number", @style = "font-size:20px;font-weight:bold;width:70px;display: inherit;background: #6cf98c;" })<span style="font-size:20px; font-weight:bold;color:red;">HAIRLINE</span></label> </td>
+                                    @if (Model.Owner07 == null)
+                                    {
+                                        <td style=" font-size: 40px; color: #007bff;" data-toggle="tooltip" title="@tNote07"><i class="fa fa-user-circle-o" aria-hidden="true"></i>?</td> }
+                                    else
+                                    {
+                                        <td><span>@Model.Owner07</span><i class="fa fa-history" aria-hidden="true" data-toggle="tooltip" title="@Model.Note07"></i></td>}
+                                    <td>
+                                        <div class="input-group mb-3">
+                                            @Html.TextBoxFor(model => model.Deadline07, new { @class = "date form-control", @autocomplete = "off" })
+                                            <div class=" input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group mb-3">
+                                            @Html.TextBoxFor(model => model.FinishDate07, new { @class = "date form-control", @autocomplete = "off" })
+                                            <div class=" input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>@Html.TextAreaFor(model => model.Idea07, new { @class = "form-control", @rows = "2" })</td>
+                                </tr>
+                            }
+                            @if (Model.Process08 == true)
+                            {
+                                <tr>
+                                    <td><label> @Html.TextBoxFor(model => model.Quantity08, new { @class = "form-control", @type = "number", @style = "font-size:20px;font-weight:bold;width:70px;display: inherit;background: #6cf98c;" })<span style="font-size:20px; font-weight:bold;color:red;">LẮP RÁP</span></label> </td>
+                                    @if (Model.Owner08 == null)
+                                    {
+                                        <td style=" font-size: 40px; color: #007bff;" data-toggle="tooltip" title="@tNote08"><i class="fa fa-user-circle-o" aria-hidden="true"></i>?</td> }
+                                    else
+                                    {
+                                        <td><span>@Model.Owner08</span><i class="fa fa-history" aria-hidden="true" data-toggle="tooltip" title="@Model.Note08"></i></td>}
+                                    <td>
+                                        <div class="input-group mb-3">
+                                            @Html.TextBoxFor(model => model.Deadline08, new { @class = "date form-control", @autocomplete = "off" })
+                                            <div class=" input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group mb-3">
+                                            @Html.TextBoxFor(model => model.FinishDate08, new { @class = "date form-control", @autocomplete = "off" })
+                                            <div class=" input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>@Html.TextAreaFor(model => model.Idea08, new { @class = "form-control", @rows = "2" })</td>
+                                </tr>
+                            }
+                            @if (Model.Process09 == true)
+                            {
+                                <tr>
+                                    <td><label> @Html.TextBoxFor(model => model.Quantity09, new { @class = "form-control", @type = "number", @style = "font-size:20px;font-weight:bold;width:70px;display: inherit;background: #6cf98c;" })<span style="font-size:20px; font-weight:bold;color:red;">BAO BÌ</span></label> </td>
+                                    @if (Model.Owner09 == null)
+                                    {
+                                        <td style=" font-size: 40px; color: #007bff;" data-toggle="tooltip" title="@tNote09"><i class=" fa fa-user-circle-o" aria-hidden="true"></i>?</td> }
+                                    else
+                                    {
+                                        <td><span>@Model.Owner09</span><i class="fa fa-history" aria-hidden="true" data-toggle="tooltip" title="@Model.Note09"></i></td>}
+                                    <td>
+                                        <div class="input-group mb-3">
+                                            @Html.TextBoxFor(model => model.Deadline09, new { @class = "date form-control", @autocomplete = "off" })
+                                            <div class=" input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group mb-3">
+                                            @Html.TextBoxFor(model => model.FinishDate09, new { @class = "date form-control", @autocomplete = "off" })
+                                            <div class=" input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>@Html.TextAreaFor(model => model.Idea09, new { @class = "form-control", @rows = "2" })</td>
+                                </tr>
+                            }
+                            @if (Model.Process00 == true)
+                            {
+                                <tr>
+                                    <td><label> @Html.TextBoxFor(model => model.Quantity00, new { @class = "form-control", @type = "number", @style = "font-size:20px;font-weight:bold;width:70px;display: inherit;background: #6cf98c;" })<span style="font-size:20px; font-weight:bold;color:red;">KẾ TOÁN</span></label> </td>
+                                    @if (Model.Owner00 == null)
+                                    {
+                                        <td style=" font-size: 40px; color: #007bff;" data-toggle="tooltip" title="@tNote00"><i class=" fa fa-user-circle-o" aria-hidden="true"></i>?</td> }
+                                    else
+                                    {
+                                        <td><span>@Model.Owner00</span><i class="fa fa-history" aria-hidden="true" data-toggle="tooltip" title="@Model.Note00"></i></td>}
+                                    <td>
+                                        <div class="input-group mb-3">
+                                            @Html.TextBoxFor(model => model.Deadline00, new { @class = "date form-control", @autocomplete = "off" })
+                                            <div class=" input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group mb-3">
+                                            @Html.TextBoxFor(model => model.FinishDate00, new { @class = "date form-control", @autocomplete = "off" })
+                                            <div class=" input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>@Html.TextAreaFor(model => model.Idea00, new { @class = "form-control", @rows = "2" })</td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="row">
+                <div class="col-6">
+                    <button type="submit" class="nutsave btn btn-primary" onclick="openNav()">Lưu thông tin</button>
+                </div>
+
+            </div>
+        </div>
+
+    }
+</div>

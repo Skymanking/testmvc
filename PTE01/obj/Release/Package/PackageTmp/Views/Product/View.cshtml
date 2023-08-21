@@ -1,0 +1,270 @@
+﻿@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_Theme1.cshtml";
+    var fullPro = (Model.View.FullProduct)ViewBag.fullPro;
+    //Model.View.InfoPlatingView1 infoXi = ViewBag.infoXi;
+    Model.EF.InfoPlating infoXi = ViewBag.infoXi;
+    List<Model.View.BOMItemView1> bomP = ViewBag.bomP;
+    List<Model.View.ItemView1> listItem = ViewBag.listItem;
+    string optionName= ViewBag.optionName;
+    string lineName = ViewBag.lineName;
+
+    List<SelectListItem> typeItem = new List<SelectListItem>();
+    typeItem.Add(new SelectListItem
+    {
+        Text = "Unit",
+        Value = "Unit",
+
+    });
+    typeItem.Add(new SelectListItem
+    {
+        Text = "Lot",
+        Value = "Lot",
+
+    });
+}
+@section jsFooter
+{
+    <script src="/Scripts/AddBOMItem.js"></script>
+}
+<div class="row">
+    @using (Html.BeginForm("View", "Product", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <!-- Cot ben trai -->
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    Thông Tin Chi Tiết Sản Phẩm
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a data-toggle="tab" href="#home">Cơ bản</a></li>
+                            <li><a data-toggle="tab" href="#menu1">Thông tin Xi</a></li>
+                            <li><a data-toggle="tab" href="#menu2">Thông tin Ép</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div id="home" class="tab-pane fade in active">
+                                <div class="col-md-4">
+                                    <img src="@fullPro.item.Image" width="210" height="140" />
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <a class="btn btn-primary" href="/Product/EditProduct/@fullPro.item.ID">Chỉnh Sửa</a>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Mã SP mới:</td>
+                                                    <td>@fullPro.item.Code1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Mã SP cũ:</td>
+                                                    <td>@fullPro.item.Code2</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Tên SP:</td>
+                                                    <td>@fullPro.item.Name</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Tên Khách Hàng:</td>
+                                                    <td>@fullPro.CusName</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Vật liệu:</td>
+                                                    <td>@fullPro.MatName</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Diện tích sản phẩm:</td>
+                                                    <td>@fullPro.item.ProductArea (cm2)</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Diện tích xi mạ:</td>
+                                                    <td>@fullPro.item.PlatingArea (cm2)</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Khối lượng:</td>
+                                                    <td>@fullPro.item.Weight (g)</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+                            <div id="menu1" class="tab-pane fade">
+                                <div class="col-md-4">
+                                    <img src="@fullPro.item.Image" width="210" height="140" />
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <a class="btn btn-primary" href="/Product/EditInfoPlating/@infoXi.ID">Chỉnh Sửa</a>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Tên Line Xi:</td>
+                                                    <td>@lineName  </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Tên Option Xi:</td>
+                                                    <td>@optionName</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Số SP/Gá:</td>
+                                                    <td>@infoXi.PinJ</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Số Gá/Cầu:</td>
+                                                    <td>@infoXi.JinB</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Mã Gá:</td>
+                                                    <td>@infoXi.IDJig</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Độ phức tạp hình dạng phôi:</td>
+                                                    <td>@infoXi.Complexity</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Cycle Time:</td>
+                                                    <td>@infoXi.CycleTime  (phút)</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Task Time:</td>
+                                                    <td>@infoXi.TaskTime (giây)</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Tỉ lệ thành phẩm Xi:</td>
+                                                    <td>@infoXi.RateS (%)</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Thời gian nhân công / SP:</td>
+                                                    <td>@infoXi.Labor  (giây)</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Số Kw điện / SP:</td>
+                                                    <td>@infoXi.Electric (kilowatt)</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Số m3 nước / SP:</td>
+                                                    <td>@infoXi.Water (m3)</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <table class="table">
+                                            <tr>
+                                            <th>Tên NVL</th>
+                                            <th>Số lượng  </th>
+                                            </tr>
+                                            <tbody>
+                                            
+                                                @foreach(var item in bomP)
+                                                { 
+                                                    <tr>
+                                                        <td>@item.ItemName</td>
+                                                        <td>@item.Quantity  </td>
+                                                        <td>@item.Type  </td>
+                                                   </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                       
+                                    </div>
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal">Thêm NVL </button>
+                            </div>
+                                </div>
+                            <div id="menu2" class="tab-pane fade">
+                                <div class="alert alert-success">
+                                    <strong>tab2</strong>
+                                </div>  
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!--------------------------fd-------End------------------------------------>
+
+
+
+    }
+</div>
+
+
+
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<form id="myForm" method="post">
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" style="width:20px">&times;</button>
+                    <h4 class="modal-title">Thêm NVL vào BOM</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class='col-md-12'>
+                            <label class="control-label">Chọn NVL</label>
+                            <select class="form-control" id="IDItem" name="IDItem">
+                                <option value="none">còn trống</option>
+                                @foreach (var item in listItem)
+                                {
+                                    <option value="@item.ID">   @item.Name    </option>
+                                }
+
+                            </select>
+                        </div>
+                        <div class='col-md-6'>
+                            <label class="control-label">Số lượng</label>
+                            <input class="form-control" data-val="true" id="Quantity" name="Quantity" placeholder=" " type="number" value="0">
+                        </div>
+                        <div class='col-md-6'>
+                            <label class="control-label">Người thực hiện</label>
+                            <select class="form-control" id="Type" name="Type">
+                                <option value="Unit" selected="selected">Unit</option>       
+                                <option value="Lot">Lot</option>                         
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    $(document).ready(function () {
+                        $("#IDItem").blur(function () {
+                            $('#addNVL').attr("data-iditem", $('#IDItem').val());
+                        });
+                        $("#Quantity").blur(function () {
+                            $('#addNVL').attr("data-quantity", $('#Quantity').val());
+                        });
+                        $("#Type").blur(function () {
+                            $('#addNVL').attr("data-type", $('#Type').val());
+                        });
+                    });
+                </script>
+
+
+                <div class="modal-footer">
+                    <a href="#" id="addNVL" class="addNVL btn-cancel" data-id="@infoXi.ID" style="background: red;    padding: 7px;  color: white;">Lưu thông tin</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>

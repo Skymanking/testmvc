@@ -1,0 +1,430 @@
+﻿@{
+    ViewBag.Title = "Report1";
+    Layout = "~/Views/Shared/_Theme1.cshtml";
+    Model.View.AllRate1 report1 = ViewBag.report1;
+    int countall = ViewBag.countall;
+
+    var tb11 = report1.kn11 / countall;
+    var tb12 = report1.kn12 / countall;
+    var tb13 = report1.kn13 / countall;
+    var tb14 = report1.kn14 / countall;
+    var tb15 = report1.kn15 / countall;
+    var tb16 = report1.kn16 / countall;
+    var tb17 = report1.kn17 / countall;
+    var tb18 = report1.kn18 / countall;
+    var tb21 = report1.kn21 / countall;
+    var tb22 = report1.kn22 / countall;
+    var tb23 = report1.kn23 / countall;
+    var tb24 = report1.kn24 / countall;
+    var tb31 = report1.kn31 / countall;
+    var tb32 = report1.kn32 / countall;
+    var tb33 = report1.kn33 / countall;
+    var tb41 = report1.kn41 / countall;
+    var tb42 = report1.kn42 / countall;
+    var tb43 = report1.kn43 / countall;
+    var tb44 = report1.kn44 / countall;
+    var tb51 = report1.kn51 / countall;
+    var tb52 = report1.kn52 / countall;
+    var tb53 = report1.kn53 / countall;
+    var tb54 = report1.kn54 / countall;
+    var tb55 = report1.kn55 / countall;
+    var tb56 = report1.kn56 / countall;
+    var tb61 = report1.kn61 / countall;
+    var tb71 = report1.kn71 / countall;
+    var tb72 = report1.kn72 / countall;
+    var tb73 = report1.kn73 / countall;
+    var tb74 = report1.kn74 / countall;
+    var tb81 = report1.kn81 / countall;
+    var tb82 = report1.kn82 / countall;
+    var tb83 = report1.kn83 / countall;
+    var tb91 = report1.kn91 / countall;
+    var tb92 = report1.kn92 / countall;
+    var tba1 = report1.kna1 / countall;
+    var tba2 = report1.kna2 / countall;
+    var tba3 = report1.kna3 / countall;
+    var tbb1 = report1.knb1 / countall;
+    var tbb2 = report1.knb2 / countall;
+    var tbb3 = report1.knb3 / countall;
+
+    var kn11 = "Công ty luôn yêu cầu hiệu quả làm việc cao từ các nhân viên ";
+    var kn12 = "Bạn tin công ty đang cung cấp các sản phẩm tốt nhất cho khách hàng";
+    var kn13 = "Bạn cơ bản hiểu được mục tiêu và chiến lược phát triển công ty";
+    var kn14 = "Bạn có biết công việc ủa bạn đóng góp một phần vào sự thành công của công ty";
+    var kn15 = "Công ty luôn quan tâm đến đời sống nhân viên ";
+    var kn16 = "Bạn rất tự hào nói với người khác về công ty PTE bạn đang làm việc ";
+    var kn17 = "Bạn có biết được Văn Hóa Doanh Nghiệp của công ty mình là gì không";
+    var kn18 = "Bạn có tự hào về Văn Hóa Doanh Nghiệp của công ty mình không";
+    var kn21 = "Mọi người có được trao đổi thẳng thắn về kiến thức ,ý tướng và các vấn đề khác trong công ty";
+    var kn22 = "Bạn có được thông báo đầy đủ về tình hình hoạt động của công ty";
+    var kn23 = "Công ty luôn khuyến khích hợp tác làm việc giữa các nhóm / bộ phận ";
+    var kn24 = "Quản lý đã trao đổi về kế hoạch phát triển nghề nghiệp của bạn bao nhiêu lần";
+    var kn31 = "Quản lý của bạn có tham khảo ý kiến của cấp đươi khi đưa ra quyết định";
+    var kn32 = "Quản lý của bạn có cung cấp đầy đủ thông tin (mục đích, yêu cầu và thời gian hoàn thành công việc..) khi giao việc cho bạn khôn)";
+    var kn33 = "Bạn có hài lòng với người quản lý trực tiếp của mình";
+    var kn41 = "Công việc hiện tại của bạn có đầy thú vị và thử thách";
+    var kn42 = "Trách nhiệm công việc của bạn có được định nghĩa rõ ràng";
+    var kn43 = "Bạn có quyền tự quyết định cách thức hoàn thành công việc của mình một cách hiệu quả nhất";
+    var kn44 = "Bạn được cung cấp đầy đủ dụng cụ làm việc và các tài nguyên khác để hoàn thành công việc";
+    var kn51 = "Ánh sáng nơi làm việc";
+    var kn52 = "Nhiệt độ nơi làm việc";
+    var kn53 = "Nhà vệ sinh";
+    var kn54 = "Nước uống";
+    var kn55 = "Nhà ăn";
+    var kn56 = "Khu vực để xe";
+    var kn61 = "Lương và phúc lợi của bạn có cạnh tranh so với thị trường lao động trong nước";
+    var kn71 = "Bạn được biết hiệu quả công việc được đánh giá như thế nào";
+    var kn72 = "Bạn luôn nhận được phản hồi về hiệu quả làm việc của bạn";
+    var kn73 = "Hiệu quả công việc của bạn luôn được đánh giá chính xác và công bằng";
+    var kn74 = "Công ty luôn khen thưởng cho các thành tích xuất sắc hay hoàn thành tốt mục tiêu";
+    var kn81 = "Công ty cung cấp đầy đủ các khóa huấn luyện cho bạn trong quá trình làm việc";
+    var kn82 = "Sau khi đào tạo, công ty luôn khuyến khích bạn thử nghiệm các ý tưởng mới";
+    var kn83 = "Bạn luôn có cơ hội học hỏi và phát triển nghề nghiệp tại công ty";
+    var kn91 = "Bạn cảm thấy bản thân rất thân thuộc với công ty và là một phần của công ty";
+    var kn92 = "Bạn tin tưởng vào sự lãnh đạo của công ty";
+    var kna1 = "Bạn có bị phân biệt, kỳ thị vì lý do tín ngưỡng, tôn giáo?";
+    var kna2 = "Bạn có bị xúc phạm tín ngưỡng, tôn giáo?";
+    var kna3 = "Bạn có bị ép buộc, mua chuộc để theo hoặc bỏ 1 tín ngưỡng, tôn giáo?";
+    var knb1 = "Bạn có bị phân biệt đối xử vì tham gia hội đoàn, công đoàn?";
+    var knb2 = "Bạn có bị ngăn cấm, can thiệp khi tham gia các hoạt động công đoàn?";
+    var knb3 = "Công ty có gây bất lợi đối với tổ chức và hoạt động công đoàn?";
+}
+<div class="col-md-12">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            THỐNG KÊ KHẢO SÁT MỨC ĐỘ HÀI LÒNG NHÂN VIÊN
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="alert alert-success alert-dismissable">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                    Tổng số lần nhân viên đã đánh giá là <strong>@countall</strong>
+                </div>
+                <div class="col-md-4">
+                    Văn Hóa và Giá Trị Công Ty (<a href="#" data-toggle="collapse" data-target="#demo1">xem chi tiết </a>)
+                </div>
+                <div class="col-md-8">
+                    <div class="progress">
+                        @if (((tb11 + tb12 + tb13 + tb14 + tb15 + tb16 + tb17 + tb18) / 8) >= 2.5)
+                        {
+                            <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"
+                                 aria-valuenow="@((tb11 + tb12 + tb13 + tb14 + tb15 + tb16 + tb17 + tb18)/8)" aria-valuemin="0" aria-valuemax="5" style="width: @(((tb11 + tb12 + tb13 + tb14 + tb15 + tb16 + tb17 + tb18) / 8) * 100 / 5)%">
+                                Điểm trung bình @(((tb11 + tb12 + tb13 + tb14 + tb15 + tb16 + tb17 + tb18) / 8).ToString("0.00"))
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar"
+                                 aria-valuenow="@((tb11 + tb12 + tb13 + tb14 + tb15 + tb16 + tb17 + tb18)/8)" aria-valuemin="0" aria-valuemax="5" style="width: @(((tb11 + tb12 + tb13 + tb14 + tb15 + tb16 + tb17 + tb18) / 8) * 100 / 5)%">
+                                Điểm trung bình @(((tb11 + tb12 + tb13 + tb14 + tb15 + tb16 + tb17 + tb18) / 8).ToString("0.00"))
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div id="demo1" class="collapse alert alert-info">
+                    <p>@kn11 :điểm TB @string.Format("{0:0.0}", tb11)</p>
+                    <p>@kn12 :điểm TB @string.Format("{0:0.0}", tb12)</p>
+                    <p>@kn13 :điểm TB @string.Format("{0:0.0}", tb13)</p>
+                    <p>@kn14 :điểm TB @string.Format("{0:0.0}", tb14)</p>
+                    <p>@kn15 :điểm TB @string.Format("{0:0.0}", tb15)</p>
+                    <p>@kn16 :điểm TB @string.Format("{0:0.0}", tb16)</p>
+                    <p>@kn17 :điểm TB @string.Format("{0:0.0}", tb17)</p>
+                    <p>@kn18 :điểm TB @string.Format("{0:0.0}", tb18)</p>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    Trao Đổi và Hợp Tác (<a href="#" data-toggle="collapse" data-target="#demo2">xem chi tiết </a>)
+                </div>
+                <div class="col-md-8">
+                    <div class="progress">
+                        @if (((tb21 + tb22 + tb23 + tb24) / 4)>=2.5)
+                        {
+                            <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"
+                                 aria-valuenow="@((tb21 + tb22 + tb23 + tb24)/4)" aria-valuemin="0" aria-valuemax="5" style="width: @(((tb21 + tb22 + tb23 + tb24) / 4) * 100 / 5)%">
+                                Điểm trung bình @(((tb21 + tb22 + tb23 + tb24) / 4).ToString("0.00"))
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar"
+                                 aria-valuenow="@((tb21 + tb22 + tb23 + tb24)/4)" aria-valuemin="0" aria-valuemax="5" style="width: @(((tb21 + tb22 + tb23 + tb24) / 4) * 100 / 5)%">
+                                Điểm trung bình @(((tb21 + tb22 + tb23 + tb24) / 4).ToString("0.00"))
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div id="demo2" class="collapse alert alert-info">
+                    <p>@kn21 :điểm TB @string.Format("{0:0.0}", tb21)</p>
+                    <p>@kn22 :điểm TB @string.Format("{0:0.0}", tb22)</p>
+                    <p>@kn23 :điểm TB @string.Format("{0:0.0}", tb23)</p>
+                    <p>@kn24 :điểm TB @string.Format("{0:0.0}", tb24)</p>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    Người Quản Lý Trực Tiếp (<a href="#" data-toggle="collapse" data-target="#demo3">xem chi tiết </a>)
+                </div>
+                <div class="col-md-8">
+                    <div class="progress">
+                        @if (((tb31 + tb32 + tb33) / 3)>=2.5)
+                        {
+                            <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"
+                                 aria-valuenow="@((tb31 + tb32 + tb33 )/3)" aria-valuemin="0" aria-valuemax="5" style="width: @(((tb31 + tb32 + tb33) / 3) * 100 / 5)%">
+                                Điểm trung bình @(((tb31 + tb32 + tb33) / 3).ToString("0.00"))
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar"
+                                 aria-valuenow="@((tb31 + tb32 + tb33 )/3)" aria-valuemin="0" aria-valuemax="5" style="width: @(((tb31 + tb32 + tb33) / 3) * 100 / 5)%">
+                                Điểm trung bình @(((tb31 + tb32 + tb33) / 3).ToString("0.00"))
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div id="demo3" class="collapse alert alert-info">
+                    <p>@kn31 :điểm TB @string.Format("{0:0.0}", tb31)</p>
+                    <p>@kn32 :điểm TB @string.Format("{0:0.0}", tb32)</p>
+                    <p>@kn33 :điểm TB @string.Format("{0:0.0}", tb33)</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    Công Việc Hiện Tại (<a href="#" data-toggle="collapse" data-target="#demo4">xem chi tiết </a>)
+                </div>
+                <div class="col-md-8">
+                    <div class="progress">
+                        @if (((tb41 + tb42 + tb43 + tb44) / 4)>=2.5)
+                        {
+                            <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"
+                                 aria-valuenow="@((tb41 + tb42 + tb43 +tb44 )/4)" aria-valuemin="0" aria-valuemax="5" style="width: @(((tb41 + tb42 + tb43 + tb44) / 4) * 100 / 5)%">
+                                Điểm trung bình @(((tb41 + tb42 + tb43 + tb44) / 4).ToString("0.00"))
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar"
+                                 aria-valuenow="@((tb41 + tb42 + tb43 +tb44 )/4)" aria-valuemin="0" aria-valuemax="5" style="width: @(((tb41 + tb42 + tb43 + tb44) / 4) * 100 / 5)%">
+                                Điểm trung bình @(((tb41 + tb42 + tb43 + tb44) / 4).ToString("0.00"))
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div id="demo4" class="collapse alert alert-info">
+                    <p>@kn41 :điểm TB @string.Format("{0:0.0}", tb41)</p>
+                    <p>@kn42 :điểm TB @string.Format("{0:0.0}", tb42)</p>
+                    <p>@kn43 :điểm TB @string.Format("{0:0.0}", tb43)</p>
+                    <p>@kn44 :điểm TB @string.Format("{0:0.0}", tb44)</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    Môi Trường Làm Việc (<a href="#" data-toggle="collapse" data-target="#demo5">xem chi tiết </a>)
+                </div>
+                <div class="col-md-8">
+                    <div class="progress">
+                        @if (((tb51 + tb52 + tb53 + tb54 + tb55 + tb56) / 6) >= 2.5)
+                        {
+                            <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"
+                                 aria-valuenow="@((tb51 + tb52 + tb53 +tb54+tb55+tb56 )/6)" aria-valuemin="0" aria-valuemax="5" style="width: @(((tb51 + tb52 + tb53 + tb54 + tb55 + tb56) / 6) * 100 / 5)%">
+                                Điểm trung bình @(((tb51 + tb52 + tb53 + tb54 + tb55 + tb56) / 6).ToString("0.00"))
+                            </div>
+                        }
+                        else
+                         {
+                            <div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar"
+                                 aria-valuenow="@((tb51 + tb52 + tb53 +tb54+tb55+tb56 )/6)" aria-valuemin="0" aria-valuemax="5" style="width: @(((tb51 + tb52 + tb53 + tb54 + tb55 + tb56) / 6) * 100 / 5)%">
+                                Điểm trung bình @(((tb51 + tb52 + tb53 + tb54 + tb55 + tb56) / 6).ToString("0.00"))
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div id="demo5" class="collapse alert alert-info">
+                    <p>@kn51 :điểm TB @string.Format("{0:0.0}", tb51)</p>
+                    <p>@kn52 :điểm TB @string.Format("{0:0.0}", tb52)</p>
+                    <p>@kn53 :điểm TB @string.Format("{0:0.0}", tb53)</p>
+                    <p>@kn54 :điểm TB @string.Format("{0:0.0}", tb54)</p>
+                    <p>@kn55 :điểm TB @string.Format("{0:0.0}", tb55)</p>
+                    <p>@kn56 :điểm TB @string.Format("{0:0.0}", tb56)</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    Lương Bổng và Phúc Lợi (<a href="#" data-toggle="collapse" data-target="#demo6">xem chi tiết </a>)
+                </div>
+                <div class="col-md-8">
+                    <div class="progress">
+                        @if (((tb61) / 1)>=2.5)
+                        {
+                            <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"
+                                 aria-valuenow="@((tb61  )/1)" aria-valuemin="0" aria-valuemax="5" style="width: @(((tb61) / 1) * 100 / 5)%">
+                                Điểm trung bình @(((tb61) / 1).ToString("0.00"))
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar"
+                                 aria-valuenow="@((tb61  )/1)" aria-valuemin="0" aria-valuemax="5" style="width: @(((tb61) / 1) * 100 / 5)%">
+                                Điểm trung bình @(((tb61) / 1).ToString("0.00"))
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div id="demo6" class="collapse alert alert-info">
+                    <p>@kn61 :điểm TB @string.Format("{0:0.0}", tb61)</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    Hiệu Quả Công Việc (<a href="#" data-toggle="collapse" data-target="#demo7">xem chi tiết </a>)
+                </div>
+                <div class="col-md-8">
+                    <div class="progress">
+                        @if (((tb71 + tb72 + tb73 + tb74) / 4)>=2.5)
+                        {
+                            <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"
+                                 aria-valuenow="@((tb71 + tb72 + tb73 +tb74 )/4)" aria-valuemin="0" aria-valuemax="5" style="width: @(((tb71 + tb72 + tb73 + tb74) / 4) * 100 / 5)%">
+                                Điểm trung bình @(((tb71 + tb72 + tb73 + tb74) / 4).ToString("0.00"))
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar"
+                                 aria-valuenow="@((tb71 + tb72 + tb73 +tb74 )/4)" aria-valuemin="0" aria-valuemax="5" style="width: @(((tb71 + tb72 + tb73 + tb74) / 4) * 100 / 5)%">
+                                Điểm trung bình @(((tb71 + tb72 + tb73 + tb74) / 4).ToString("0.00"))
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div id="demo7" class="collapse alert alert-info">
+                    <p>@kn71 :điểm TB @string.Format("{0:0.0}", tb71)</p>
+                    <p>@kn72 :điểm TB @string.Format("{0:0.0}", tb72)</p>
+                    <p>@kn73 :điểm TB @string.Format("{0:0.0}", tb73)</p>
+                    <p>@kn74 :điểm TB @string.Format("{0:0.0}", tb74)</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    Đào Tạo và Phát Triển (<a href="#" data-toggle="collapse" data-target="#demo8">xem chi tiết </a>)
+                </div>
+                <div class="col-md-8">
+                    <div class="progress">
+                        @if (((tb81 + tb82 + tb83) / 3)>=2.5)
+                        {
+                            <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"
+                                 aria-valuenow="@((tb81 + tb82 + tb83 )/3)" aria-valuemin="0" aria-valuemax="5" style="width: @(((tb81 + tb82 + tb83) / 3) * 100 / 5)%">
+                                Điểm trung bình @(((tb81 + tb82 + tb83) / 3).ToString("0.00"))
+                            </div>
+                        }
+                        else
+                         {
+                            <div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar"
+                                 aria-valuenow="@((tb81 + tb82 + tb83 )/3)" aria-valuemin="0" aria-valuemax="5" style="width: @(((tb81 + tb82 + tb83) / 3) * 100 / 5)%">
+                                Điểm trung bình @(((tb81 + tb82 + tb83) / 3).ToString("0.00"))
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div id="demo8" class="collapse alert alert-info">
+                    <p>@kn81 :điểm TB @string.Format("{0:0.0}", tb81)</p>
+                    <p>@kn82 :điểm TB @string.Format("{0:0.0}", tb82)</p>
+                    <p>@kn83 :điểm TB @string.Format("{0:0.0}", tb83)</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    Mức Độ Gắn Kết Nhân Viên Với Công Ty (<a href="#" data-toggle="collapse" data-target="#demo9">xem chi tiết </a>)
+                </div>
+                <div class="col-md-8">
+                    <div class="progress">
+                        @if (((tb91 + tb92) / 2)>=2.5)
+                        {
+                            <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"
+                                 aria-valuenow="@((tb91 + tb92 )/2)" aria-valuemin="0" aria-valuemax="5" style="width: @(((tb91 + tb92) / 2) * 100 / 5)%">
+                                Điểm trung bình @(((tb91 + tb92) / 2).ToString("0.00"))
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar"
+                                 aria-valuenow="@((tb91 + tb92 )/2)" aria-valuemin="0" aria-valuemax="5" style="width: @(((tb91 + tb92) / 2) * 100 / 5)%">
+                                Điểm trung bình @(((tb91 + tb92) / 2).ToString("0.00"))
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div id="demo9" class="collapse alert alert-info">
+                    <p>@kn91 :điểm TB @string.Format("{0:0.0}", tb91)</p>
+                    <p>@kn92 :điểm TB @string.Format("{0:0.0}", tb92)</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    Quyền Tự Do Tín Ngưỡng Tôn Giáo (<a href="#" data-toggle="collapse" data-target="#demo10">xem chi tiết </a>)
+                </div>
+                <div class="col-md-8">
+                    <div class="progress">
+                        @if (((tba1 + tba2 + tba3) / 3) >= 2.5)
+                        {
+                            <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"
+                                 aria-valuenow="@((tba1 + tba2 + tba3 )/3)" aria-valuemin="0" aria-valuemax="5" style="width: @(((tba1 + tba2 + tba3) / 3) * 100 / 5)%">
+                                Điểm trung bình @(((tba1 + tba2 + tba3) / 3).ToString("0.00"))
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar"
+                                 aria-valuenow="@((tba1 + tba2 + tba3 )/3)" aria-valuemin="0" aria-valuemax="5" style="width: @(((tba1 + tba2 + tba3) / 3) * 100 / 5)%">
+                                Điểm trung bình @(((tba1 + tba2 + tba3) / 3).ToString("0.00"))
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div id="demo10" class="collapse alert alert-info">
+                    <p>@kna1 :điểm TB @string.Format("{0:0.0}", tba1)</p>
+                    <p>@kna2 :điểm TB @string.Format("{0:0.0}", tba2)</p>
+                    <p>@kna3 :điểm TB @string.Format("{0:0.0}", tba3)</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    Quyền Tự Do Hội Đoàn và Thương Lượng Tập Thể (<a href="#" data-toggle="collapse" data-target="#demo11">xem chi tiết </a>)
+                </div>
+                <div class="col-md-8">
+                    <div class="progress">
+                        @if (((tbb1 + tbb2 + tbb3) / 3) >= 2.5)
+                        {
+                            <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"
+                                 aria-valuenow="@((tbb1 + tbb2 + tbb3 )/3)" aria-valuemin="0" aria-valuemax="5" style="width: @(((tbb1 + tbb2 + tbb3) / 3) * 100 / 5)%">
+                                Điểm trung bình @(((tbb1 + tbb2 + tbb3) / 3).ToString("0.00"))
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar"
+                                 aria-valuenow="@((tbb1 + tbb2 + tbb3 )/3)" aria-valuemin="0" aria-valuemax="5" style="width: @(((tbb1 + tbb2 + tbb3) / 3) * 100 / 5)%">
+                                Điểm trung bình @(((tbb1 + tbb2 + tbb3) / 3).ToString("0.00"))
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div id="demo11" class="collapse alert alert-info">
+                    <p>@knb1 :điểm TB @string.Format("{0:0.0}", tbb1)</p>
+                    <p>@knb2 :điểm TB @string.Format("{0:0.0}", tbb2)</p>
+                    <p>@knb3 :điểm TB @string.Format("{0:0.0}", tbb3)</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

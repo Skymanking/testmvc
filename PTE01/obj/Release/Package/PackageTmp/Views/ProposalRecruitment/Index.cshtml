@@ -1,0 +1,91 @@
+﻿@model PagedList.IPagedList<Model.View.ProposalRecruitmentView1>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+}
+
+<div class="row">
+
+         <div class="col-md-12">
+        <div class="card card-success card-outline">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fa fa-clipboard"></i>Yêu Cầu Tuyển Dụng</h3>
+
+                <div class="card-tools">
+
+                    <div class="btn-group" style="height: 37px; margin-top: -20px;">
+                        <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-filter"></i>
+                        </button>
+                        <div class="dropdown-menu float-right" role="menu">
+                            <a class="dropdown-item" href="/ProposalRecruitment/Index">Danh sách</a>
+                            @*<a class="dropdown-item" href="/ProposalRecruitment/Index2">Chi Tiết Tổng</a>*@
+                            <a class="dropdown-item" href="/ProposalRecruitment/Index3?month=@DateTime.Now.Month&year=@DateTime.Now.Year">Chi Tiết Từng Tháng</a>
+                            <a class="dropdown-item" href="/ProposalRecruitment/Report2?year=@DateTime.Now.Year&month=@DateTime.Now.Month">Report Nhóm Ứng Viên</a>
+                            <a class="dropdown-item" href="/ProposalRecruitment/Report5">Thống kê 12 Tháng</a>
+                        </div>
+                    </div>
+                    <a href="/ProposalRecruitment/Create" data-toggle="tooltip" title="Thêm mới "><i class="fa fa-plus-circle" style="font-size: 40px; color: red"></i></a>
+                    @*<a class="btn btn-warning float-right" href="/ProposalRecruitment/Create"><i class="fa fa-plus" style="font-size:24px;"></i></a>*@
+                    <div style="float:left">
+                        @using (Html.BeginForm("Index", "ProposalRecruitment", FormMethod.Get))
+                        {
+                            <div class="input-group " style="width: 300px;">
+                                <input type="text" value="@ViewBag.SearchString" name="searchString" class="form-control float-right" placeholder="tìm kiếm">
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <ul class="todo-list">
+                    @foreach (var item in Model)
+                    {
+
+                        <li>
+                            @if(item.TypeJob==15)
+                            {  <span class="badge badge-warning"><i class="fa fa-child"></i> LĐPT </span>}
+                            <a href="/ProposalRecruitment/Edit/@item.ID"><span class="text">@item.Position</span></a>                                                     
+                       
+                            <a class="btn btn-app float-right" style="min-width: 30px; height: 30px; padding: 5px 5px; border: none; margin-left: 8px; margin-right: 8px; ">
+                                <span class="badge bg-warning">Xác Nhận</span>
+                                @Html.Raw(item.OwnerConfirm ? "<span class='fa fa-check-circle-o fa-2x' style='color: #0cb583;font-size: 30px;'></span>" : "<span class='fa fa-times-circle-o fa-2x' style='color: #f90d0d;font-size: 30px;'></span>")
+                            </a> 
+                            <a class="btn btn-app float-right" style="min-width: 30px; height: 30px; padding: 5px 5px; border: none; margin-left: 8px; margin-right: 8px; ">
+                                <span class="badge bg-warning">Đã Đủ</span>
+                                @Html.Raw(item.StartConfirm ? "<span class='fa fa-check-circle-o fa-2x' style='color: #0cb583;font-size: 30px;'></span>" : "<span class='fa fa-times-circle-o fa-2x' style='color: #f90d0d;font-size: 30px;'></span>")
+                            </a> 
+                            <a class="btn btn-app float-right" style="min-width: 30px; height: 30px; padding: 5px 5px; border: none; margin-left: 8px; margin-right: 8px; ">
+                                <span class="badge bg-warning">BGĐ</span>
+                                @Html.Raw(item.BOSSApproval ? "<span class='fa fa-check-circle-o fa-2x' style='color: #0cb583;font-size: 30px;'></span>" : "<span class='fa fa-times-circle-o fa-2x' style='color: #f90d0d;font-size: 30px;'></span>")
+                            </a> 
+                            <a class="btn btn-app float-right" style="min-width: 30px; height: 30px; padding: 5px 5px; border: none; margin-left: 8px; margin-right: 8px; ">
+                                <span class="badge bg-warning">HCNS</span>
+                                @Html.Raw(item.RecruiterApproval ? "<span class='fa fa-check-circle-o fa-2x' style='color: #0cb583;font-size: 30px;'></span>" : "<span class='fa fa-times-circle-o fa-2x' style='color: #f90d0d;font-size: 30px;'></span>")
+                            </a> 
+
+                            <br />
+                            <span> ( Số phiếu: @item.ID )</span>
+                            <span class="badge badge-info"><i class="fa fa-user"></i> @item.FullName </span>
+                            <span class="badge badge-info"><i class="fa fa-clock-o"></i> @item.CreateDate.ToString("dd/MM/yyyy") </span>
+
+                        </li>
+
+                    }
+
+                </ul>
+            </div>
+            <div class="card-footer clearfix">
+                <a class="btn btn-sm btn-info float-left" href="/ProposalRecruitment/Create"><i class="fa fa-plus"></i> Thêm mới</a>
+                <div class="dataTables_paginate paging_simple_numbers float-right" id="example2_paginate">
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, @searchString = @ViewBag.SearchString }))
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

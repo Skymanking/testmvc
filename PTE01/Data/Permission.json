@@ -1,0 +1,14 @@
+﻿{
+  "Permission": [
+    {
+      "Name": "Administrator",
+      "Level": "Admin ",
+      "Status": "true"
+    },
+    {
+      "Name": "Guest",
+      "Level": "Guest ",
+      "Status": "true"
+    }
+  ]
+}

@@ -1,0 +1,190 @@
+﻿@model Model.EF.Vendor
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Theme1.cshtml";
+    IEnumerable<Model.View.Vendor4> detailPTB = ViewBag.detailPTB;
+    int solantre = 0;
+    int tong = 0;
+}
+
+<div class="row">
+    @using (Html.BeginForm("Edit", "Vendor", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <!-- Cot ben trai -->
+        <div class="col-md-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    Thông Tin Nhà Cung Cấp
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class='col-md-3'>
+                                    <label class="control-label">Mã NCC</label>
+                                    @Html.TextBoxFor(model => model.ID, new { @class = "form-control" })
+                                </div>
+                                <div class='col-md-6'>
+                                    <label class="control-label">Tên Nhà Cung Cấp</label>
+                                    @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                                </div>
+                                <div class='col-md-3'>
+                                    <label class="control-label">Mã Số Thuế</label>
+                                    @Html.TextBoxFor(model => model.AccountCode, new { @class = "form-control" })
+                                </div>
+
+                            </div>
+                            <div class="row">
+
+                                <div class='col-md-3'>
+                                    <label class="control-label">Điện Thoại</label>
+                                    @Html.TextBoxFor(model => model.Phone, new { @class = "form-control" })
+                                </div>
+                                <div class='col-md-3'>
+                                    <label class="control-label">Email</label>
+                                    @Html.TextBoxFor(model => model.Mail, new { @class = "form-control" })
+                                </div>
+                                <div class='col-md-6'>
+                                    <label class="control-label">Địa Chỉ</label>
+                                    @Html.TextBoxFor(model => model.Address, new { @class = "form-control" })
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class='col-md-3'>
+                                    <label class="control-label">Tài Khoản</label>
+                                    @Html.TextBoxFor(model => model.BankCode, new { @class = "form-control" })
+                                </div>
+                                <div class='col-md-6'>
+                                    <label class="control-label">Chi Nhánh Ngân Hàng</label>
+                                    @Html.TextBoxFor(model => model.BankAddress, new { @class = "form-control" })
+                                </div>
+                                <div class='col-md-3'>
+                                    <label class="control-label">Hạn Thanh Toán</label>
+                                    @Html.TextBoxFor(model => model.PaymentTerm, new { @class = "form-control", @type = "number" })
+                                </div>
+                            </div>
+                            <div class='row'>
+                                <div class='col-md-12'>
+                                    <label class="control-label">Ghi Chú</label>
+                                    @Html.TextAreaFor(model => model.Note, new { @class = "form-control", @rows = "5" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+            <!--------------------------fd-------End------------------------------------>
+        <div class="form-group">
+            <div class="col-md-4">
+                <input type="submit" value="Cập Nhật" class="btn btn-primary" />
+            </div>
+        </div>
+
+
+    }
+</div>
+<p></p>
+<p></p>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                LỊCH SỬ GIAO DỊCH
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Tên vật tư</th>
+                                    <th>Ngày NCC hẹn</th>
+                                    <th>Ngày nhập kho</th>
+                                    <th>Số lượng</th>
+                                    <th>Giá</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in detailPTB)
+                                {
+                                    <tr id="row_@item.ID">
+                                        <td>@item.ID</td>
+                                        <td>@item.MaterialName</td>
+                                        <td>
+                                            @if (item.ExpectedDate == null)
+                                            {<span>không xác định </span> }
+                                            else
+                                            {@item.ExpectedDate.Value.ToString("dd/MM/yyyy")}
+                                        </td>
+
+                                        @if (item.ImportDate == null)
+                                        {
+                                            <td style="background: #FFC107; "><span>không xác định </span> </td>}
+                                        else
+                                        {
+                                            if (item.ExpectedDate != null)
+                                            {
+                                                if (item.ImportDate <= item.ExpectedDate)
+                                                {
+                                                <td style="background: #4CAF50;">@item.ImportDate.Value.ToString("dd/MM/yyyy")</td> }
+                                                else
+                                                {
+                                                    <td style="background: #F44336;">@item.ImportDate.Value.ToString("dd/MM/yyyy")</td>
+                                                    { solantre = solantre + 1; }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <td>@item.ImportDate.Value.ToString("dd/MM/yyyy")</td>
+                                            }
+
+                                        }
+
+                                        <td>
+                                            @item.Quatity
+                                        </td>
+                                        @if (item.Price != null)
+                                        {
+
+                                            <td>@item.Price.Value.ToString("N0").Replace(',', '.') vnđ</td>
+                                        }
+                                        else
+                                        {
+                                            <td>chưa nhập giá</td>
+                                        }
+
+
+                                    </tr>
+                                    tong = tong + 1;
+                                }
+
+
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                </div>
+                @if(tong>0)
+                { 
+                <div class="alert alert-danger">
+                    số lần trễ hẹn <strong>@solantre / @tong ==> @(solantre*100/tong) %</strong>
+                </div>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>

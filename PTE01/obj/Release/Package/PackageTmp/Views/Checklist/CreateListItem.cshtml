@@ -1,0 +1,184 @@
+﻿@model List<Model.EF.ChecklistQuestion>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    List<SelectListItem> ketqua = new List<SelectListItem>();
+    ketqua.Add(new SelectListItem
+    {
+        Text = "bắt buộc chọn",
+        Value = "null",
+        Selected = true
+    });
+
+    ketqua.Add(new SelectListItem
+         {
+             Text = "Đạt",
+             Value = "true",
+
+         });
+    ketqua.Add(new SelectListItem
+    {
+        Text = "Không Đạt",
+        Value = "false",
+    });
+}
+@section jsFooter
+{
+    <script src="~/Scripts/CreateChecklistItem.js"></script>
+    <script>
+        $(function () {
+
+            $('input[type="checkbox"].flat-green, input[type="radio"].flat-green').iCheck({
+                checkboxClass: 'icheckbox_flat-green',
+                radioClass: 'iradio_flat-green'
+            })
+            $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+                checkboxClass: 'icheckbox_flat-red',
+                radioClass: 'iradio_flat-red'
+            })
+
+        })
+    </script>
+
+}
+<style>
+    input, label {
+        vertical-align: middle;
+    }
+
+    .qrcode-text {
+        padding-right: 1.7em;
+        margin-right: 0;
+        width:95%
+    }
+
+    .qrcode-text-btn {
+        display: inline-block;
+        background: url(/Assets/theme3/dist/img/qr_icon.svg) 50% 50% no-repeat;
+        height: 30px;
+        width: 30px;
+        margin-left: -40px;
+        margin-top:10px;
+        cursor: pointer;
+    }
+
+        .qrcode-text-btn > input[type=file] {
+            position: absolute;
+            overflow: hidden;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+        }
+</style>
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/instascan.min.js"></script>
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Checklist cần thực hiện</h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <ul class="todo-list" style="width:100%">
+                @foreach (var item in Model)
+                {
+
+                    <li>
+                        <span class="text" id="Equipment">@item.Equipment</span>
+
+                        <span class="badge badge-warning">yêu cầu( <span id="Request">@item.Request</span> )</span>
+                        <br />
+                        <div class="row">
+
+                            <div class="col-md-9 col-12">
+                                <textarea class="form-control" id="Note_@item.ID" placeholder="ghi chú" rows="4"></textarea>
+                                
+                            </div>
+                            <div class="col-md-2 col-8">
+                                <div class="row" style="padding-left:10px;">
+                                    <input id="EquipID2_@item.ID" name="EquipID2_@item.ID" type=text size=16 placeholder="Quét thiết bị có dán QR Code-->" class="qrcode-text form-control" disabled>
+                                    <label class=qrcode-text-btn>
+                                        <input type=file accept=" image />*" capture=environment onchange="openQRCamera(this);" tabindex=-1>
+                                    </label>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <input class="form-control" id="Parameter_@item.ID" placeholder="thông số nếu có" type="number" value="">
+
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <select class="form-control" id="Result_@item.ID" name="Result_@item.ID" style="background: #e691b8;">
+                                                <option value="null">chọn kết quả</option>
+                                                <option value="true">Đạt</option>
+                                                <option value="false">Không Đạt</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                </div>
+                            <div class="col-md-1 col-4">
+
+                                    <a class="btn-saveitem btn btn-app" data-equipment="@item.Equipment" data-equipid="@item.EquipID" data-request="@item.Request" data-parameter="" data-result="null" data-note="" id="save_@item.ID" style="color: #dc3545; background: #c0daf7; font-weight: bold; height: 100px; width: 100%; margin-top: 10px;margin-left:0;padding-top:30px; ">
+                                        <i class="fa fa-save"></i> Lưu thông tin
+                                    </a>
+
+                                </div>
+
+                        </div>
+                    </li>
+
+                    <script>
+    $(document).ready(function () {
+        $('#save_' +@item.ID +'').hide();
+        $('#Note_' +@item.ID +'').blur(function () {
+            $('#save_' +@item.ID +'').attr("data-note", $('#Note_' +@item.ID +'').val());
+        });
+        $('#Parameter_' +@item.ID +'').blur(function () {
+            $('#save_' +@item.ID +'').attr("data-parameter", $('#Parameter_' +@item.ID +'').val());
+        });
+        $('#Result_' +@item.ID +'').change(function () {
+            $('#save_' +@item.ID +'').attr("data-result", $('#Result_' +@item.ID +' option:selected').val());
+            $('#save_' +@item.ID +'').attr("data-equipid2", $('#EquipID2_' +@item.ID +'').val());
+
+                                if ($('#Result_' +@item.ID +' option:selected').val() == "null") { $('#save_' +@item.ID +'').hide() }
+            else { $('#save_' +@item.ID +'').show() }
+        });
+
+    });
+                    </script>
+                }
+
+            </ul>
+        </div>
+        <p id="temp"></p>
+
+
+
+
+
+    </div>
+    <div class="card-footer">
+
+    </div>
+
+</div>
+<script src="~/Scripts/qr_packed.js"></script>
+<script>
+    function openQRCamera(node) {
+        var reader = new FileReader();
+        reader.onload = function () {
+            node.value = "";
+            qrcode.callback = function (res) {
+                if (res instanceof Error) {
+                    alert("Không tìm thấy QR Code. Hãy thử lại và canh chỉnh camera nhìn rõ nét QR Code cần quét.");
+                } else {
+                    node.parentNode.previousElementSibling.value = res;
+                }
+            };
+            qrcode.decode(reader.result);
+        };
+        reader.readAsDataURL(node.files[0]);
+    }
+</script>

@@ -1,0 +1,209 @@
+﻿@model Model.EF.ProjectFile
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    List<Model.View.Dropdownlist5> cProject1 = ViewBag.cProject1;
+    List<Model.View.Dropdownlist5> cProject2 = ViewBag.cProject2;
+    List<SelectListItem> listCC = new List<SelectListItem>();
+    listCC.Add(new SelectListItem
+    {
+        Text = "chưa chọn",
+        Value = "",
+    });
+
+    foreach (var item in cProject1)
+    {
+        listCC.Add(new SelectListItem
+        {
+            Text = "(P)" + item.Name + " - " + item.ID,
+            Value = item.ID.ToString(),
+        });
+    }
+    foreach (var item in cProject2)
+    {
+        listCC.Add(new SelectListItem
+        {
+            Text = "(P)" + item.Name + " - " + item.ID,
+            Value = item.ID.ToString(),
+        });
+    }
+    List<SelectListItem> listTT = new List<SelectListItem>();
+    listTT.Add(new SelectListItem
+    {
+        Text = "Yêu Cầu Báo Giá",
+        Value = "YCBG",
+    });
+    listTT.Add(new SelectListItem
+    {
+        Text = "Báo Giá Của Kế Toán",
+        Value = "BGKT",
+    });
+    listTT.Add(new SelectListItem
+    {
+        Text = "Phân Tích Giá",
+        Value = "PANA",
+    });
+    listTT.Add(new SelectListItem
+    {
+        Text = "Báo Giá Gửi Khách Hàng",
+        Value = "BGKD",
+    });
+    listTT.Add(new SelectListItem
+    {
+        Text = "Hợp Đồng",
+        Value = "HDKD",
+    });
+    listTT.Add(new SelectListItem
+    {
+        Text = "Khác",
+        Value = "KHAC",
+    });
+
+    List<SelectListItem> listSS = new List<SelectListItem>();
+    listSS.Add(new SelectListItem
+    {
+        Text = "Chính thức",
+        Value = "1",
+    });
+    listSS.Add(new SelectListItem
+    {
+        Text = "Tạm thời",
+        Value = "2",
+    });
+    listSS.Add(new SelectListItem
+    {
+        Text = "Final",
+        Value = "3",
+    });
+    listSS.Add(new SelectListItem
+    {
+        Text = "Khác",
+        Value = "4",
+    });
+    listSS.Add(new SelectListItem
+    {
+        Text = "Hủy",
+        Value = "0",
+    });
+
+
+}
+@section jsFooter
+{
+    <script src="/Assets/plugin/ckfinder/ckfinder.js"></script>
+    <script src="/Assets/theme3/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+    <script>
+        $(function () {
+
+            $('.select2').select2()
+            $(".date1").datepicker(
+                {
+                    dateFormat: 'mm/dd/yy',
+                    changeMonth: true,
+                    changeYear: true,
+                    numberOfYears: 1,
+                    numberOfMonths: 1,
+                    yearRange: "-90:+10",
+                    onSelect: function (selectedDate) {
+                        // we can write code here
+                    }
+                });
+
+        })
+    </script>
+
+
+
+
+
+
+
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Thông tin hồ sơ</h3>
+    </div>
+    @using (Html.BeginForm("Edit", "ProjectFile", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="card-body">
+            <div class="row">
+
+                <div class="col-md-12">
+                    <div class="row" style="background: #f6fcfd; padding-bottom: 15px;">
+                        <div class='col-md-8'>
+                            <label class="control-label">Tên tài liệu</label>
+                            @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                        </div>
+                        <div class='col-md-2'>
+                            <label class="control-label">Version</label>
+                           @Html.TextBoxFor(model => model.Version, new { @class = "form-control" })
+                        </div>
+                        <div class='col-md-2'>
+                            <label class="control-label">Tình trạng</label>
+                            @Html.DropDownListFor(model => model.Status, listSS, new { @class = "form-control" })
+                        </div>
+                        <div class='col-md-3'>
+                            <label class="control-label">Loại hồ sơ</label>
+                            @Html.DropDownListFor(model => model.Type, listTT, new { @class = "form-control" })
+                        </div>
+                        <div class='col-md-3'>
+                            <label class="control-label">Thuộc dự án</label>
+                            @Html.DropDownListFor(model => model.IDPro, listCC, new { @class = "form-control" })
+                        </div>
+                        <div class='col-md-2'>
+                            <label class="control-label">Ngày áp dụng</label>
+                            <div class="input-group mb-3">
+                                <input autocomplete="off" style="background: #f9d7d4;" class="date1 form-control" id="ApplyDate" name="ApplyDate" type="text" value="@if (@Model.ApplyDate != null){@Model.ApplyDate.ToString("MM/dd/yyyy")}">
+                                <div class=" input-group-append">
+                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                </div>
+                            </div>    
+                        </div>
+                        <div class='col-md-4'>
+                            <label class="control-label">File đính kèm</label>
+                            <div class='input-group'>
+                                @Html.TextBoxFor(model => model.FileName, new { @class = "form-control", @style = "background: #f9d7d4;", @placeholder = "upload file đính kèm" })
+                                <div class=" input-group-append">
+                                    <span class="input-group-text">
+                                        <a id="btnViewFile" href="#"><span class="fa fa-paperclip"></span></a>
+                                    </span>
+                                </div>
+                            </div>
+                            <script>
+                                $('#btnViewFile').on('click', function (e) {
+                                    e.preventDefault();
+                                    var finder = new CKFinder();
+                                    finder.selectActionFunction = function (url) {
+                                        $('#FileName').val(url);
+                                        $('#btnViewFile').attr("href", $('#FileName').val());
+                                    };
+                                    finder.popup();
+                                })
+                            </script>
+                        </div>
+
+                        <div class='col-md-12'>
+                            <label class="control-label">Ghi chú</label>
+                            @Html.TextAreaFor(model => model.Note, new { @class = "form-control", @row = "4" })
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary" onclick="openNav()">Lưu thông tin</button>
+        </div>
+
+
+    }
+</div>

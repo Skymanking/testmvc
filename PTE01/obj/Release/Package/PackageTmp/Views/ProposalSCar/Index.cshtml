@@ -1,0 +1,61 @@
+﻿@model PagedList.IPagedList<Model.View.SCar1>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-success card-outline">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fa fa-clipboard"></i>ĐỀ NGHỊ XE CÔNG TÁC</h3>
+                <div class="card-tools">
+                    <div style="float:left">
+                        @using (Html.BeginForm("Index", "ProposalSCar", FormMethod.Get))
+                        {
+                            <div class="input-group " style="width: 200px;">
+                                <input type="text" value="@ViewBag.SearchString" name="searchString" class="form-control float-right" placeholder="tìm kiếm">
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <ul class="todo-list">
+                    <li>
+                        <a href="/ProposalSCar/Create" data-toggle="tooltip" title="Thêm mới yêu cầu ">Thêm mới yêu cầu<i class="fa fa-plus-circle" style="font-size: 20px; color: red"></i></a>
+                    </li>
+                    @foreach (var item in Model)
+                    {
+                        <li>                                                                             
+                            <span class="badge badge-warning"><i class="fa fa-briefcase"></i> @item.CarName </span>
+                            <span class="badge badge-info"><i class="fa fa-clock-o"></i> @item.TimeTo.ToString("dd/MM/yyyy") @item.TimeTo.ToString("hh:mm")-@item.TimeFrom.ToString("hh:mm") </span>
+                            <a href="/ProposalSCar/Edit/@item.ID" style="font-size:20px"><span>@item.Reason</span></a> 
+                            <br /><span><i class="fa fa-car" aria-hidden="true" style="font-size: 22px;color: #28a745;"></i><span style="font-weight:bold">Lộ trình:</span>  @item.Route</span>
+                            <br />
+                            <a class="btn btn-app float-right" style="min-width: 30px; height: 30px; padding: 5px 5px; border: none; margin-left: 8px; margin-right: 8px; ">
+                                <span class="badge bg-warning">TPHCNS</span>
+                                @Html.Raw(item.Approval2 ? "<span class='fa fa-check-circle-o fa-2x' style='color: #0cb583;font-size: 30px;'></span>" : "<span class='fa fa-times-circle-o fa-2x' style='color: #f90d0d;font-size: 30px;'></span>")
+                            </a>
+                            <a class="btn btn-app float-right" style="min-width: 30px; height: 30px; padding: 5px 5px; border: none; margin-left: 8px; margin-right: 8px; ">
+                                <span class="badge bg-warning">TBP</span>
+                                @Html.Raw(item.Approval1 ? "<span class='fa fa-check-circle-o fa-2x' style='color: #0cb583;font-size: 30px;'></span>" : "<span class='fa fa-times-circle-o fa-2x' style='color: #f90d0d;font-size: 30px;'></span>")
+                            </a>                            
+                            <br />
+                        </li>
+                    }
+
+                </ul>
+            </div>
+            <div class="card-footer clearfix">               
+                <div class="dataTables_paginate paging_simple_numbers float-right" id="example2_paginate">
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, @searchString = @ViewBag.SearchString }))
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

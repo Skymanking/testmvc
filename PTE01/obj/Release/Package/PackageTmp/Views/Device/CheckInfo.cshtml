@@ -1,0 +1,230 @@
+﻿@model Model.EF.Device
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+
+    Model.EF.Device detail = ViewBag.item;
+    List<Model.View.DeviceHandover1> infohandover = ViewBag.infohandover;
+    List<Model.EF.DeviceFix> infofix = ViewBag.infofix;
+
+
+}
+@section jsFooter
+{
+    <script src="/Scripts/ChangeStatusDeviceHandOver.js"></script>
+    <script>
+        $(function () {
+            $('.select2').select2()
+            $(".date1").datepicker(
+                {
+                    dateFormat: 'mm/dd/yy',
+                    changeMonth: true,
+                    changeYear: true,
+                    numberOfYears: 1,
+                    numberOfMonths: 1,
+                    yearRange: "-90:+10",
+                    onSelect: function (selectedDate) {
+                    }
+                });
+            $(".date2").datepicker();
+            $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
+            //Money Euro
+            $('[data-mask]').inputmask()
+        })
+    </script>
+}
+
+
+<div class="row">
+
+    <div class="col-md-12">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Thông tin thiết bị</h3>
+            </div>
+            <div class="card-body">
+                <div class="tab-content">
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            <div class="row">
+
+                                <div class='col-md-4 col-6'>
+                                    <label class="control-label">Tên Thiết Bị</label>
+                                    <p class="form-control">@detail.Name</p>
+
+                                </div>
+                                <div class='col-md-2 col-6'>
+                                    <label class="control-label">Model</label>
+                                    <p class="form-control">@detail.Model</p>
+                                </div>
+                                <div class='col-md-2 col-4'>
+                                    <label class="control-label">Tình trạng</label>
+                                    @switch (detail.Status)
+                                    {
+                                        case "0":  <p class="form-control">Hư hỏng < 30% </p>; break;
+                                        case "1":  <p class="form-control">Tệ nên thay 30%-60%</p>; break;
+                                        case "2":  <p class="form-control">Khá 60%-80% </p>; break;
+                                        case "3":  <p class="form-control">Tốt > 80%</p>; break;
+                                    }
+
+                                </div>
+                                <div class='col-md-2 col-4'>
+                                    <label class="control-label">Nhà SX</label>
+                                    <p class="form-control">@detail.Manufacturer</p>
+                                </div>
+                                <div class='col-md-2 col-4'>
+                                    <label class="control-label">Owner</label>
+                                    <p class="form-control">@detail.PerID</p>
+                                </div>
+                                <div class='col-md-2 col-4'>
+                                    <label class="control-label">Vị trí</label>
+                                    <p class="form-control">@detail.ItemCode</p>
+                                </div>
+                                <div class='col-md-2 col-4'>
+                                    <label class="control-label">Mục đích SD</label>
+                                    <p class="form-control">@detail.GroupDevice</p>
+                                </div>
+                                <div class='col-md-2 col-4'>
+                                    <label class="control-label">Ngày Mua</label>
+                                    @if (detail.DateofPur != null)
+                                    {
+                                        <p class="form-control">@detail.DateofPur.Value.ToString("dd/MM/yyyy")</p>
+                                    }
+                                </div>
+                                <div class='col-md-2 col-4'>
+                                    <label class="control-label">SerialCode1</label>
+                                    <p class="form-control">@detail.SerialCode1</p>
+                                </div>
+                                <div class='col-md-2 col-4'>
+                                    <label class="control-label">SerialCode2</label>
+                                    <p class="form-control">@detail.SerialCode2</p>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class='col-md-8'>
+                                    <label class="control-label">Thông tin kỹ thuật</label>
+                                    <p class="form-control">@detail.Description</p>
+                                </div>
+
+                                <div class='col-md-4'>
+                                    <label class="control-label">Ghi chú</label>
+                                    <p class="form-control">@detail.Note</p>
+                                </div>
+                            </div>
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="row">
+
+    <div class="col-md-12">
+        <div class="card card-success card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Thông tin bàn giao</h3>
+            </div>
+            <div class="card-body">
+                <div class="tab-content">
+                    @if (infohandover != null)
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Mã NV</th>
+                                        <th>Tên Nhân Viên</th>
+                                        <th>Tình trạng</th>
+                                        <th>Ngày BG</th>
+                                        <th>Status</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in infohandover)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @item.PerID
+                                            </td>
+                                            <td>@item.PerName</td>
+                                            <td>
+                                                @if (item.StatusPer == false)
+                                                {<span>đã nghỉ</span> }
+                                                         else
+                                                { <span>còn làm</span>}
+                                        </td>
+                                        <td>@item.DeliveryDate.ToString("dd/MM/yyyy")</td>
+
+                                        <td>
+                                            <a style="min-width: 30px; height: 30px; padding: 5px 5px; border: none; margin-left: 8px; margin-right: 8px; ">
+                                                @Html.Raw(item.Status ? "đang sử dụng" : " đã trả thiết bị")
+                                            </a>
+                                        </td>
+
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="row">
+
+    <div class="col-md-12">
+        <div class="card card-success card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Thông tin sửa chữa</h3>
+                <div class="card-tools">
+                    <div class="btn-group" style="height:37px">
+                        <a href="/DeviceFix/Create1/@detail.ID" data-toggle="tooltip" title="Thêm mới "><i class="fa fa-plus-circle" style="font-size: 40px; color: red"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="tab-content">
+                    @if (infofix != null)
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Người sửa</th>
+                                        <th>Ngày sửa</th>
+                                        <th>Thời gian</th>
+                                        <th>Hiện trạng</th>
+                                        <th>Ghi chú</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in infofix)
+                                    {
+                                        <tr>
+                                            <td>@item.CreateBy </td>
+                                            <td>@item.FixDate.ToString("dd/MM/yyyy")</td>
+                                            <td>@item.Time phút</td>
+                                            <td>@item.StatusQuo</td>
+                                            <td>@item.FixNote</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,331 @@
+﻿@model List<Model.EF.PTE_baocom1>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    var listDep = (List<Model.View.Dropdownlist2>)ViewBag.Linek;
+    string quahan = ViewBag.quahan;
+    var tongnhanvien = 0;
+
+}
+
+@section jsFooter
+{
+
+    <script src="/Assets/theme3/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+    <script>
+        $(function () {
+            $("#ngay1").datepicker();
+            $("#end").datepicker();
+            $("#StartDate").datepicker();
+            $("#EndDate").datepicker();
+            $('input[type="checkbox"].flat-green, input[type="radio"].flat-green').iCheck({
+                checkboxClass: 'icheckbox_flat-green',
+                radioClass: 'iradio_flat-green'
+            })
+            $('.select2').select2()
+            $('.time1').timepicker({
+                showInputs: false, Ư
+                    showMeridian: false
+            })
+            $('.time2').timepicker({
+                showInputs: false,
+                showMeridian: false
+            })
+        })
+        function GetValueModel1() {
+
+            var names = $('.parent input:checked').map(function () { return this.name; }).get();
+            $(".ketqua").text(names);
+            $(".ketqua").val(names);
+            if (names.length > 0) {
+                $(".datcom").attr("style", "display:inherit");
+                var arr = names;
+                var start1 = $('#start').val();
+                var end1 = $('#end').val();
+                var check = $('.checkall:checked').val();
+                var i = 0
+                $('#fileinput').html('');
+                if (start1 == "" || end1 == "") {
+                    alert("chưa nhập ngày");
+                    $(".datcom").attr("style", "display:none");
+                }
+                for (i = 0; i < names.length; i++) {
+                    $('#fileinput').html($('#fileinput').html() + '<input type="text" id="chuoi_' + i + '"  name="chuoi[' + i + ']" value="' + arr[i] + '"/>');
+                }
+            }
+
+            else {
+                $(".datcom").attr("style", "display:none");
+            }
+        };
+    </script>
+}
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Thông tin đặt cơm</h3>
+        <div class="card-tools">
+            <div class="btn-group" style="height:40px">
+                <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                    More
+                </button>
+                <div class="dropdown-menu float-right" role="menu">
+                    <a class="dropdown-item" href="/PTE_baocom/Report2" style="color:#000">Danh sách đã đặt</a>
+                    <a class="dropdown-item" href="/PTE_baocom/Index3" style="color:#000">Đăng ký Cơm</a>
+                    <a class="dropdown-item" href="/PTE_baocom/Index2" style="color:#000">Thay đổi Cơm</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="callout callout-info">
+
+                    <label class="control-label" style="color: #FF5722;">Bộ phận - Nhóm</label><br>
+                    <select class="form-control select2" id="dep" name="dep">
+                        <option value="0">Hãy chọn Line</option>
+                        @foreach (var item in listDep)
+                        {
+                            if (ViewBag.dep == item.ID)
+                            {
+                                <option value="@item.ID" selected>@item.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@item.ID">@item.Name</option>
+}
+
+                        }
+
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="callout callout-info">
+                    <label class="control-label" style="color: #FF5722;">Ngày</label><br>
+                    <div class="bootstrap-timepicker">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input type="text" id="ngay1" name="ngay1" class="form-control" readonly="readonly" value="@if(ViewBag.ngay1!=null){@ViewBag.ngay1}else{@DateTime.Now.ToShortDateString()}"><br>
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="callout callout-info">
+                    <label class="control-label" style="color: #FF5722;">Buổi</label><br>
+                    <div class="bootstrap-timepicker">
+                        <div class="form-group label">
+                            <select id="buoi" name="buoi" class="form-control select2">
+                                <option value="Sang">Sáng</option>
+                                <option value="Toi">Tối</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="callout callout-info">
+                    <label class="control-label" style="color: #FF5722;">Tìm theo nhân viên</label><br>
+                    <input type="text" class="form-control" id="searchString" name="Mã hoặc tên nhân viên" placeholder="Tìm kiếm" />
+                </div>
+            </div>
+
+            <div class="col-md-1">
+                <label class="control-label"></label>
+                <div class="form-group">
+                    <a class="btn btn-primary" id="inbaocao">Tìm kiếm</a>
+                </div>
+            </div>
+        </div>
+        <script>
+            $(document).ready(function () {
+
+                $("#inbaocao").hover(function () {
+                    var dep = $("#dep").val();
+                    var ngay1 = $('#ngay1').val();
+                    var buoi = $('#buoi').val();
+                    var searchString = $('#searchString').val();
+                    $('#inbaocao').attr("href", '/PTE_baocom/Index2?dep=' + dep + '&ngay1=' + ngay1 + '&buoi=' + buoi + '&searchString=' + searchString);
+
+
+                });
+            });
+
+        </script>
+    </div>
+
+
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        @if (quahan == "true")
+        {
+            <h1 style="color:red"> Đã quá hạn được chỉnh sửa thông tin cơm hãy chọn 1 ngày khác phù hợp hoặc liên hệ nhân viên Hành chính</h1>
+        }
+        <div class="card card-success card-outline">
+            <div class="card-body">
+                @using (Html.BeginForm("Edit", "PTE_baocom", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="table-responsive ">
+                        <table class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th width="30px"><input type="checkbox" class="checkall"></th>
+                                    <th>Mã nhân viên</th>
+                                    <th>Tên nhân viên</th>
+                                    <th>Bộ phận</th>
+                                    <th>Ngày</th>
+                                    <th>Món cũ</th>
+                                    <th>Món mới</th>
+                                    <th>Buổi cũ</th>
+                                    <th>Buổi mới</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model == null)
+                                {
+                                    <tr>Không có</tr>
+                                }
+                                else
+                                {
+                                    foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td class="parent">
+                                                <input type="checkbox" id="B_@item.emp_code" class="abc" name='@item.ID&&MM&&Sang' />
+                                            </td>
+                                            <td>@item.emp_code</td>
+                                            @{tongnhanvien = tongnhanvien + 1;}
+                                            <td>@item.first_name</td>
+                                            <td>@item.dep_name1</td>
+                                            <td>@item.Day1.Day/@item.Day1.Month/@item.Day1.Year</td>
+                                            <td>@item.mon</td>
+                                            <td id="@item.emp_code" class="parent1">
+                                                <select>
+                                                    <option value="MM">Món mặn</option>
+                                                    <option value="MC">Món chay</option>
+                                                    <option value="BS">Bánh sữa</option>
+                                                </select>
+                                            </td>
+                                            <td>@item.buoi</td>
+                                            <td id="A_@item.emp_code" class="pace">
+                                                <select>
+                                                    <option value="Sang">Sáng</option>
+                                                    <option value="Toi">Tối</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <script>
+                                            $(document).ready(function () {
+                                                $("#@item.emp_code").change(function () {
+                                                    var tam2 = $('#B_@item.emp_code').attr("name");
+                                                    var montemp = $('#@item.emp_code :selected').val();
+                                                    var buoitemp = $('#A_@item.emp_code :selected').val();
+
+                                                    var tam = tam2.substring(0, tam2.indexOf("&&")) + "&&" + montemp + "&&" + buoitemp;
+                                                    $('#B_@item.emp_code').attr("name", tam);
+                                                });
+                                                $("#A_@item.emp_code").change(function () {
+                                                    var tam2 = $('#B_@item.emp_code').attr("name");
+                                                    var montemp = $('#@item.emp_code :selected').val();
+                                                    var buoitemp = $('#A_@item.emp_code :selected').val();
+
+                                                    var tam = tam2.substring(0, tam2.indexOf("&&")) + "&&" + montemp + "&&" + buoitemp;
+                                                    $('#B_@item.emp_code').attr("name", tam);
+                                                });
+
+                                                $("#@item.emp_code").change(function () {
+                                                    GetValueModel1();
+                                                });
+                                                $("#A_@item.emp_code").change(function () {
+                                                    GetValueModel1();
+                                                });
+
+                                            });
+                                        </script>
+                                    }
+                                }
+                            </tbody>
+                            <tr>
+                                <td colspan="4">
+                                    <span style="font-size: 22px;">Tổng nhân viên: @tongnhanvien</span>
+                                </td>
+                            </tr>
+                        </table>
+                        @*<span class="ketqua"></span>*@
+                        <div class="suacom" style="display:none">
+                            <button type="submit" class="btn btn-primary" id="luulai">Sửa</button>
+                            <span id="fileinput" style="display:none"></span>
+
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $(".abc").change(function () {
+            GetValueModel();
+        });
+        $("#dep2").change(function () {
+            GetValueModel();
+        });
+        $("#buoi").change(function () {
+            GetValueModel();
+        });
+        $(".checkall").change(function () {
+
+            if ($('.checkall:checked').val() != undefined) {
+                $('.abc').prop('checked', 'checked');
+                $(".abc").ready(function () {
+                    GetValueModel();
+                });
+            }
+            else {
+                $('.abc').prop('checked', false);
+            }
+
+        });
+        function GetValueModel() {
+
+            var names = $('.parent input:checked').map(function () { return this.name; }).get();
+            $(".ketqua").text(names);
+            $(".ketqua").val(names);
+            if (names.length > 0) {
+                $(".suacom").attr("style", "display:inherit");
+                var arr = names;
+                var start1 = $('#start').val();
+                var end1 = $('#end').val();
+                var check = $('.checkall:checked').val();
+                var i = 0
+                $('#fileinput').html('');
+                if (start1 == "" || end1 == "") {
+                    alert("chưa nhập ngày");
+                    $(".suacom").attr("style", "display:none");
+                }
+                for (i = 0; i < names.length; i++) {
+                    $('#fileinput').html($('#fileinput').html() + '<input type="text" id="chuoi_' + i + '"  name="chuoi[' + i + ']" value="' + arr[i] + '"/>');
+                }
+            }
+
+            else {
+                $(".suacom").attr("style", "display:none");
+            }
+        };
+    });
+</script>

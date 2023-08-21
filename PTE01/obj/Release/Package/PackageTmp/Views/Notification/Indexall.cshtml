@@ -1,0 +1,105 @@
+﻿@model PagedList.IPagedList<Model.EF.Notification1>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+
+}
+@section jsFooter
+{
+    <script src="/Scripts/ReadedNotification.js"></script>
+    <script src="~/Scripts/ChangeStatusNotification.js"></script>
+    <script src="~/Scripts/NotificationReadAll.js"></script>
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-success card-outline">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fa fa-clipboard"></i>Notification</h3>
+                <div class="card-tools">
+                    <div class="btn-group" style="height:40px">
+                        <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                            More
+                        </button>
+                        <div class="dropdown-menu float-right" role="menu">
+                            <a class="dropdown-item btn-readall" data-id="0"><i class="fa fa-envelope-open-o"></i>  Mark All as Read</a>
+                        </div>
+                    </div>
+                    <div style="float:left">
+                        @using (Html.BeginForm("Indexall", "Notification", FormMethod.Get))
+                        {
+                            <div class="input-group " style="width: 200px;">
+                                <input type="text" value="@ViewBag.SearchString" name="searchString" class="form-control float-right" placeholder="tìm kiếm">
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+
+                <div class="table-responsive" style="overflow:inherit">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th width="70px">Icon</th>
+                                @*<th width="100px">Date</th>*@
+                                <th>Subject</th>
+                                <th>Detail</th>
+                                <th width="70px">Delete</th>
+                                <th width="70px">View</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                if (item.Readed == false)
+                                {
+                                    <tr class="dong" style="border-left: 6px solid green;">
+                                        <td>
+                                            @if (item.Type == 1)
+                                            {<img src="~/Assets/theme3/dist/img/not01.png" style="width: 48px;" />}
+                                            @if (item.Type == 2)
+                                            {<img src="~/Assets/theme3/dist/img/not02.png" style="width: 48px;" />}
+                                            @if (item.Type == 3)
+                                            {<img src="~/Assets/theme3/dist/img/not03.png" style="width: 48px;" />}
+                                            @if (item.Type == 4)
+                                            {<img src="~/Assets/theme3/dist/img/not04.png" style="width: 48px;" />}
+                                            @if (item.Type == 5)
+                                            {<img src="~/Assets/theme3/dist/img/not05.png" style="width: 48px;" />}
+                                        </td>
+                                        @*<td style="font-size: 14px;">@item.CreateDate</td>*@
+                                        <td><a href="@item.LinkAct" class="btn-approval" data-id="@item.ID" data-link="@item.LinkAct" style="font-weight: bold; color: black;">@item.Subject <p style="font-size: 14px; font-weight:normal">@item.CreateDate</p></a> </td>
+                                        <td><a href="@item.LinkAct" class="btn-approval" data-id="@item.ID" data-link="@item.LinkAct" style="color: #343a40;">@item.Detail</a> </td>
+                                        <td><a class="btn-delete" data-id="@item.ID"><img src="~/Assets/theme3/dist/img/base-delete.png" style="width: 48px;" /></a></td>
+                                        <td><a href="@item.LinkAct" class="btn-approval" data-id="@item.ID" data-link="@item.LinkAct"><img src="~/Assets/theme3/dist/img/base-view.png" style="width: 48px;" /></a> </td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr class="dong" style="border-left: 6px solid green; background: #999">
+                                        <td>
+                                            @if (item.Type == 1)
+                                            {<img src="~/Assets/theme3/dist/img/not01.png" style="width: 48px;" />}
+                                            @if (item.Type == 2)
+                                            {<img src="~/Assets/theme3/dist/img/not02.png" style="width: 48px;" />}
+                                            @if (item.Type == 3)
+                                            {<img src="~/Assets/theme3/dist/img/not03.png" style="width: 48px;" />}
+                                        </td>
+                                        @*<td style="font-size: 14px;">@item.CreateDate</td>*@
+                                        <td><a href="@item.LinkAct" class="btn-approval" data-id="@item.ID" data-link="@item.LinkAct" style="font-weight: bold; color: black;">@item.Subject <p style="font-size: 14px; font-weight:normal">@item.CreateDate</p></a> </td>
+                                        <td><a href="@item.LinkAct" class="btn-approval" data-id="@item.ID" data-link="@item.LinkAct" style="color: #343a40;">@item.Detail</a> </td>
+                                        <td><a class="btn-delete" data-id="@item.ID"><img src="~/Assets/theme3/dist/img/base-delete.png" style="width: 48px;" /></a></td>
+                                        <td><a href="@item.LinkAct" class="btn-approval" data-id="@item.ID" data-link="@item.LinkAct"><img src="~/Assets/theme3/dist/img/base-view.png" style="width: 48px;" /></a> </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

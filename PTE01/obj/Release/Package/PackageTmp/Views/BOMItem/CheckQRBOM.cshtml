@@ -1,0 +1,249 @@
+﻿@model Model.View.FullBOM
+
+@{
+    ViewBag.Title = "CheckQRBOM";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    var i = 0;
+    var lenght = Model.detail.Count();
+    bool permissionEdited = ViewBag.permissionEdited;
+    string loginUser = ViewBag.loginUser;
+    List<Model.EF3.SI_Items> listT = ViewBag.listtemp;
+    List<SelectListItem> listVT = new List<SelectListItem>();
+
+    List<Model.EF.WorkCenter> temp1 = ViewBag.WorkCenter;
+    List<SelectListItem> listCenter = new List<SelectListItem>();
+    listCenter.Add(new SelectListItem
+    {
+        Text = "chưa chọn",
+        Value = "NULL",
+        Selected = true
+    });
+    foreach (var item in temp1)
+    {
+        listCenter.Add(new SelectListItem
+        {
+            Text = item.Name,
+            Value = item.ID,
+        });
+    }
+
+    List<SelectListItem> listBOMType = new List<SelectListItem>();
+    listBOMType.Add(new SelectListItem
+    {
+        Text = "Chuẩn",
+        Value = "chuan",
+        Selected = true
+    });
+    listBOMType.Add(new SelectListItem
+    {
+        Text = "Báo Giá",
+        Value = "baogia",
+    });
+    listBOMType.Add(new SelectListItem
+    {
+        Text = "Sản Xuất",
+        Value = "sanxuat",
+    });
+    List<SelectListItem> listType = new List<SelectListItem>();
+    listType.Add(new SelectListItem
+    {
+        Text = "Trên 1 SP",
+        Value = "unit",
+    });
+    listType.Add(new SelectListItem
+    {
+        Text = "Trên 1 Lô",
+        Value = "lot",
+    });
+
+
+
+}
+@section jsFooter
+{
+    <script src="/Scripts/FindNameVT.js"></script>
+    <script>
+        $(function () {
+
+            $('input[type="checkbox"].flat-green, input[type="radio"].flat-green').iCheck({
+                checkboxClass: 'icheckbox_flat-green',
+                radioClass: 'iradio_flat-green'
+            })
+            $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+                checkboxClass: 'icheckbox_flat-red',
+                radioClass: 'iradio_flat-red'
+            })
+        })
+    </script>
+    <style>
+        input, label {
+            vertical-align: middle;
+        }
+
+        .qrcode-text {
+            padding-right: 1.7em;
+            margin-right: 0;
+            width: 95%
+        }
+
+        .qrcode-text-btn {
+            display: inline-block;
+            background: url(/Assets/theme3/dist/img/qr_icon.svg) 50% 50% no-repeat;
+            height: 30px;
+            width: 30px;
+            margin-left: -40px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+            .qrcode-text-btn > input[type=file] {
+                position: absolute;
+                overflow: hidden;
+                width: 1px;
+                height: 1px;
+                opacity: 0;
+            }
+        .materialcode {
+            background-color: red;
+        }
+    </style>
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Thông tin BOM</h3>
+            </div>
+            <div class="card-body">
+                <div class="tab-content">
+                    @using (Html.BeginForm("Edit", "BOMItem", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                        <div class="col-12">
+                            <div class="row">
+
+                                <div style="display:none">  @Html.TextBoxFor(model => model.item.ID, new { @class = "form-control", @readonly = "true" })</div>
+                                <div class='col-md-6 col-12' data-toggle="tooltip" title="Người chỉnh sửa: @Model.item.ModifyBy - vào lúc: @Model.item.ModifyDate.ToString("dd/MM/yyyy")">
+                                    <label class="control-label">Mã Sản Phẩm</label>
+                                    @Html.TextBoxFor(model => model.item.IDItem, new { @class = "form-control", @readonly = "true" })
+                                </div>
+
+                                <div class='col-md-6 col-12'>
+                                    <label class="control-label">Chọn Máy Sản Xuất</label>
+                                    @Html.DropDownListFor(model => model.item.IDMachine, listCenter, new { @class = "form-control" })
+                                </div>
+                                <label class="control-label">Danh sách Item</label>
+                                <div class="col-md-12">
+                                    <table class="table table-striped table-bordered table-hover" id="gvCustomers">
+                                        <thead>
+                                            <tr>
+                                                <th>Thông tin VT</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.detail)
+                                            {
+                                                i = i + 1;
+                                                <tr id="dong_@(i)">
+                                                    <td width="170px" data-toggle="tooltip" id="fileinput@(i)">
+                                                        <div class="row">
+                                                            <div class="col-md-8 col-8">
+                                                                <input id="item@(i)" value="@item.ItemID" type="text" class="form-control materialcode" style="background-color:aliceblue" readonly />
+                                                            </div>
+                                                                <div class="row col-md-4 col-4" @*style="padding-left:10px;"*@>
+                                                                    <input id="tenvt@(i)" type="text" size=16 class="qrcode-text form-control change" style="background: transparent; border:none">
+                                                                    <label class=qrcode-text-btn>
+                                                                        <input type=file accept=" image />*" capture=environment onchange="openQRCamera(this);" tabindex=-1 class="form-control">
+
+                                                                    </label>
+                                                                </div>
+                                                            <div class="col-md-12 col-12">
+                                                                <input class="form-control" value="@item.MaterialName" readonly />
+                                                            </div>
+                                                        </div>
+                                                    </td>
+
+
+                                                </tr>
+                                                <script>
+                                                    setInterval(function () {
+                                                        var item@(i) = $("input[id=item@(i)]").val();
+                                                        var temp@(i) = item@(i);
+                                                        var val@(i) = $("input[id=tenvt@(i)]").val();
+                                                        if (temp@(i) === val@(i)) {
+                                                            var qrcode@(i) = $("input[id=tenvt@(i)]").val();
+                                                            if (item@(i) == qrcode@(i)) {
+                                                                $("#fileinput@(i)").find("span").remove();
+                                                                $("#fileinput@(i)").val("");
+                                                                $("#tenvt@(i)").val("");
+                                                                $("#item@(i)").css("background-color", "#007bff");
+                                                            }
+
+                                                        }
+                                                        else {
+                                                            if (val@(i) != '') {
+                                                                $("#fileinput@(i)").find("span").remove();
+
+                                                                $("#fileinput@(i)").val("");
+                                                                $("#tenvt@(i)").val("");
+                                                                $("#item@(i)").css("background-color", "#dc3545");
+                                                            }
+                                                        }
+                                                    }, 100);
+                                                </script>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <script>
+                                    $(document).ready(function () {
+                                        $(window).keydown(function (event) {
+                                            if (event.keyCode == 13) {
+                                                event.preventDefault();
+                                                return false;
+                                            }
+                                        });
+                                    });
+                                </script>
+
+
+
+                            </div>
+                        </div>
+                        <!--------------------------fd-------End------------------------------------>
+                        if (permissionEdited == true)
+                        {
+
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">Lưu thông tin</button>
+                                <a href="/BOMItem/Copy/@Model.item.ID" class="btn btn-danger float-right">Copy BOM</a>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/qr_packed.js"></script>
+
+<script>
+    function openQRCamera(node) {
+        var reader = new FileReader();
+        reader.onload = function () {
+            node.value = "";
+            qrcode.callback = function (res) {
+                if (res instanceof Error) {
+                    alert("Không tìm thấy QR Code. Hãy thử lại và canh chỉnh camera nhìn rõ nét QR Code cần quét.");
+                } else {
+                    node.parentNode.previousElementSibling.value = res;
+                }
+            };
+            qrcode.decode(reader.result);
+        };
+        reader.readAsDataURL(node.files[0]);
+    }
+</script>

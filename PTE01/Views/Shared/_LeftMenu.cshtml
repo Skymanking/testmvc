@@ -1,0 +1,135 @@
+﻿<div class="sidebar-nav navbar-collapse">
+    <ul class="nav" id="side-menu">
+        <li class="logosidebar">
+            <a href="#"></a>
+        </li>
+        <li><a href="#"><i class="fa fa-dashboard fa-fw"></i>Mua Vật Tư<span class="fa arrow"></span></a>
+        <ul class="nav nav-second-level">
+            <li>
+                <a href="~/ProposalToBuy/index"><i class="fa fa-dashboard fa-fw"></i> Đề Nghị Mua Vật Tư<span class="fa arrow"></span></a> 
+            </li>
+            <li>
+                <a href="~/ProposalToBuy/buy"><i class="fa fa-dashboard fa-fw"></i> Vật Tư Cần Mua<span class="fa arrow"></span></a>
+            </li>
+            <li>
+                <a id="waitimport" href="~/ProposalToBuy/WaitImport?ngay="><i class="fa fa-dashboard fa-fw"></i> Vật Tư Sắp Về<span class="fa arrow"></span></a>
+            </li>
+            <script>
+                $(document).ready(function () {
+                    var today = new Date();
+                    $('#waitimport').attr("href", "../../ProposalToBuy/WaitImport?ngay=" + (today.getMonth()+1) + "-" + today.getDate() + "-" + today.getFullYear());
+                  
+                });
+            </script>
+
+            <li>
+                <a href="~/ProposalToBuy/reportbuy"><i class="fa fa-dashboard fa-fw"></i> Tiến Độ Mua Hàng<span class="fa arrow"></span></a>
+            </li>
+            <li>
+                <a href="~/Itemprice"><i class="fa fa-dashboard fa-fw"></i> Giá Sản Phẩm<span class="fa arrow"></span></a>
+            </li>
+            <li>
+                <a href="~/Vendor"><i class="fa fa-dashboard fa-fw"></i> Nhà Cung Cấp<span class="fa arrow"></span></a>
+            </li>
+        </ul>                              
+        </li>
+
+
+        <li>
+            <a href="~/FixRequest/Index"><i class="fa fa-dashboard fa-fw"></i>Sửa Chữa Thiết Bị<span class="fa arrow"></span></a>
+        </li>
+        
+        <li>
+            <a href="#"><i class="fa fa-dashboard fa-fw"></i>Cuộc Họp<span class="fa arrow"></span></a>
+            <ul class="nav nav-second-level">
+                <li>
+                    <a href="~/Meeting/index"><i class="fa fa-dashboard fa-fw"></i>Thông tin cuộc họp<span class="fa arrow"></span></a>
+                </li>
+                <li>
+                    <a href="~/Meeting/IndexMinutesMeeting"><i class="fa fa-dashboard fa-fw"></i>Biên Bản Họp<span class="fa arrow"></span></a>
+                </li>
+                <li>
+                    <a href="~/Meeting/MeetingRoom/1"><i class="fa fa-dashboard fa-fw"></i> Thông tin phòng họp<span class="fa arrow"></span></a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="#"><i class="fa fa-dashboard fa-fw"></i>Sản Xuất<span class="fa arrow"></span></a>
+            <ul class="nav nav-second-level">
+                <li>
+                    <a href="~/Product/index"><i class="fa fa-dashboard fa-fw"></i>Thông tin Sản Phẩm<span class="fa arrow"></span></a>
+                </li>
+                <li>
+                    <a href="~/BOMItem/index"><i class="fa fa-dashboard fa-fw"></i>BOM Sản Xuất<span class="fa arrow"></span></a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="~/User/Index"><i class="fa fa-dashboard fa-fw"></i> Người dùng<span class="fa arrow"></span></a>
+        </li>
+        <li>
+            <a href="#"><i class="fa fa-dashboard fa-fw"></i>Khảo Sát/ Đánh Giá/ Góp Ý<span class="fa arrow"></span></a>
+            <ul class="nav nav-second-level">
+                <li>
+                    <a href="~/MMRate/Index"><i class="fa fa-dashboard fa-fw"></i>Đánh Giá MM<span class="fa arrow"></span></a>
+                </li>
+                <li>
+                    <a href="~/AllRate/Index"><i class="fa fa-dashboard fa-fw"></i>Khảo Sát Nhân Viên<span class="fa arrow"></span></a>
+                </li>
+                <li>
+                    <a href="~/Comment/Index"><i class="fa fa-dashboard fa-fw"></i>Phản Ánh / Góp Ý<span class="fa arrow"></span></a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="#"><i class="fa fa-dashboard fa-fw"></i>Đào Tạo<span class="fa arrow"></span></a>
+            <ul class="nav nav-second-level">
+                <li>
+                    <a href="~/Document/Index"><i class="fa fa-dashboard fa-fw"></i>Tài liệu<span class="fa arrow"></span></a>
+                </li>
+                <li>
+                    <a href="~/DoTestQuestion/Index"><i class="fa fa-dashboard fa-fw"></i>Làm Trắc Nghiệm<span class="fa arrow"></span></a>
+                </li>
+                <li>
+                    <a href="~/Dictionary/Index"><i class="fa fa-dashboard fa-fw"></i>Từ Điển Kinh Nghiệm<span class="fa arrow"></span></a>
+                </li>
+                <li>
+                    <a href="~/Dictionary/Index2"><i class="fa fa-dashboard fa-fw"></i>Từ Điển Kiến Thức<span class="fa arrow"></span></a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="#"><i class="fa fa-dashboard fa-fw"></i>Quản Lý Nhân Sự<span class="fa arrow"></span></a>
+            <ul class="nav nav-second-level">
+                <li>
+                    <a href="~/Personal/DashBroad"><i class="fa fa-dashboard fa-fw"></i>DashBroad<span class="fa arrow"></span></a>
+                </li>
+                <li>
+                    <a href="~/Personal/Index"><i class="fa fa-dashboard fa-fw"></i>Thông Tin Nhân Viên<span class="fa arrow"></span></a>
+                </li>
+                <li>
+                    <a href="~/HDLD/Nofication"><i class="fa fa-dashboard fa-fw"></i>Hợp Đồng Lao Động<span class="fa arrow"></span></a>
+                </li>
+                <li>
+                    <a href="~/ProposalRecruitment/Index"><i class="fa fa-dashboard fa-fw"></i>Yêu Cầu Tuyển Dụng<span class="fa arrow"></span></a>
+                </li>
+                <li>
+                    <a href="~/Candidate/Index"><i class="fa fa-dashboard fa-fw"></i>Thông Tin Ứng Viên<span class="fa arrow"></span></a>
+                </li>
+                <li>
+                    <a href="~/ProposalLeave/Index"><i class="fa fa-dashboard fa-fw"></i>Xin Nghỉ Phép<span class="fa arrow"></span></a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="#"><i class="fa fa-dashboard fa-fw"></i>Công Cụ<span class="fa arrow"></span></a>
+            <ul class="nav nav-second-level">
+                <li>
+                    <a href="~/Task/Index"><i class="fa fa-dashboard fa-fw"></i>Nhiệm Vụ<span class="fa arrow"></span></a>
+                </li>
+
+            </ul>
+        </li>
+            
+    </ul>
+</div>

@@ -1,0 +1,398 @@
+﻿@model Model.EF.FullWareHouse
+@{
+    ViewBag.Title = "CreateNoQR";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    var listW = (List<Model.EF.Warehouse>)ViewBag.ListW;
+    var listL = (List<Model.EF.WHLocation>)ViewBag.ListLocation;
+    var ListLot = (List<Model.EF.WHLot>)ViewBag.ListLot;
+    var i = 0;
+    List<SelectListItem> listVT = new List<SelectListItem>();
+    List<SelectListItem> listLocation = new List<SelectListItem>();
+    var kho = new List<SelectListItem>();
+    var location = new List<SelectListItem>();
+
+    foreach (var item in listW)
+    {
+        kho.Add(new SelectListItem
+        {
+            Text = item.Name,
+            Value = item.ID.ToString(),
+        });
+    }
+    foreach (var item in listL)
+    {
+        listLocation.Add(new SelectListItem
+        {
+            Text = item.Name,
+            Value = item.ID.ToString(),
+        });
+    }
+    var ListLo = new List<SelectListItem>();
+    ListLo.Add(new SelectListItem
+    {
+        Text = "Không áp dụng",
+        Value = "",
+        Selected = true,
+    });
+    ListLo.Add(new SelectListItem
+    {
+        Text = "Lô mới",
+        Value = "Null",
+    });
+
+    foreach (var lot in ListLot)
+    {
+        if (lot.ID == "NoLot")
+        {
+        }
+        else
+        {
+            ListLo.Add(new SelectListItem
+            {
+                Text = lot.ID,
+                Value = lot.ID,
+            });
+        }
+    }
+
+    List<SelectListItem> Loaiphieu = new List<SelectListItem>();
+    Loaiphieu.Add(new SelectListItem
+    {
+        Text = "Nhập Nội Bộ",
+        Value = "1",
+    });
+    Loaiphieu.Add(new SelectListItem
+    {
+        Text = "Xuất Nội Bộ",
+        Value = "0",
+    });
+
+    List<Model.View.Dropdownlist2> cUser = ViewBag.cUser;
+    List<SelectListItem> listUser = new List<SelectListItem>();
+    listUser.Add(new SelectListItem
+    {
+        Text = "chưa chọn",
+        Value = "",
+    });
+    foreach (var item in cUser)
+    {
+        listUser.Add(new SelectListItem
+        {
+            Text = item.Name,
+            Value = item.ID,
+        });
+    }
+}
+@section jsFooter
+{
+    <script src="/Assets/theme3/plugins/ionslider/ion.rangeSlider.min.js"></script>
+    <script src="/Assets/plugin/ckfinder/ckfinder.js"></script>
+    <script src="/Assets/theme3/plugins/datepicker/js/bootstrap-datetimepicker.js"></script>
+    <script src="/Assets/theme3/plugins/datepicker/js/locales/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
+    <!-- Bootstrap slider -->
+    <script src="/Assets/theme3/plugins/bootstrap-slider/bootstrap-slider.js"></script>
+    <script>
+        $(function () {
+            $('.form_datetime').datetimepicker({
+                format: 'mm/dd/yyyy hh:ii',
+                todayBtn: 1,
+                autoclose: 1,
+                todayHighlight: 1,
+                startDate: new Date,
+            });
+            $('.select2').select2()
+
+        })
+    </script>
+    <script>
+        $(function () {
+
+            $('input[type="checkbox"].flat-green, input[type="radio"].flat-green').iCheck({
+                checkboxClass: 'icheckbox_flat-green',
+                radioClass: 'iradio_flat-green'
+            })
+            $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+                checkboxClass: 'icheckbox_flat-red',
+                radioClass: 'iradio_flat-red'
+            })
+        })
+        function selectElement(id, valueToSelect) {
+            let element = document.getElementById(id);
+            element.value = valueToSelect;
+        }
+
+        selectElement('location', '');
+    </script>
+
+    <script src="/Scripts/FindNameNoQR.js"></script>
+    <script src="/Scripts/FindLocation.js"></script>
+    <script src="~/Scripts/FindLot.js"></script>
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
+<div class="card card-primary">
+    <div class="card-header">
+        <a href="~/Warehouse/WMS"><img src="~/Assets/theme3/dist/img/home6.png" style="width: 48px; float: left; margin: -10px 10px -10px -10px; " /></a>  <h3 class="card-title">Tạo Mới Phiếu Nhập/Xuất Vật Tư</h3>
+    </div>
+    @using (Html.BeginForm("Create4", "WarehouseTransaction", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row" style="padding-bottom: 15px;">
+                        <div class="col-md-6">
+                            <label class="control-label">Lý do</label>
+                            @Html.TextBoxFor(model => model.item.Name, new { @class = "form-control", @ID = "name" })
+                        </div>
+
+                        <div class="col-md-2">
+                            <label class="control-label">Loại phiếu</label>
+                            @Html.DropDownListFor(model => model.item.Type, Loaiphieu, new { @class = "form-control select2", @style = "width: 100%;", @ID = "type" })
+                        </div>
+                        <div class="col-md-2">
+                            <label class="control-label">Người nhận</label><br>
+                            @Html.DropDownListFor(model => model.item.Receiver, listUser, new { @class = "form-control select2" })
+                        </div>
+                        <div class="col-md-2">
+                            <label>Ngày nhập</label>
+                            <div class="input-group date form_datetime" data-link-field="item.LimitedDate">
+                                <input class="form-control" id="item_LimitedDate" name="item.LimitedDate" type="text" value="@DateTime.Now.Date" readonly>
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                </div>
+                            </div>
+                            <input type="hidden" id="item_LimitedDate" name="item.LimitedDate" value="@DateTime.Now" /><br />
+                        </div>
+                    </div>
+                    <div class="row" style="background: #fbd0d4; padding-bottom: 15px;">
+                        <div class="col-md-2 col-6">
+                            <label class="control-label">Kho<span style="font-weight:bold;color:red">*</span></label>
+                            <div class="form-group">
+                                @Html.DropDownListFor(model => model.item.IDWH, kho, new { @class = "form-control", @style = "width: 100%;", @ID = "kho" })
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-2">
+                            <label class="control-label">Tìm vật tư</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control tenvt" id="tenvt" placeholder="chỉ hiện 20 kết quả gần giống nhất">
+                                <div class="input-group-append btnFindVT" id="btnFindVT">
+                                    <span class="btn btn-default"><i class="fa fa-search"></i></span>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class=" col-md-6">
+                            <label class="control-label">Chọn vật tư</label>
+                            <div class='input-group'>
+
+                                @Html.DropDownList("abc", listVT, new { @class = "form-control", @ID = "abc" })
+                                @*<div class="input-group-append" id="btnAddVT2">
+                                        <span class="btn btn-default"><i class="fa fa-cart-plus"></i></span>
+                                    </div>*@
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-6">
+                            <label class="control-label">Chọn Location<span style="font-weight:bold;color:red">*</span></label>
+                            <div class="form-group">
+                                @Html.DropDownListFor(model => model.item.IDWH, listLocation, new { @class = "form-control", @style = "width: 100%;" })
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <center>
+                                <span id="btnAdvance" style="color: #007bff; font-weight: bold;">Hiển thị thông tin mở rộng (Số Lô, số PO, số PR...)</span>
+                            </center>
+                        </div>
+
+                    </div>
+                    <div class="row" style="padding-bottom: 15px; display:none" id="Advance">
+                        <div class="col-md-2 col-6">
+                            <label class="control-label col-md-12">Số Yêu Cầu Mua </label>
+                            @Html.TextBoxFor(model => model.item.PoNum, new { @class = "form-control", @ID = "PoNum" })
+                        </div>
+                        <div class="col-md-2 col-6">
+                            <label class="control-label col-md-12">Số Yêu Cầu Xuất</label>
+                            @Html.TextBoxFor(model => model.item.RelatedNum, new { @class = "form-control", @ID = "RelatedNum" })
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <label class="control-label col-md-12">Số lô<span style="font-weight:bold;color:red">*</span></label>
+                            <div class="form-group">
+
+                                <select id="IDLot" class="form-control select2 IDLot" style="width:100%">
+                                    @foreach (var lot in ListLo)
+                                    {
+                                        <option value="@lot.Value">@lot.Text</option>
+
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <script>
+                            $(document).ready(function () {
+                                $("#IDLot").change(function () {
+                                    var LotID = $("#IDLot option:selected").val();
+                                    if (LotID == "Null") {
+                                        $("#solot01").show();
+                                        $("#solot02").show();
+                                    }
+                                    else {
+                                        $("#solot01").hide();
+                                        $("#solot02").hide();
+                                    }
+                                })
+                                var display = false;
+                                $("#btnAdvance").click(function () {
+                                    if (display == false) {
+                                        $("#Advance").show();
+                                        $("#btnAdvance").text('Ẩn thông tin mở rộng (Số Lô, số PO, số PR...)');
+                                        display = true;
+                                    }
+                                    else {
+                                        $("#Advance").hide();
+                                        $("#btnAdvance").text('Hiển thị thông tin mở rộng (Số Lô, số PO, số PR...)');
+                                        display = false;
+                                    }
+                                })
+                            });
+                        </script>
+                        <div class="col-md-3 col-6" id="solot01" style="display:none">
+                            <label class="control-label col-md-12">Số lô NCC</label>
+                            @Html.TextBoxFor(model => model.item.IDLot, new { @class = "form-control", @style = "width: 100%;", @ID = "LotNCC" })
+                        </div>
+                        <div class="col-md-2 col-6" id="solot02" style="display:none">
+                            <label>Ngày hết hạn</label>
+                            <div class="input-group date form_datetime" data-link-field="item.LimitedDate">
+                                <input class="form-control" id="dateLot" type="text" value="@DateTime.Now.Date" readonly>
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <center>
+                        <span id="btnAddVT"><span style="font-size: 20px; font-weight: bold; color: #dc3545;">Add Row</span> <img src="~/Assets/theme3/dist/img/table_row_add_after.png" style="padding: 10px 10px 0 10px; width: 80px;" /></span>
+                    </center>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="gvCustomers">
+                        <thead>
+                            <tr>
+                                <th style="width:50px">Xóa</th>
+                                <th style="min-width: 140px; ">Item</th>
+                                <th style="min-width:300px">Tên Item</th>
+                                <th style="min-width: 110px;">Số lượng</th>
+                                <th style="min-width: 80px;">ĐVT</th>
+                                <th style="min-width: 300px">Ghi chú</th>
+                                <th style="min-width: 150px; ">Vị trí</th>
+                                <th style="min-width: 150px;">Số Yêu Cầu Mua</th>
+                                <th style="min-width: 150px;">Số Lô NCC</th>
+                                <th style="min-width: 150px;">Số Lô</th>
+                                <th style="min-width: 150px;">HSD</th>
+                                <th style="min-width: 150px;">Số Yêu Cầu Xuất</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody></tbody>
+                    </table>
+                    <script>
+                        var count = $('#gvCustomers tr').length - 1;
+                        var Namelocation = "";
+                        $(document).ready(function () {
+                            function addRowVT() {
+                                const myArray = $("#abc option:selected").text().split(":");
+                                var location = $("#item_IDWH").val();
+                                var PoNum = $("#PoNum").val();
+                                var RelatedNum = $("#RelatedNum").val();
+                                var IDLot = $("#IDLot option:selected").val();
+                                var dateLot = $("#dateLot").val();
+                                var LotNCC = $("#LotNCC").val();
+                                if (IDLot != "Null") {
+                                    dateLot = "";
+                                }
+                                if ($("#abc").val() != null && (location != "")) {
+
+                                    var html =
+                                        '<tr id="dong_' + (count + 1) + '">' +
+                                        '<td> <button type="button" data-sodong="' + (count + 1) + '" class="xoadongR"style="color: red; width: 30px; height: 30px; border-radius: 50%;"><span class="fa fa-trash"></span></button></td>' +
+                                        '<td> <input style="background: transparent; border:none" class="form-control" data-val="true" style="width:130px;float:left;" readonly = "true" id="detail_' + count + '__MaterialCode" name="detail[' + count + '].MaterialCode" type="text" value="' + myArray[0] + '"></td>' +
+                                        '<td><input style="background: transparent; border:none" class="form-control" data-val="true"  style="width:300px;float:left;" readonly = "true" id="detail_' + count + '__MaterialName" name="detail[' + count + '].MaterialName"  type="text" value="' + myArray[1] + '"></td>' +
+                                        '<td><input class="form-control" data-val="true" style="width:90px;float:left; background:#f798c4"type="number" id="detail_' + count + '__Amount" name="detail[' + count + '].Amount" placeholder="số lượng" type="number" value="1" min ="1"> </td>' +
+                                        '<td><input class="form-control" data-val="tru e" style="width:50px;float:left; background: transparent; border:none" readonly = "true" id="detail_' + count + '__MaterialUnit" name="detail[' + count + '].MaterialUnit" type="text" value="' + myArray[4] + '"></td>' +
+
+                                        '<td><input class="form-control style="width:300px;float:left;" id="detail_' + count + '__Note" name="detail[' + count + '].Note"  placeholder="ghi chú" type="text" ></td></td>' +
+                                        '<td><input style="background: transparent; border:none" class="form-control" data-val="true" style="width:300px;float:left;" readonly = "true"  id="detail_' + count + '__IDLocation" name="detail[' + count + '].IDLocation" placeholder="vị trí" type="hidden" value="' + location + '">' +
+                                        '<input style="background: transparent; border:none" class="form-control" data-val="true" style="width:300px;float:left;" readonly = "true"  placeholder="vị trí" type="text" value="' + location + ':' + myArray[6] + '"></td>' +
+                                        '<td><input style="background: transparent; border:none" class="form-control" data-val="true"  style="width:100%;float:left;" readonly = "true" id="detail_' + count + '__PoNum" name="detail[' + count + '].PoNum"  type="text" value="' + PoNum + '"></td>' +
+                                        '<input class="form-control" data-val="true"  style="width:50%;float:left;" readonly = "true" id="detail_' + count + '__IDLot" name="detail[' + count + '].IDLot"  type="hidden" value="' + IDLot + '$' + dateLot + '$' + LotNCC + '">' +
+                                        '<td><input style="background: transparent; border:none" class="form-control" data-val="true"  style="width:100%;float:left;" readonly = "true"  type="text" value="' + LotNCC + '"></td>' +
+                                        '<td><input style="background: transparent; border:none" class="form-control" data-val="true"  style="width:100%;float:left;" readonly = "true"  type="text" value="' + IDLot + '"></td>' +
+
+                                        '<td><input style="background: transparent; border:none" class="form-control" data-val="true"  style="width:100%;float:left;" readonly = "true"  type="text" value="' + dateLot + '"></td>' +
+                                        '<td><input style="background: transparent; border:none" class="form-control" data-val="true"  style="width:100%;float:left;" readonly = "true" id="detail_' + count + '__RelatedNum" name="detail[' + count + '].RelatedNum"  type="text" value="' + RelatedNum + '"></td>' +
+
+                                        '</tr>'
+
+                                    count = count + 1;
+
+                                    $(html).appendTo($("#gvCustomers"))
+                                }
+                            };
+                            $("#btnAddVT").click(addRowVT);
+
+                            $('.table tbody').on('click', '.xoadongR', function () {
+
+                                var sodong = $(this).attr("data-sodong") - 1;
+                                $('#detail_' + sodong + '__ItemID').attr("value", "");
+                                $(this).closest('tr').hide();
+
+
+                            });
+
+
+                        });
+                    </script>
+                </div>
+
+            </div>
+            <div class="datcom d-flex justify-content-center" @*style="display:none"*@>
+                <button type="submit" class="btn btn-primary" id="luulai">Lưu thông tin</button>
+                <span id="fileinput" style="display:none"></span>
+            </div>
+
+        </div>
+    }
+</div>
+<script>
+    $(document).ready(function () {
+        $("form").on('submit', function (e) {
+            var start1 = $('#item_LimitedDate').val();
+            var name = $('#name').val();
+            if (count == 0 || start1 == "" || name == "") {
+                alert("Chưa nhập đủ thông tin");
+                return false;
+            }
+            else {
+                return true;
+            }
+        });
+    });
+</script>

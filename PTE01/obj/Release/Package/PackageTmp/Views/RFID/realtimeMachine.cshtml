@@ -1,0 +1,301 @@
+﻿@{
+    ViewBag.Title = "realtimeMachine";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+}
+
+
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Trạng thái Máy</h3>
+        <div class="card-tools">
+            <div class="btn-group" style="height:40px">
+                <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                    More
+                </button>
+                <div class="dropdown-menu float-right" role="menu">
+                    <a class="dropdown-item" href="#" style="color:#000"></a>
+                    <a class="dropdown-item" href="#" style="color:#000"></a>
+                    <a class="dropdown-item" href="#" style="color:#000"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("Report2", "PTE_baocom", FormMethod.Get))
+        {
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label" style="color: #FF5722;">Tìm kiếm</label><br>
+                        <input type="text" class="form-control" id="searchString" name="searchString" placeholder="Tìm kiếm" />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="control-label">Chọn Line</label><br>
+                    <select class="form-control select2" id="dep" name="dep">
+                        <option value="">Line 1-1</option>
+                        <option value="">Line 1-2</option>
+
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="control-label">Chọn Hồ</label><br>
+                    <select class="form-control select2" id="dep" name="dep">
+                        <option value="">Hồ Xi</option>
+                        <option value="">Hồ ...</option>
+
+                    </select>
+                </div>
+
+                <div class="col-md-3 text-center">
+                    <label></label>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i>Tìm kiếm</button>
+                    </div>
+                </div>
+            </div>
+        }
+        <script src="~/Scripts/jquery-1.9.1.min.js"></script>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-success card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fa fa-clipboard"></i> <span id="sokq" style="color:red;font-weight:bold;"></span> Kết quả</h3>
+                        <div class="card-tools">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-10" style="height: 200px; border: 15px solid #28a745; padding-left: 0; padding-right: 0; padding-top: 0;">
+                        <div class="row" style=" padding-top: 0px">
+                            <div style="text-align: center; font-size: 20px; color: #f8f9fa; background-color: #28a745; " class="col-md-6">
+                                Máy 1
+                            </div>
+                            <div style="text-align: center; font-size: 20px; color: #f8f9fa; background-color: #28a745; " class="col-md-6">
+                                Sản phẩm 1
+                            </div>
+                        </div>
+                        <div class="row" style="height: 150px; ">
+                            <div class="col-md-4">
+                                <div id="chart_div_0" style="height: 70%; " class="d-flex justify-content-center"></div>
+                            </div>
+                            <div class="col-md-4 ">
+                                <div id="chart_div_1" style="height:70%" class="d-flex justify-content-center"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div id="chart_div_2" style="height:70%" class="d-flex justify-content-center"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="width:100%;text-align:left;margin-left:0" />
+                    <div class="col-md-1"></div>
+                    <div class="col-md-10" style="height: 200px; border: 15px solid #28a745; padding-left: 0; padding-right: 0; ">
+                        <div class="row" style=" padding-top: 0px">
+                            <div style="text-align: center; font-size: 20px; color: #f8f9fa; background-color: #28a745; " class="col-md-6">
+                                Máy 1
+                            </div>
+                            <div style="text-align: center; font-size: 20px; color: #f8f9fa; background-color: #28a745; " class="col-md-6">
+                                Sản phẩm 1
+                            </div>
+                        </div>
+                        <div class="row" style="height: 150px; ">
+                            <div class="col-md-4">
+                                <div id="chart_div_3" style="height:70%" class="d-flex justify-content-center"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div id="chart_div_4" style="height:70%" class="d-flex justify-content-center"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div id="chart_div_5" style="height:70%" class="d-flex justify-content-center"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-10" style="height: 200px; border: 15px solid #28a745; padding-left: 0; padding-right: 0; ">
+                        <div class="row" style=" padding-top: 0px">
+                            <div style="text-align: center; font-size: 20px; color: #f8f9fa; background-color: #28a745; " class="col-md-6">
+                                Máy 1
+                            </div>
+                            <div style="text-align: center; font-size: 20px; color: #f8f9fa; background-color: #28a745; " class="col-md-6">
+                                Sản phẩm 1
+                            </div>
+                        </div>
+                        <div class="row" style="height: 150px; ">
+                            <div class="col-md-4">
+                                <div id="chart_div_6" style="height:70%" class="d-flex justify-content-center"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div id="chart_div_7" style="height:70%" class="d-flex justify-content-center"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div id="chart_div_8" style="height:70%" class="d-flex justify-content-center"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="width:100%;text-align:left;margin-left:0" />
+                    <div class="col-md-1"></div>
+                    <div class="col-md-10" style="height: 200px; border: 15px solid #28a745; padding-left: 0; padding-right: 0; ">
+                        <div class="row" style=" padding-top: 0px">
+                            <div style="text-align: center; font-size: 20px; color: #f8f9fa; background-color: #28a745; " class="col-md-6">
+                                Máy 1
+                            </div>
+                            <div style="text-align: center; font-size: 20px; color: #f8f9fa; background-color: #28a745; " class="col-md-6">
+                                Sản phẩm 1
+                            </div>
+                        </div>
+                        <div class="row" style="height: 150px;">
+                            <div class="col-md-4">
+                                <div id="chart_div_9" style="height:70%" class="d-flex justify-content-center"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div id="chart_div_10" style="height:70%" class="d-flex justify-content-center"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div id="chart_div_11" style="height:70%" class="d-flex justify-content-center"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-10" style="height: 200px; border: 15px solid #28a745; padding-left: 0; padding-right: 0; ">
+                        <div class="row" style=" padding-top: 0px">
+                            <div style="text-align: center; font-size: 20px; color: #f8f9fa; background-color: #28a745; " class="col-md-6">
+                                Máy 1
+                            </div>
+                            <div style="text-align: center; font-size: 20px; color: #f8f9fa; background-color: #28a745; " class="col-md-6">
+                                Sản phẩm 1
+                            </div>
+                        </div>
+                        <div class="row" style="height: 150px; ">
+                            <div class="col-md-4">
+                                <div id="chart_div_12" style="height:70%" class="d-flex justify-content-center"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div id="chart_div_13" style="height:70%" class="d-flex justify-content-center"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div id="chart_div_14" style="height:70%" class="d-flex justify-content-center"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="width:100%;text-align:left;margin-left:0" />
+                    <div class="col-md-1"></div>
+                    <div class="col-md-10" style="height: 200px; border: 15px solid #28a745; padding-left: 0; padding-right: 0; ">
+                        <div class="row" style=" padding-top: 0px">
+                            <div style="text-align: center; font-size: 20px; color: #f8f9fa; background-color: #28a745; " class="col-md-6">
+                                Máy 1
+                            </div>
+                            <div style="text-align: center; font-size: 20px; color: #f8f9fa; background-color: #28a745; " class="col-md-6">
+                                Sản phẩm 1
+                            </div>
+                        </div>
+                        <div class="row" style="height: 150px;">
+                            <div class="col-md-4">
+                                <div id="chart_div_15" style="height:70%" class="d-flex justify-content-center"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div id="chart_div_16" style="height:70%" class="d-flex justify-content-center"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div id="chart_div_17" style="height:70%" class="d-flex justify-content-center"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        @for (int i = 0; i <= 17; i+=3)
+        {
+            <script type="text/javascript">
+                google.charts.load('current', { 'packages': ['gauge'] });
+                google.charts.setOnLoadCallback(drawChart);
+
+                function drawChart() {
+
+                    var data = google.visualization.arrayToDataTable([
+                      ['Label', 'Value'],
+                      ['Nhiệt độ', 85],
+                    ]);
+
+                    var options = {
+                        redFrom: 0, redTo: 60,
+                        yellowFrom: 60, yellowTo: 80,
+                        greenFrom: 80, greenTo: 100,
+                        redFrom: 100, redTo: 200,
+                        minorTicks: 5,
+                        max: 200,
+                        min: 0
+                    };
+
+                    var chart = new google.visualization.Gauge(document.getElementById('chart_div_@i'));
+                    chart.draw(data, options);
+                }
+            </script>
+                        <script type="text/javascript">
+                google.charts.load('current', { 'packages': ['gauge'] });
+                google.charts.setOnLoadCallback(drawChart);
+
+                function drawChart() {
+
+                    var data = google.visualization.arrayToDataTable([
+                      ['Label', 'Value'],
+                      ['Thời gian', 100],
+                    ]);
+
+                    var options = {
+                        redFrom: 0, redTo: 60,
+                        yellowFrom: 60, yellowTo: 80,
+                        greenFrom: 80, greenTo: 140,
+                        redFrom: 140, redTo: 200,
+                        minorTicks: 5,
+                        max: 200,
+                        min: 0
+                    };
+
+                    var chart = new google.visualization.Gauge(document.getElementById('chart_div_@(i+1)'));
+                    chart.draw(data, options);
+                }
+            </script>
+                        <script type="text/javascript">
+                google.charts.load('current', { 'packages': ['gauge'] });
+                google.charts.setOnLoadCallback(drawChart);
+
+                function drawChart() {
+
+                    var data = google.visualization.arrayToDataTable([
+                      ['Label', 'Value'],
+                      ['Điện áp', 100],
+                    ]);
+
+                    var options = {
+                        redFrom: 0, redTo: 60,
+                        yellowFrom: 60, yellowTo: 80,
+                        greenFrom: 80, greenTo: 150,
+                        redFrom: 150, redTo: 200,
+                        minorTicks: 5,
+                        max: 200,
+                        min: 0
+                    };
+
+                    var chart = new google.visualization.Gauge(document.getElementById('chart_div_@(i+2)'));
+                    chart.draw(data, options);
+                }
+            </script>
+        }
+    </div>
+</div>

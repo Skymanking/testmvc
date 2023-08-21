@@ -1,0 +1,83 @@
+﻿@model PagedList.IPagedList<Model.View.ResignationView1>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-success card-outline">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fa fa-clipboard"></i>Đơn Xin Nghỉ Việc</h3>
+                <div class="card-tools">
+                    
+                        <div class="btn-group" style="height:40px">
+                            <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                                More
+                            </button>
+                            <div class="dropdown-menu float-right" role="menu">
+                                <a class="dropdown-item" href="/Resignation/Index" style="color:#000">Danh sách</a>
+                                <a class="dropdown-item" href="/Resignation/Report1" style="color:#000">Thống kê</a>
+                            </div>
+                        </div>
+                 
+                    <a class="btn btn-warning float-right" href="/Resignation/Create"><i class="fa fa-plus" style="font-size:24px;"></i></a>
+                    <div style="float:left">
+                        @using (Html.BeginForm("Index", "Resignation", FormMethod.Get))
+                        {
+                            <div class="input-group " style="width: 300px;">
+                                <input type="text" value="@ViewBag.SearchString" name="searchString" class="form-control float-right" placeholder="tìm kiếm">
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Mã NV</th>
+                                <th>Tên Nhân Viên</th>
+                                <th>Chức vụ</th>
+                                <th>Phòng Ban</th>
+                                <th>Ngày viết đơn</th>
+                                <th>Ngày nghỉ <i class="fa fa-arrow-down" aria-hidden="true"></i></th>
+                                <th>Ngày HCNS nhận đơn</th>
+                                <th>Xem</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.PerID</td>
+                                    <td>@item.PerName</td>
+                                    <td>@item.Position</td>
+                                    <td>@item.Depname</td>
+                                    <td>@item.SignDate1.ToString("dd/MM/yyyy") </td>
+                                    <td>@item.EndDate.ToString("dd/MM/yyyy")</td>
+                                    <td>@item.SignDate4.ToString("dd/MM/yyyy") </td>
+                                    <td>
+                                        <a href="/Resignation/Edit/@item.ID"><span class='fa fa-eye' style="font-size: 22px;"></span></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer clearfix">
+                <a class="btn btn-sm btn-info float-left" href="/Resignation/Create"><i class="fa fa-plus"></i> Thêm mới</a>
+                <div class="dataTables_paginate paging_simple_numbers float-right" id="example2_paginate">
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, @searchString = @ViewBag.SearchString }))
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

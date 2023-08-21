@@ -1,0 +1,66 @@
+﻿@model PagedList.IPagedList<Model.View.ItemPriceKH1>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-success card-outline">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fa fa-clipboard"></i>Giá Vật Tư Báo Khách Hàng</h3>
+                <div class="card-tools">
+                    <a href="/ItemPriceKH/Create" data-toggle="tooltip" title="Thêm mới "><i class="fa fa-plus-circle" style="font-size: 40px; color: red"></i></a>
+                    <div style="float:left">
+                        @using (Html.BeginForm("Index", "ItemPriceKH", FormMethod.Get))
+                        {
+                            <div class="input-group " style="width: 200px;">
+                                <input type="text" value="@ViewBag.SearchString" name="searchString" class="form-control float-right" placeholder="tìm kiếm">
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive" style="overflow:inherit">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Tên Vật tư</th>
+                                <th>Mã vật tư</th>
+                                <th>Giá</th>
+                                <th>Khách Hàng</th>
+                                <th>Ngày áp dụng</th>
+                                <th>Số Hồ Sơ</th>
+                                <th>Edit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr style="border-left: 6px solid green;">
+                                    <td>@item.ItemName</td>
+                                    <td>@item.ItemID </td>
+                                    <td>@item.Price.ToString("N0").Replace(',', '.') đ </td>
+                                    <td>@item.CusName </td>
+                                    <td>@item.EffectiveDate.ToString("dd/MM/yyyy") </td>
+                                    <td>@item.IDDocument </td>                                   
+                                    <td><a href="/ItemPriceKH/Edit/@item.ID"><span class='fa fa-eye' style="font-size: 20px;"></span></a></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer clearfix">                
+                <div class="dataTables_paginate paging_simple_numbers float-right" id="example2_paginate">
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, @searchString = @ViewBag.SearchString }))
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

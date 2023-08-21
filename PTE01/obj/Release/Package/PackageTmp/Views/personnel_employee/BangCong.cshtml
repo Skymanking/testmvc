@@ -1,0 +1,329 @@
+﻿@model IEnumerable<Model.EF.FullTimeSheet>
+@{
+    ViewBag.Title = "BangCong";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    var listU = (IEnumerable<Model.EFBIO.personnel_employee3>)ViewBag.listUser;
+    var listD = (IEnumerable<Model.EFBIO.department_employee>)ViewBag.listDep;
+    DateTime Start = ViewBag.StartDate;
+    DateTime Start1 = ViewBag.StartDate;
+    DateTime Start2 = ViewBag.StartDate;
+    DateTime End = ViewBag.EndDate;
+    var CountTime = ViewBag.CountDays - 1;
+    var staff = new List<SelectListItem>
+        ();
+    var manage = new List<SelectListItem>
+        ();
+    staff.Add(new SelectListItem
+    {
+        Text = "Chưa chọn",
+        Value = "Chưa chọn",
+    });
+    staff.Add(new SelectListItem
+    {
+        Text = "Tất cả",
+        Value = "0",
+    });
+    foreach (var item in listU)
+    {
+        staff.Add(new SelectListItem
+        {
+            Text = item.emp_code + " " + item.name,
+            Value = item.emp_id.ToString(),
+        });
+    }
+    manage.Add(new SelectListItem
+    {
+        Text = "Chưa chọn",
+        Value = "Chưa chọn",
+    });
+    foreach (var item in listD)
+    {
+        manage.Add(new SelectListItem
+        {
+            Text = item.name,
+            Value = item.id.ToString(),
+        });
+    }
+
+
+}    <!-- jQuery -->
+<script src="/Assets/theme3/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="./Assets/theme3/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- SlimScroll -->
+<script src="/Assets/theme3/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<!-- FastClick -->
+<script src="/Assets/theme3/plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="/Assets/theme3/dist/js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="/Assets/theme3/dist/js/demo.js"></script>
+<!-- page script -->
+<link rel="stylesheet" href="/Assets/theme3/plugins/datatables/dataTables.bootstrap4.min.css">
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
+<link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet" />
+<script>
+    $(function () {
+        $("#example1").DataTable();
+        $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false
+        });
+    });
+</script>
+
+@section jsFooter
+{
+    <script src="/Assets/plugin/ckfinder/ckfinder.js"></script>
+    <script src="/Assets/theme3/plugins/datepicker/js/bootstrap-datetimepicker.js"></script>
+    <script src="/Assets/theme3/plugins/datepicker/js/locales/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
+    <script src="/Assets/theme3/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+    <script src="/Assets/theme3/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="/Assets/theme3/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+    <script>
+        $(function () {
+            $("#StartDate").datepicker();
+            $("#EndDate").datepicker();
+            $('input[type="checkbox"].flat-green, input[type="radio"].flat-green').iCheck({
+                checkboxClass: 'icheckbox_flat-green',
+                radioClass: 'iradio_flat-green'
+            })
+        })
+    </script>
+    <script>
+        $(function () {
+            $("#example1").DataTable();
+            $('#baocom').DataTable({
+                "paging": false,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": false,
+                "autoWidth": false
+            });
+        });
+    </script>
+}
+
+<div class="card-body">
+    @using (Html.BeginForm("BangCong", "personnel_employee", FormMethod.Get))
+    {
+        <div class="row">
+
+            <div class="col-md-3">
+
+                <div class="callout callout-info">
+
+                    <div class="bootstrap-timepicker">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <label class="control-label" style="color: #FF5722;">Từ</label>
+                                <input type="text" id="StartDate" name="StartDate" class="form-control" readonly="readonly" value="@if (ViewBag.StartDate != null)
+                                                                                                                                       {@ViewBag.StartDate.ToShortDateString()}else{@DateTime.Now.ToShortDateString()}"><br>
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="bootstrap-timepicker">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <label class="control-label" style="color: #FF5722;">Đến</label>
+                                <input type="text" id="EndDate" name="EndDate" class="form-control" readonly="readonly" value="@if (ViewBag.EndDate != null)
+                                                                                                                                   {@ViewBag.EndDate.ToShortDateString()}else{@DateTime.Now.ToShortDateString()}"><br>
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="callout callout-info">
+                    <label class="control-label" style="color: #FF5722;">Bộ phận</label><br>
+                    <select data-placeholder="Bộ phận" multiple class="chosen-select" id="staff"style="width:100%">
+                        @foreach (var st in manage)
+                        {
+                            <option value="@st.Value">@st.Text</option>
+                        }
+                    </select>
+                    <input type="hidden" id="ListStaff" name="dep" />
+                    <script type="text/javascript">
+                        $("#staff").chosen({
+                            disable_search_threshold: 10
+                        }).change(function (event) {
+                            if (event.target == this) {
+                                document.getElementById("ListStaff").value = $(this).val();
+                            }
+                        });
+                        $(".chosen-select").chosen({
+                            no_results_text: "Không tìm thấy:"
+                        });
+                    </script>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="callout callout-info">
+                    <label class="control-label" style="color: #FF5722;">Nhân viên</label><br>
+                    <select data-placeholder="Nhân viên" multiple class="chosen-select" id="dep" style="width:100%">
+                        @foreach (var st in staff)
+                        {
+                            <option value="@st.Value">@st.Text</option>
+                        }
+                    </select>
+                    <input type="hidden" id="ListDep" name="staff" />
+                    <script type="text/javascript">
+                        $("#dep").chosen({
+                            disable_search_threshold: 10
+                        }).change(function (event) {
+                            if (event.target == this) {
+                                document.getElementById("ListDep").value = $(this).val();
+                            }
+                        });
+                        $(".chosen-select").chosen({
+                            no_results_text: "Không tìm thấy:"
+                        });
+                    </script>
+
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i>Tìm kiếm</button>
+                </div>
+            </div>
+        </div>
+    }
+    <script src="~/Scripts/jquery-1.9.1.min.js"></script>
+    <style type="text/css">
+        table {
+            border: none;
+            top: 0;
+            z-index: 1;
+        }
+
+        .row1 {
+            position: sticky;
+            background: white;
+            border: none;
+            border-style: hidden;
+            z-index: 1;
+            top: 0px;
+        }
+
+        .row2 {
+            position: sticky;
+            background: white;
+            border: none;
+            border-style: hidden;
+            z-index: 1;
+            top: 35px;
+        }
+
+        #col1 {
+            position: sticky;
+            left: 0px;
+            background: white;
+            border: none;
+            border-style: hidden;
+            top: 35px;
+            z-index: 2;
+        }
+
+        #col2 {
+            position: sticky;
+            left: 58px;
+            background: white;
+            border: none;
+            border-style: hidden;
+            z-index: 2;
+        }
+
+        #colb1 {
+            position: sticky;
+            left: 0px;
+            background: white;
+            border: none;
+            border-style: hidden;
+        }
+
+        #colb2 {
+            position: sticky;
+            left: 58px;
+            background: white;
+            border: none;
+            border-style: hidden;
+        }
+    </style>
+</div>
+<div style="height: 80vh; overflow: auto; ">
+    <table class="table table-bordered table-striped" id="example1">
+        <thead>
+
+            <tr class="row1">
+                <th id="col1"></th>
+                <th id="col2"></th>
+                @while (Start <= End)
+                {
+                    <th colspan="2">@Start.Day</th>
+                    Start = Start.AddDays(1);
+                }
+            </tr>
+            <tr class="row2">
+                <th id="col1">Mã NV</th>
+                <th id="col2">Tên NV</th>
+
+                @while (Start1 <= End)
+                {
+                    <th>NC</th>
+                    <th>TC</th>
+                    Start1 = Start1.AddDays(1);
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+
+                <tr style="z-index: 3;">
+                    <td id="colb1">@item.emp_code</td>
+                    <td id="colb1">@item.emp_name</td>
+                    @foreach (var item1 in item.detail)
+                    {
+                        while (Start2.Date < item1.date.Date)
+                        {
+                            <td id="colb2"></td>
+                            <td id="colb2"></td>
+                            Start2 = Start2.AddDays(1);
+                        }
+                        
+                        
+                            <td id="colb2">@item1.code_work</td>
+                            <td id="colb2">@if (item1.timeot >= item1.Nomal_OT)
+                            {@item1.Nomal_OT}
+                            else
+                            {@item1.timeot}</td>
+                        Start2 = Start2.AddDays(1);
+                        
+                    }
+                </tr>
+
+            }
+
+        </tbody>
+    </table>
+</div>

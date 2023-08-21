@@ -1,0 +1,304 @@
+﻿@model List<Model.EF.PInOutDep>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    string ngaythangnam = "INPUTDATA" + DateTime.Now.ToUniversalTime();
+    var manage = new List<SelectListItem>
+        ();
+    var listD = (IEnumerable<Model.EF.PersonalGroup>)ViewBag.listdep;
+    manage.Add(new SelectListItem
+    {
+        Text = "Tất cả",
+        Value = "All",
+    });
+    foreach (var item in listD)
+    {
+        manage.Add(new SelectListItem
+        {
+            Text = item.ID + " " + item.Name,
+            Value = item.ID.ToString(),
+        });
+    }
+    var Mounth = new List<SelectListItem>();
+    Mounth.Add(new SelectListItem
+    {
+        Text = "Tất cả",
+        Value = "0",
+    });
+    for (int i = 1; i <= 12; i++)
+    {
+        Mounth.Add(new SelectListItem
+        {
+            Text = i.ToString(),
+            Value = i.ToString(),
+        });
+    }
+    var Year = new List<SelectListItem>();
+    for (var j = 2021; j <= DateTime.Now.Year; j++)
+    {
+        if (j == DateTime.Now.Year)
+        {
+            Year.Add(new SelectListItem
+            {
+                Text = j.ToString(),
+                Value = j.ToString(),
+                Selected = true,
+            });
+        }
+        else
+        {
+            Year.Add(new SelectListItem
+            {
+                Text = j.ToString(),
+                Value = j.ToString(),
+            });
+        }
+    }
+}
+<link rel="stylesheet" href="/Assets/theme3/plugins/datatables/dataTables.bootstrap4.min.css">
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
+<link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet" />
+@section jsFooter
+{
+    <script src="/Assets/plugin/ckfinder/ckfinder.js"></script>
+    <script src="/Assets/theme3/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="/Assets/theme3/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="/Assets/theme3/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/Assets/theme3/plugins/chartjs-old/Chart.min.js"></script>
+    <script src="/Assets/theme3/plugins/fastclick/fastclick.js"></script>
+    <script src="/Assets/theme3/dist/js/adminlte.min.js"></script>
+    <script src="/Assets/theme3/dist/js/demo.js"></script>
+    <script>
+        $(function () {
+            $("#example1").DataTable(
+                {
+                    "paging": false,
+                    "lengthChange": false,
+                    "searching": true,
+                    "ordering": true,
+                    "info": false,
+                    "autoWidth": false,
+                    order: [[2, 'desc'], [3, 'desc']],
+                });
+            $('#example2').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false
+            });
+        });
+    </script>
+}
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Report ra vào cổng theo Bộ phận</h3>
+        <div class="card-tools">
+            @using (Html.BeginForm("StatisticalDep", "PInOut", FormMethod.Get))
+            {
+                <div class="row">
+
+                    <div class="">
+                        @*<label class="control-label" style="color: #FF5722;">Năm</label>*@
+                        @Html.DropDownList("year", Year, new { @class = "form-control float-right", @ID = "year1"})
+                    </div>
+                    <div class="">
+                        @*<label class="control-label" style="color: #FF5722;">Tháng</label>*@
+                        @Html.DropDownList("mounth", Mounth, new { @class = "form-control float-right", @ID = "mounth1" })
+                        <input type="hidden" id="ListDep" name="dep" value="All" />
+                    </div>
+
+                    <div class="">
+                        <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                    </div>
+
+                    <div class="btn-group " style="height:37px">
+                        <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                            More
+                        </button>
+                        <div class="dropdown-menu float-right" role="menu">
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+
+    <div class="card-body">
+        
+        <script src="~/Scripts/jquery-1.9.1.min.js"></script>
+    </div>
+    <div class="card-footer">
+
+    </div>
+
+</div>
+@*@if (Model != null)
+    {
+        <div class="row">
+            <div class="col-12" style="height:80%">
+                <div class="chart center">
+                    <canvas id="barChart" style="min-height: 250px; height: 500px; max-height: 500px; max-width: 100%;"></canvas>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" charset="utf-8">
+            $(function () {
+                var areaChartData = {
+                    labels: [
+                        @foreach (var item in Model)
+                        {
+                                <text>
+                        '@item.Name.Replace("â", "a").Replace("á", "a").Replace("à", "a").Replace("ý", "y").Replace("ô", "o").Replace("ó", "o").Replace("ò", "o").Replace("í", "i").Replace("ì", "i").Replace("ê", "e").Replace("é", "e").Replace("É", "E").Replace("è", "e").Replace("ử", "u").Replace("Ư", "U").Replace("ơ", "o").Replace("Ở", "O").Trim()',
+                               </text>
+                        }
+                    ],
+                    datasets: [
+                        {
+                            label: 'Company',
+                            fillColor: '#00bcd4',
+                            strokeColor: 'rgba(210, 214, 222, 1)',
+                            pointColor: 'rgba(210, 214, 222, 1)',
+                            pointStrokeColor: '#c1c7d1',
+                            pointHighlightFill: '#fff',
+                            pointHighlightStroke: 'rgba(220,220,220,1)',
+                            data: [@foreach (var item in Model)
+                            {
+                                <text>
+                                '@item.TimeCo',
+                               </text>
+                            }]
+                        },
+                        {
+                            label: 'personal',
+                            fillColor: '#ffc107',
+                            strokeColor: 'rgba(60,141,188,0.8)',
+                            pointColor: '#3b8bba',
+                            pointStrokeColor: 'rgba(60,141,188,1)',
+                            pointHighlightFill: '#fff',
+                            pointHighlightStroke: 'rgba(60,141,188,1)',
+                            data: [@foreach (var item in Model)
+                            {
+                                <text>
+                                '@item.TimePer',
+                               </text>
+                            }]
+                        }
+                    ]
+                }
+                var barChartCanvas = $('#barChart').get(0).getContext('2d')
+                var barChart = new Chart(barChartCanvas)
+                var barChartData = areaChartData
+                barChartData.datasets[1].fillColor = '#00a65a'
+                barChartData.datasets[1].strokeColor = '#00a65a'
+                barChartData.datasets[1].pointColor = '#00a65a'
+                var barChartOptions = {
+                    scaleBeginAtZero: true,
+                    scaleShowGridLines: true,
+                    scaleGridLineColor: 'rgba(0,0,0,.05)',
+                    scaleGridLineWidth: 1,
+                    scaleShowHorizontalLines: true,
+                    scaleShowVerticalLines: true,
+                    barShowStroke: true,
+                    barStrokeWidth: 2,
+                    barValueSpacing: 5,
+                    barDatasetSpacing: 1,
+                    legendTemplate: '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>',
+                    responsive: true,
+                    maintainAspectRatio: true
+                }
+
+                barChartOptions.datasetFill = true
+                barChart.Bar(barChartData, barChartOptions)
+            })
+        </script>}*@
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-success card-outline">
+            <div class="card-header">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <script>
+                            function exportTableToExcel(tableID, filename) {
+                                var downloadLink;
+                                var dataType = 'application/vnd.ms-excel';
+                                var tableSelect = document.getElementById(tableID);
+                                var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+                                filename = filename ? filename + '.xls' : 'excel_data.xls';
+                                downloadLink = document.createElement("a");
+                                document.body.appendChild(downloadLink);
+                                if (navigator.msSaveOrOpenBlob) {
+                                    var blob = new Blob(['\ufeff', tableHTML], {
+                                        type: dataType
+                                    });
+                                    navigator.msSaveOrOpenBlob(blob, filename);
+                                } else {
+                                    downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+                                    downloadLink.download = filename;
+                                    downloadLink.click();
+                                }
+                            }
+                        </script>
+                        <table class="table table-striped table-bordered table-hover" id="example1">
+                            <thead>
+                                <tr>
+                                    <th>Tên Bôh phận</th>
+                                    <th>Số phiếu nghỉ/tổng phiếu</th>
+                                    <th>Thời gian đi cho công ty</th>
+                                    <th>Thời gian cá nhân</th>
+                                    <th>Tuyến đường đi nhiều nhất</th>
+                                    <th>Chi tiết</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null)
+                                {
+                                    foreach (var item in Model)
+                                    {
+                                        if (item.TimeCo != 0 && item.TimePer != 0)
+                                        {
+                                        <tr id="row_@item.DepCode">
+                                            <td>@item.Name</td>
+                                            <td>@item.offShiff/@item.Total</td>
+                                            <td>@item.TimeCo</td>
+                                            <td>@item.TimePer</td>
+                                            <td>@item.MostTravelName</td>
+                                            <td><a id="@item.DepCode"><span class='fa fa-eye' style="font-size: 22px; color:cornflowerblue"></span></a></td>
+                                            <script>
+                                            $(document).ready(function () {
+
+                                                $("#@item.DepCode").click(function () {
+                                                    var mounth = $("#mounth1 option:selected").val();
+                                                    var year = $('#year1 option:selected').val();
+                                                    $('#@item.DepCode').attr("href", "/PInOut/StatisticalDepDetail?mounth=" + mounth + "&dep=" +@item.DepCode+"&year=" + year);
+
+                                                });
+                                            });
+
+                                            </script>
+                                        </tr>
+                                        }
+                                    }
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+                <div class="card-footer clearfix">
+
+                </div>
+                <!-- /.panel-body -->
+            </div>
+
+        </div>
+    </div>
+</div>

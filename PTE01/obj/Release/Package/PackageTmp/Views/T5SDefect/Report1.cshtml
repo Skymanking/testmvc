@@ -1,0 +1,137 @@
+﻿@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    var listI = (List<Model.View.T5SReportItem1>)ViewBag.listI;
+    var listCty = (List<Model.View.T5SReportItem1>)ViewBag.listCty;
+    var listZ = (List<Model.EF.T5SZone>)ViewBag.listZ;
+    var listO = (List<Model.View.Dropdownlist4>)ViewBag.listO;
+    var nam = (long)ViewBag.nam;
+    string ten = "";
+    string hinh = "/Assets/dist/css/logo2.jpg";
+
+}
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+@foreach(var itemZ in listZ)
+{ 
+<script type="text/javascript">
+    google.charts.load("current", { packages: ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {       
+        var data = google.visualization.arrayToDataTable([
+      ['Month', 'Da khac phuc', 'Chua khac phuc'],
+
+         @foreach (var item in listI)
+          {
+             if(item.ZoneName==itemZ.Name)
+             {  <text> ['@item.Time', @item.CChecked, @(item.CDefect-item.CChecked)], </text>  }
+          }
+        ]);
+
+        var options = {
+            width: 900,
+            height: 320,
+            legend: { position: 'top', maxLines: 3 },
+          
+            isStacked: true,
+        };
+
+        var view = new google.visualization.DataView(data);
+        view.setColumns([0, 1,
+                         {
+                             calc: "stringify",
+                             sourceColumn: 1,
+                             type: "string",
+                             role: "annotation"
+                         },
+                         2]);
+        var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_@itemZ.ID"));
+        chart.draw(view, options);
+    }
+</script>
+}
+<script type="text/javascript">
+    google.charts.load("current", { packages: ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+      ['Month', 'Da khac phuc', 'Chua khac phuc'],
+
+         @foreach (var item in listCty)
+          {
+             
+             <text> ['@item.Time', @item.CChecked, @(item.CDefect-item.CChecked)], </text>  
+          }
+        ]);
+
+        var options = {
+            width: 900,
+            height: 320,
+            legend: { position: 'top', maxLines: 3 },
+
+            isStacked: true,
+        };
+
+        var view = new google.visualization.DataView(data);
+        view.setColumns([0, 1,
+                         {
+                             calc: "stringify",
+                             sourceColumn: 1,
+                             type: "string",
+                             role: "annotation"
+                         },
+                         2]);
+        var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_PTE"));
+        chart.draw(view, options);
+    }
+</script>
+
+
+
+<div class="row">
+    <table class ="table table-bordered" style="width:980px">
+        <thead>
+            <tr>
+                <th style="min-width: 150px; "></th>
+                <th style="width:920px;"><center><h2> DEFECT 5S NĂM @nam</h2></center></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr id="">
+                <td class="center">
+                    <center>
+                        <h4>THỐNG KÊ DEFECT 5S</h4>
+                        Zone : PTE
+                        <img src="@hinh" class="img-thumbnail" style="width:110px">
+                        
+                    </center>
+                </td>
+                <td><div id="columnchart_PTE" style="width: 910px; height: 330px;"></div></td>
+            </tr>
+
+            @foreach (var itemZ in listZ)
+            {
+                <tr id="">
+                    <td  class="center">
+                        <center>
+                            <h4>THỐNG KÊ DEFECT 5S</h4>
+                            Zone : @itemZ.Name
+                            @foreach (var itemO in listO)
+                            {
+                                if (itemO.user == itemZ.Owner)
+                                {
+                                    ten = itemO.Name;
+                                    hinh = itemO.Image;
+                                    break;
+                                }
+                            }
+                            <img src="@hinh" class="img-thumbnail" style="width:110px">
+                            <strong>@ten</strong>
+                        </center>
+                    </td>
+                    <td><div id="columnchart_@itemZ.ID" style="width: 910px; height: 330px;"></div></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>

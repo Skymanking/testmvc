@@ -1,0 +1,237 @@
+﻿@model List<Model.View.DocumentReaded2>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    DateTime homnay = DateTime.Now;
+    string ngaythangnam = "ReportMH" + DateTime.Now.ToUniversalTime();
+
+
+
+    List<Model.View.Dropdownlist2> cCenter = ViewBag.cCenter;
+    List<Model.View.Dropdownlist2> cUser = ViewBag.cUser;
+    List<Model.View.Dropdownlist2> cDocument = ViewBag.cDocument;
+
+    List<SelectListItem> listCU = new List<SelectListItem>();
+    listCU.Add(new SelectListItem
+    {
+        Text = "chưa chọn",
+        Value = "",
+    });
+    foreach (var item in cUser)
+    {
+        listCU.Add(new SelectListItem
+        {
+            Text = item.Name,
+            Value = item.ID,
+        });
+    }
+
+
+    List<SelectListItem> listCC = new List<SelectListItem>();
+    listCC.Add(new SelectListItem
+    {
+        Text = "chưa chọn",
+        Value = "",
+    });
+    foreach (var item in cCenter)
+    {
+        listCC.Add(new SelectListItem
+        {
+            Text = item.Name + " - " + item.ID,
+            Value = item.ID,
+        });
+    }
+    List<SelectListItem> listCD = new List<SelectListItem>();
+    listCD.Add(new SelectListItem
+    {
+        Text = "chưa chọn",
+        Value = "",
+    });
+    foreach (var item in cDocument)
+    {
+        listCD.Add(new SelectListItem
+        {
+            Text = item.Name + " - " + item.ID,
+            Value = item.ID,
+        });
+    }
+
+}
+
+@section jsFooter
+{
+
+    <script src="/Assets/theme3/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+    <script>
+        $(function () {
+            $("#ngay1").datepicker();
+            $("#ngay2").datepicker();
+            $('input[type="checkbox"].flat-green, input[type="radio"].flat-green').iCheck({
+                checkboxClass: 'icheckbox_flat-green',
+                radioClass: 'iradio_flat-green'
+            })
+            $('.select2').select2()
+
+        })
+    </script>
+
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Tìm kiếm nâng cao</h3>
+
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="callout callout-info">
+                    <label class="control-label" style="color: #FF5722;">Nhân Viên</label><br>
+                    @Html.DropDownList("perid", listCU, new { @class = "form-control select2" })
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="callout callout-info">
+                    <label class="control-label" style="color: #FF5722;">Bộ Phận</label><br>
+                    @Html.DropDownList("depid", listCC, new { @class = "form-control select2" })
+                   
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="callout callout-info">
+                    <label class="control-label" style="color: #FF5722;">Tài Liệu</label><br>
+                    @Html.DropDownList("docid", listCD, new { @class = "form-control select2" })
+
+                </div>
+            </div>
+
+            <div class="col-md-12 text-center">
+                <div class="form-group">
+                    <a class="btn btn-primary" id="inbaocao">Tìm kiếm</a>
+                </div>
+            </div>
+        </div>
+        <script src="~/Scripts/jquery-1.9.1.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                var perid = $("#perid").val();
+                var docid = $("#docid").val();
+                var depid = $("#depid").val();
+                var ngay1 = $('#ngay1').val();
+                var ngay2 = $('#ngay2').val();
+                $('#inbaocao').attr("href", '/Document/SearchAdvance2?docid=' + docid + '&perid=' + perid + '&depid=' + depid );
+
+                $("#inbaocao").focus(function () {
+                    var perid = $("#perid").val();
+                    var docid = $("#docid").val();
+                    var depid = $("#depid").val();
+                    var ngay1 = $('#ngay1').val();
+                    var ngay2 = $('#ngay2').val();
+                    $('#inbaocao').attr("href", '/Document/SearchAdvance2?docid=' + docid + '&perid=' + perid + '&depid=' + depid );
+                });
+            });
+
+        </script>
+    </div>
+    <div class="card-footer">
+
+    </div>
+
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-success card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Kết quả</h3>
+                <div class="card-tools">
+                    <div class="btn-group" style="height:40px">
+                        <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                            Tool
+                        </button>
+                        <div class="dropdown-menu float-right" role="menu">
+                            <span class="dropdown-item" onclick="exportTableToExcel('inputdata', '@ngaythangnam')">Export to Excel</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="card-body">
+                @if (Model != null)
+                {
+                    <script>
+                        function exportTableToExcel(tableID, filename) {
+                            var downloadLink;
+                            var dataType = 'application/vnd.ms-excel';
+                            var tableSelect = document.getElementById(tableID);
+                            var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+                            filename = filename ? filename + '.xls' : 'excel_data.xls';
+                            downloadLink = document.createElement("a");
+                            document.body.appendChild(downloadLink);
+                            if (navigator.msSaveOrOpenBlob) {
+                                var blob = new Blob(['\ufeff', tableHTML], {
+                                    type: dataType
+                                });
+                                navigator.msSaveOrOpenBlob(blob, filename);
+                            } else {
+                                downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+                                downloadLink.download = filename;
+                                downloadLink.click();
+                            }
+                        }
+                    </script>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="inputdata">
+                            <thead>
+                                <tr>
+                                    <th>ID TL</th>
+                                    <th>ID PB</th>
+                                    <th>Mã NV</th>
+                                    <th>Tên Nhân Viên</th>
+                                    <th>Vị trí chức vụ</th>
+                                    <th>Phòng Ban/ Nhóm</th>
+                                    <th>Ngày vào làm</th>
+                                    <th>Tên Tài Liệu</th>
+                                    <th>Ngày xem</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+
+                                    <tr>
+                                        <td>@item.DocID</td>
+                                        <td>@item.DepID</td>
+                                        <td>@item.PerID</td>
+                                        <td>@item.PerName</td>
+                                        <td>@item.PosName</td>
+                                        <td>@item.DepName</td>
+                                        <td>@if(item.StartDate !=null){ <span>@item.StartDate.Value.ToString("dd/MM/yyyy")</span>}</td>
+                                        <td>@item.DocName</td>
+                                        <td>@if (item.DateRead != null)
+                                        { <span>@item.DateRead.Value.ToString("dd/MM/yyyy")</span>}</td>                                   
+                                    </tr>
+                                }
+
+
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                }
+                else
+                {
+                    <span>chưa có kết quả nào</span>
+                }
+            </div>
+            <div class="card-footer clearfix">
+
+            </div>
+        </div>
+    </div>
+</div>

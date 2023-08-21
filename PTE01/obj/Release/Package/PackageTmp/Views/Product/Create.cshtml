@@ -1,0 +1,76 @@
+﻿@model Model.EF.Product
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+}
+@section jsFooter
+{
+    <script>
+        $(function () {
+            $('.select2').select2()
+        })
+    </script>
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<div class="row">
+
+    <div class="col-md-12">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Thông tin Sản Phẩm</h3>
+            </div>
+            <div class="card-body">
+                <div class="tab-content">
+                    <div class="row">
+                        @using (Html.BeginForm("Create", "Product", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class='col-md-3'>
+                                        <label class="control-label">Mã ERP</label>
+                                        @Html.TextBoxFor(model => model.ID, new { @class = "form-control", @placeholder = "bắt buộc điền", @style = "background: #f9d7d4;" })
+                                    </div>
+                                    <div class='col-md-3'>
+                                        <label class="control-label">Mã Cũ</label>
+                                        @Html.TextBoxFor(model => model.Code1, null, new { @class = "form-control" })
+                                    </div>
+                                    
+
+                                    <div class='col-md-6'>
+                                        <label class="control-label">Tên Sản Phẩm Nội Bộ</label>
+                                        @Html.TextBoxFor(model => model.Name, new { @class = "form-control", @placeholder = "bắt buộc điền", @style = "background: #f9d7d4;" })
+                                    </div>
+                                    <div class='col-md-3'>
+                                        <label class="control-label">Loại Sản Phẩm</label>
+                                        @Html.DropDownListFor(model => model.IDType, null, new { @class = "form-control" })
+                                    </div>
+                                    <div class='col-md-3'>
+                                        <label class="control-label">Khách Hàng</label>
+                                        @Html.DropDownListFor(model => model.IDCus, null, new { @class = "form-control select2" })
+                                    </div>
+                                    <div class='col-md-6'>
+                                        <label class="control-label">Tên Sản Phẩm Xuất HĐ</label>
+                                        @Html.TextBoxFor(model => model.Code2, new { @class = "form-control" })
+                                    </div>
+                                    <div class='col-md-12'>
+                                        <label class="control-label">Ghi chú</label>
+                                        @Html.TextAreaFor(model => model.Note, new { @class = "form-control", @rows = "5" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">Lưu thông tin</button>
+                            </div>
+
+
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

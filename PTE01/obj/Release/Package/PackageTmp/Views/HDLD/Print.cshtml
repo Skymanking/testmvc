@@ -1,0 +1,148 @@
+﻿@{
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+
+    Model.View.HDLDDetail detail = ViewBag.detailHDLD;
+
+}
+<style>
+    body {
+        
+    }
+    .printhd {
+        font-family: 'Times New Roman';
+        font-size: 20px;
+        margin-bottom: 0.2rem;
+    }
+
+    </style>
+<div id="printarea" style="width:940px;padding-left:70px; padding-right:10px; padding-top:20px">
+    <div class="row">
+        <div class="col-md-12">
+            <table align="left" border="0" cellpadding="0" cellspacing="0" style="font-size:18px;">
+                <tbody>
+                    <tr class="printhd" >
+                        <td style="height:21px; width:470px">
+                            <center><p class="printhd" ><strong>CÔNG TY TNHH SX HIỆP PHƯỚC THÀNH</strong></p></center>
+                            <center><p class="printhd" >Số: @detail.ID</p></center>
+                        </td>
+                        <td style="height:21px; width:470px">
+                            <center><p class="printhd" ><strong>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</strong></p></center>
+                            <center><p class="printhd" ><strong>Độc lập - Tự do - Hạnh phúc</strong></p></center>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <center> <h1 style="padding-top: 40px; padding-bottom: 40px; font-family: 'Times New Roman';"><strong>HỢP ĐỒNG THỬ VIỆC</strong></h1></center>
+            <p class="printhd" >Hôm nay, ngày  @detail.StartDate.Day  tháng  @detail.StartDate.Month năm @detail.StartDate.Year , chúng tôi gồm:</p>
+            <table align="left" border="0" cellpadding="0" cellspacing="0">
+                <tbody>
+                    <tr class="printhd" ><td style="width:200px"><b>Một bên là Ông</b></td><td style="width:740px"><b>: TỐNG VIẾT CƯỜNG</b></td></tr>
+                    <tr class="printhd" ><td style="width:200px">Chức vụ</td><td style="width:740px">: Giám Đốc</td></tr>
+                    <tr class="printhd" ><td style="width:200px">Đại diện cho</td><td style="width:740px">: CÔNG TY TNHH SX HIỆP PHƯỚC THÀNH</td></tr>
+                    <tr class="printhd" ><td style="width:200px">Địa chỉ</td><td style="width:740px">: Lô A4C, Khu Công Nghiệp Hiệp Phước, Nhà Bè, Tp.Hồ Chí Minh</td></tr>
+                </tbody>
+            </table>
+            <p class="printhd" >(Sau đây gọi là người sử dụng lao động)</p>
+            <p class="printhd" >Và</p>
+            <table align="left" border="0" cellpadding="0" cellspacing="0">
+                <tbody>
+                    <tr class="printhd" ><td style="width:200px"><b>Một bên là Ông/Bà</b></td><td style="width:740px"><b>: @detail.HoTen</b>&emsp; &emsp; Sinh ngày: @if(detail.NgaySinh != null){ @detail.NgaySinh.Value.ToString("dd/MM/yyyy")}</td></tr>
+                    <tr class="printhd" ><td style="width:200px">Địa chỉ thường trú</td><td style="width:740px">: @detail.DiaChi</td></tr>
+                    <tr class="printhd" ><td style="width:200px">Địa chỉ tạm trú</td><td style="width:740px">: </td></tr>
+                    <tr class="printhd" ><td style="width:200px">Số CMND</td><td style="width:740px">: @detail.SoCMND   &emsp;  Ngày cấp: @if (detail.NgayCap != null){ @detail.NgayCap.Value.ToString("dd/MM/yyyy")}	&emsp;	Nơi cấp: @detail.NoiCap</td></tr>
+                </tbody>
+            </table>
+            <p class="printhd" >(Sau đây gọi là người lao động)</p>
+            <p class="printhd" >Thoả thuận ký kết hợp đồng thử việc và cam kết thực hiện đúng những điều khoản sau đây:</p>
+            <p class="printhd"  style="padding-top:20px;"><b>Điều 1:  Thời hạn và công việc hợp đồng</b></p>
+                <table align="left" border="0" cellpadding="0" cellspacing="0">
+                    <tbody>
+                        <tr class="printhd"><td style="width:200px">Loại hợp đồng</td><td style="width:740px">: @if (detail.EndDate != null)
+                        {<span>Thử việc </span>@(detail.EndDate.Value.DayOfYear - detail.StartDate.DayOfYear)  <span>ngày.</span>}</td></tr>
+                        <tr class="printhd"><td style="width:200px">­Thời hạn hợp đồng</td><td style="width:740px">: Từ ngày @detail.StartDate.ToString("dd/MM/yyyy") đến hết ngày @if (detail.EndDate != null)
+                        { @detail.EndDate.Value.ToString("dd/MM/yyyy")}</td></tr>
+                        <tr class="printhd"><td style="width:200px">Chức danh/vị trí</td><td style="width:740px">: @detail.ChucVu</td></tr>
+                        <tr class="printhd"><td style="width:200px">Công việc phải làm</td><td style="width:740px">: Theo bản mô tả công việc.</td></tr>
+                        <tr class="printhd"><td style="width:200px">­Địa điểm làm việc</td><td style="width:740px">: Văn phòng Công ty hoặc các địa điểm khác theo sự phân công của Công ty.</td></tr>
+                    </tbody>
+                </table>
+
+            <p class="printhd" > &emsp;</p>
+            <p class="printhd"  style="padding-top:0px;"><b>Điều 2:  Chế độ làm việc</b></p>
+            <p class="printhd" >­-	Thời gian làm việc	: 8giờ/ ngày, 48giờ/ tuần, từ Thứ hai đến Thứ bảy.</p>
+            <p class="printhd" >­-	Được cấp phát những dụng cụ làm việc cần thiết để thực hiện công việc được giao.</p>
+            <p class="printhd"  style="padding-top:20px;"><b>Điều 3:  Chế độ làm việc</b></p>
+            <p class="printhd" >1.	Phương tiện đi lại làm việc: bằng phương tiện cá nhân.</p>
+            <p class="printhd" >2.	Mức lương căn bản: @(string.Format("{0:0,0}", detail.BasicS)) đồng/tháng.</p>
+            <p class="printhd" >3.	Các khoản trợ cấp và thu nhập khác: được hưởng theo qui định của Công ty.</p>
+            <p class="printhd" >4.	Hình thức trả lương: Theo thời gian. </p>
+            <p class="printhd" >5.	Thời hạn trả lương: được trả lương một lần bằng hình thức chuyển khoản vào ngày 05 – ngày 10 hàng tháng.</p>
+            <p class="printhd" >6.	Tiền thưởng: được hưởng theo chính sách của Công ty.</p>
+            <p class="printhd" >7.	Chế độ nâng lương và điều chỉnh các khoản phụ cấp: theo chính sách của Công ty.</p>
+            <p class="printhd" >8.	Chế độ nghỉ ngơi (nghỉ hàng tuần, nghỉ phép, nghỉ lễ tết…): theo quy định của Công ty và Luật lao động.</p>
+            <p class="printhd" >9.	Trang bị bảo hộ lao động: theo tính chất công việc.</p>
+            <p class="printhd" >10.	Bảo hiểm xã hội, bảo hiểm y tế: Thực hiện theo chế độ Bảo hiểm xã hội Việt Nam.</p>
+            <p class="printhd" >11.	Chế độ đào tạo: theo quy định của Công ty và yêu cầu công việc.</p>
+            <p class="printhd" >12.	Những thỏa thuận khác: Được hưởng các quyền lợi khác theo Thỏa ước lao động tập thể (nếu có) và theo chính sách của Công ty.</p>
+            <p class="printhd" ></p>
+            <p class="printhd"  style="padding-top:20px;"><b>Điều 4: Nghĩa vụ của Người lao động </b></p>
+            <p class="printhd" >1.	Hoàn thành những công việc đã cam kết trong hợp đồng thử việc.</p>
+            <p class="printhd" >2.	Nộp BHXH, BHYT, BHTN theo quy định của Luật Bảo hiểm Xã hội, các khoản thuế thu nhập cá nhân (nếu có) theo quy định của pháp luật.</p>
+            <p class="printhd" >3.	Chấp hành nội quy kỷ luật lao động, an toàn lao động, các quy định, quy chế, điều lệ của Công ty.</p>
+            <p class="printhd" >4.	Cam kết bảo mật thông tin: </p>
+            <p class="printhd" >-­	Toàn bộ thông tin và dữ liệu mà người lao động tiếp xúc trong thời gian làm việc tại Công ty TNHH SX Hiệp Phước Thành thuộc quyền sở hữu của Công ty. </p>
+            <p class="printhd" >­-	Người lao động có trách nhiệm giữ gìn, bảo vệ các thông tin, bí mật kinh doanh và công nghệ của Công ty. </p>
+            <p class="printhd" >­-	Trong thời gian hiệu lực hợp đồng và trong vòng 36 tháng kể từ khi nghỉ việc tại Công ty, Người lao động cam kết không tiết lộ hoặc sao chép bất cứ thông tin nào mà không có sự đồng ý của Người sử dụng lao động.</p>
+            <p class="printhd" >5.	Bồi thường vi phạm và vật chất: theo qui định của Công ty và Luật lao động.</p>
+            <p class="printhd" >6.	Trong thời gian thử việc, nếu người lao động muốn chấm dứt hợp đồng thử việc, phải thông báo cho người sử dụng lao động biết ít nhất 03 ngày bằng văn bản.</p>
+            <p class="printhd" ></p>
+            <p class="printhd"  style="padding-top:20px;"><b>Điều 5: Nghĩa vụ của Người sử dụng lao động</b></p>
+            <p class="printhd" >-­­	Bảo đảm việc làm và thực hiện đầy đủ những điều đã cam kết trong hợp đồng thử việc.</p>
+            <p class="printhd" >­-	Thanh toán đầy đủ, đúng thời hạn các chế độ và quyền lợi cho Người lao động theo hợp đồng thử việc và thoả ước lao động tập thể (nếu có).</p>
+            <p class="printhd" ></p>
+            <p class="printhd"  style="padding-top:20px;"><b>Điều 6: Quyền hạn của Người sử dụng lao động</b></p>
+            <p class="printhd" >­-	Điều hành Người lao động hoàn thành công việc theo hợp đồng (bố trí, điều chuyển, tạm ngưng việc...).</p>
+            <p class="printhd" >­­-	Tạm hoãn, chấm dứt hợp đồng thử việc, kỷ luật Người lao động theo qui định của Bộ luật Lao động, Thoả ước lao động tập thể và Nội quy lao động của Công ty. </p>
+            <p class="printhd" ></p>
+            <p class="printhd"  style="padding-top:20px;"><b>Điều 7: Điều khoản thi hành</b></p>
+            <p class="printhd" >­-	Những vấn đề về lao động không ghi trong trong Hợp đồng thử việc này thì áp dụng quy định của Thỏa ước lao động tập thể, trong trường hợp chưa có Thoả ước lao động tập thể thì áp dụng quy định của pháp luật Lao động.</p>
+            <p class="printhd" >-­­	Hợp đồng thử việc được lập thành 02 bản có giá trị ngang nhau, mỗi bên giữ một bản và có hiệu lực từ ngày ký. Khi hai bên ký kết phụ lục hợp đồng thử việc thì nội dung của phụ lục hợp đồng thử việc cũng có giá trị như các nội dung của bản hợp đồng thử việc này.</p>
+            <p class="printhd" >­-	Hợp đồng này được ký kết tại Văn phòng Công ty TNHH SX Hiệp Phước Thành</p>
+            <p class="printhd" ></p>
+
+
+        </div>
+    </div>
+    <div class="row" style="padding-top:20px;">
+        <div class="col-md-12">
+            <table align="left" border="0" cellpadding="0" cellspacing="0">
+                <tbody>
+                    <tr class="printhd" >
+                        <td style="height:21px; width:470px">
+                            <center><p class="printhd" ><strong>Người lao động</strong></p></center>
+                        </td>
+                        <td style="height:21px; width:470px">
+                            <center><p class="printhd" ><strong>Người sử dụng lao động</strong></p></center>
+                        </td>
+                    </tr>
+                </tbody>
+            </table><table align="left" border="0" cellpadding="0" cellspacing="0">
+                <tbody>
+                    <tr class="printhd" >
+                        <td style="height:21px; width:470px">
+                            <center><p class="printhd" ></p></center>
+                        </td>
+                        <td style="height:21px; width:470px">
+                            <center><p class="printhd"  style="padding-top:150px"><strong>TỐNG VIẾT CƯỜNG</strong></p></center>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>

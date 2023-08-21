@@ -1,0 +1,984 @@
+﻿@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    string maHDLD = DateTime.Now.DayOfYear + "-" + DateTime.Now.Year + "-HDLD-";
+    List<Model.EF.HDLD> listHDLD = ViewBag.listHDLD;
+    List<Model.EF.Competence> listSkill = ViewBag.listSkill;
+    List<Model.View.CompetenceView1> listCompetence = ViewBag.listCompetence;
+    List<Model.EF.PersonalTool> listTool = ViewBag.listTool;
+    List<Model.View.TrainingView1> listTraining = ViewBag.listTraining;
+    Model.EF.Personal model = ViewBag.item;
+    List<SelectListItem> phanxuong = new List<SelectListItem>();
+    phanxuong.Add(new SelectListItem
+         {
+             Text = "Xưởng 1",
+             Value = "X1",
+             Selected = true
+         });
+
+    phanxuong.Add(new SelectListItem
+         {
+             Text = "Xưởng 2",
+             Value = "X2",
+
+         });
+    phanxuong.Add(new SelectListItem
+    {
+        Text = "Xưởng 3",
+        Value = "X3",
+    });
+    List<SelectListItem> capbac = new List<SelectListItem>();
+    List<SelectListItem> listVT = new List<SelectListItem>();
+    capbac.Add(new SelectListItem
+         {
+             Text = "Chưa cập nhật thông tin",
+             Value = "99",
+             Selected = true
+         });
+
+    capbac.Add(new SelectListItem
+         {
+             Text = "Nhóm 1 - Giám đốc/Phó Giám đốc",
+             Value = "1",
+
+         });
+    capbac.Add(new SelectListItem
+    {
+        Text = "Nhóm 2 - Kế toán trưởng/Chuyên gia cấp cao",
+        Value = "2",
+    });
+    capbac.Add(new SelectListItem
+    {
+        Text = "Nhóm 3 - Trưởng phòng",
+        Value = "3",
+    });
+    capbac.Add(new SelectListItem
+    {
+        Text = "Nhóm 4 - Phó phòng/Chuyên viên 2",
+        Value = "4",
+    });
+    capbac.Add(new SelectListItem
+    {
+        Text = "Nhóm 5 - Kỹ sư/Cử nhân/Chuyên viên 1 (có quyết định làm quản lý)",
+        Value = "5",
+    });
+    capbac.Add(new SelectListItem
+    {
+        Text = "Nhóm 6 - Kỹ thuật viên/NV nghiệp vụ (Đại học)",
+        Value = "6",
+    });
+    capbac.Add(new SelectListItem
+    {
+        Text = "Nhóm 7 - Kỹ thuật viên/NV nghiệp vụ/ Tổ trưởng tài xế (Cao đẳng/ Trung cấp/ có quyết định làm quản lý)",
+        Value = "7",
+    });
+    capbac.Add(new SelectListItem
+    {
+        Text = "Nhóm 8 - Kỹ thuật viên/NV nghiệp vụ/ Tổ trưởng Bảo Vệ (Cao đẳng/Trung cấp)",
+        Value = "8",
+    });
+    capbac.Add(new SelectListItem
+    {
+        Text = "Nhóm 9 - Công nhân tay nghề (Có quyết định làm quản lý): Tổ trưởng/ nhóm trưởng QA/QC hoặc TT các chuyền)",
+        Value = "9",
+    });
+    capbac.Add(new SelectListItem
+    {
+        Text = "Nhóm 10 -Công nhân tay nghề (Tài xế, CN các chuyền, CN QA/QC, Bảo vệ, Phụ kho)",
+        Value = "10",
+    });
+    capbac.Add(new SelectListItem
+    {
+        Text = "Nhóm 11 - Lao động phổ thông (tạp vụ, phụ xe)",
+        Value = "11",
+    });
+}
+@section jsFooter
+{
+    <script src="/Scripts/ChangeStatusPersonal.js"></script>
+    <script src="/Scripts/UpdateCompetence.js"></script>
+    <script src="/Scripts/AddCompetence.js"></script>
+    <script src="/Scripts/FindNameVT2.js"></script>
+    <script src="/Scripts/CreatePersonalTool.js"></script>
+    <script src="/Scripts/DeletePersonalTool.js"></script>
+    <script src="/Scripts/EditPersonalTool.js"></script>
+    <script src="/Assets/plugin/ckfinder/ckfinder.js"></script>
+    <script>
+        $(document).ready(function () {
+            ////////////// Edit Tool//////////////
+            $(".edittool").click(function () {
+                var manvs = $(this).attr("data-idper");
+                $('#manv').val(manvs);
+                $('.btnedittool').attr("data-id", $(this).attr("data-id"));
+                $('.btnedittool').attr("data-manv", manvs);
+            });
+            $("#manv").blur(function () {
+                $('.btnedittool').attr("data-manv", $('#manv').val());
+            });
+            $("#hethsd").blur(function () {
+                $('.btnedittool').attr("data-hethsd", $('#hethsd').val());
+            });
+            $("#ghichu").blur(function () {
+                $('.btnedittool').attr("data-ghichu", $('#ghichu').val());
+            });
+            ///////////////////////////////////////
+            ////////////// Delete Tool ////////////
+            $(".deletetool").click(function () {
+                $('.btndeletetool').attr("data-id", $(this).attr("data-id"));
+
+            });
+            ///////////////////////////////////////
+            ////////////// Add Tool ////////////
+            $("#quantity1").blur(function () {
+                $('#createrr').attr("data-quantity", $('#quantity1').val());
+            });
+            $("#startdate1").blur(function () {
+                $('#createrr').attr("data-startdate", $('#startdate1').val());
+            });
+            $("#enddate1").blur(function () {
+                $('#createrr').attr("data-enddate", $('#enddate1').val());
+            });
+            $("#note1").blur(function () {
+                $('#createrr').attr("data-note", $('#note1').val());
+            });
+            $("#itemid").blur(function () {
+                $('#createrr').attr("data-itemname", $("#itemid option:selected").text());
+            });
+            $("#itemid").blur(function () {
+                $('#createrr').attr("data-idite", $('#itemid').val());
+            });
+            ///////////////////////////////////////
+            ////////////// Thời gian ////////////
+            $(function () {
+                $('#hethsds').datetimepicker({
+                    format: 'MM/DD/YYYY'
+                });
+                $('#enddate1').datetimepicker({
+                    format: 'MM/DD/YYYY'
+                });
+                $('#startdate1').datetimepicker({
+                    format: 'MM/DD/YYYY'
+                });
+                $('#datetimepicker1').datetimepicker({
+                    format: 'MM/DD/YYYY'
+                });
+                $('#datetimepicker2').datetimepicker({
+                    format: 'MM/DD/YYYY'
+                });
+                $('#datetimepicker3').datetimepicker({
+                    format: 'MM/DD/YYYY'
+                });
+                $('#datetimepicker4').datetimepicker({
+                    format: 'MM/DD/YYYY'
+                });
+                $('#datetimepicker5').datetimepicker({
+                    format: 'MM/DD/YYYY'
+                });
+                $('#datetimepicker6').datetimepicker({
+                    format: 'MM/DD/YYYY'
+                });
+                $('#datetimepicker7').datetimepicker({
+                    format: 'MM/DD/YYYY'
+                });
+                $('#date').datetimepicker({
+                    format: 'MM/DD/YYYY'
+                });
+                $('#dateup').datetimepicker({
+                    format: 'MM/DD/YYYY'
+                });
+                $('#datead').datetimepicker({
+                    format: 'MM/DD/YYYY'
+                });
+            });
+            ///////////////////////////////////////
+            ////////////// Thong tin nghi viec ////////////
+            $("#reason").blur(function () {
+                $('#createBB').attr("data-reason", $('#reason').val());
+            });
+            $("#enddate").blur(function () {
+                $('#createBB').attr("data-enddate", $('#enddate').val());
+            });
+            ///////////////////////////////////////
+            ////////////// Them Thong tin Nang Luc ////////////
+            var today = new Date();
+            $('#completedate').val(today.getMonth() + "/" + today.getDate() + "/" + today.getFullYear());
+            $("#levels").blur(function () {
+                $('#createCC').attr("data-levels", $('#levels').val());
+            });
+            $("#completedate").blur(function () {
+                $('#createCC').attr("data-completedate", $('#completedate').val());
+            });
+
+        });
+        ///////////////////////////////////////
+        ////////////// Cap Nhat Thong tin Nang Luc ////////////
+        $(".themgia").click(function () {
+            $('#createCC').attr("data-idcom", $(this).attr("data-idcom"));
+            $('#createCC').attr("data-levels", $(this).attr("data-levels"));
+            $('#createCC').attr("data-completedate", "1/1/2001");
+
+            $('#completedates').val(today.getMonth() + "/" + today.getDate() + "/" + today.getFullYear());
+            $("#idcoms").blur(function () {
+                $('#createDD').attr("data-idcoms", $('#idcoms').val());
+            });
+            $("#levelss").blur(function () {
+                $('#createDD').attr("data-levelss", $('#levelss').val());
+            });
+            $("#completedates").blur(function () {
+                $('#createDD').attr("data-completedates", $('#completedates').val());
+            });
+            $(".themkynang").click(function () {
+                $('#createDD').attr("data-idcoms", $('#idcoms').val());
+                $('#createDD').attr("data-levelss", $('#levelss').val());
+                $('#createDD').attr("data-completedates", $('#completedates').val());
+            });
+            ///////////////////////////////////////
+        });
+    </script>
+    <script>
+        $(function () {
+
+            $('.select2').select2()
+            $(".date1").datepicker(
+                {
+                    dateFormat: 'mm/dd/yy',
+                    changeMonth: true,
+                    changeYear: true,
+                    numberOfYears: 1,
+                    numberOfMonths: 1,
+                    yearRange: "-90:+10",
+                    onSelect: function (selectedDate) {
+                        // we can write code here
+                    }
+                });
+            $(".date2").datepicker();
+            $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
+            //Money Euro
+            $('[data-mask]').inputmask()
+
+        })
+    </script>
+
+
+
+}
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(window).keydown(function (event) {
+            if (event.keyCode == 13) {
+                event.preventDefault();
+                return false;
+            }
+        });
+    });
+</script>
+
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+<div class="row">
+    <h1>Thông tin nhân viên</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <!-- Profile Image -->
+        <div class="card card-primary card-outline">
+            <div class="card-body box-profile">
+                <div class="text-center">
+                    @if (Model.Image != null)
+                    {<img class="profile-user-img img-fluid img-circle" src="@Model.Image" alt="link hình bị lỗi" style="width: 100px; height: 130px; border-radius: 0%;border:none">}
+                    else
+                    { <img class="profile-user-img img-fluid img-circle" src="/Assets/theme3/dist/img/user.png" alt="User profile picture">}
+                </div>
+                <h3 class="profile-username text-center">Mã NV: @Model.ID</h3>
+                @if (Model.Status == true)
+                {<a href="#" class="btn btn-success btn-block" data-toggle="modal" data-target="#myModal"><b>đang làm</b></a>}
+                else
+                {<a href="#" class="btn btn-danger btn-block" data-toggle="tooltip" title="lý do nghỉ: @Model.ReasonQuit"><b>đã nghỉ ngày @Model.EndDate.Value.ToString("dd/MM/yyyy")</b></a>}
+
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+        <!-- About Me Box -->
+        <div class="card card-primary card-outline">
+
+            <!-- /.card-header -->
+            <div class="card-body">
+                <strong><i class="fa fa-book mr-1"></i>CCDC</strong> <a title="Thêm mới!" class="float-right" data-toggle="modal" data-target="#toolModal"><i class="fa fa-plus-circle" style="color: red; font-size: 20px"></i></a>
+                @foreach (var item in listTool)
+                {
+                    <p class="text-muted">
+                        - @item.ItemName (SL: @item.Quantity) - @item.Note -
+                        <span class="badge badge-warning"><i class="fa fa-clock-o"></i>ngày cấp @item.StartDate.ToString("dd/MM/yyyy")</span>
+                        @*<a href="#" class="edittool" id="edittool" data-id="@item.ID" data-idper="@item.IDPer" data-toggle="modal" data-target="#edittoolModal">
+                                <span class="fa fa-pencil"></span>
+                            </a>*@
+                        <a href="#" class="deletetool" id="deletetool" data-id="@item.ID" data-toggle="modal" data-target="#deletetoolModal">
+                            <span class="fa fa-trash"></span>
+                        </a>
+                    </p>
+                }
+
+
+                <hr>
+                <strong><i class="fa fa-file-text-o mr-1"></i> HĐLĐ</strong> <a href="/HDLD/CreateHD/@maHDLD@Model.ID" class="float-right" data-toggle="tooltip" title="Thêm mới!"><i class="fa fa-plus-circle" style="color:red;font-size:20px"></i></a>
+                @foreach (var item in listHDLD)
+                {
+                    <p class="text-muted">
+                        - @item.ID <span class="badge badge-warning"> <i class="fa fa-clock-o"></i>@item.StartDate.ToString("dd/MM/yyyy")</span> -
+                        @if (item.EndDate == null)
+                        {<span class="badge badge-warning"> <i class="fa fa-clock-o"></i>không xác định</span> }
+                        else
+                        {<span class="badge badge-warning"> <i class="fa fa-clock-o"></i>@item.EndDate.Value.ToString("dd/MM/yyyy")</span>}
+
+                        @if (item.TypeH == 4)
+                        {<a href="/HDLD/Print?id=@item.ID"><i class="fa fa-print" aria-hidden="true" style="font-size: 30px;"></i></a>}
+
+                    </p>
+                }
+
+
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+    <!-- /.col -->
+    <div class="col-md-9">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Cơ Bản</h3>
+            </div>
+            <div class="card-body">
+                <div class="tab-content">
+
+                    <div class="row">
+                        @using (Html.BeginForm("Edit2", "Personal", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+
+                            <div class="col-md-12">
+                                <div class="row">
+
+                                    <div style="display:none"> @Html.LabelFor(model => model.ID, new { @class = "form-control" })</div>
+
+                                    <div class='col-md-4'>
+                                        <label class="control-label">Họ Tên</label>
+                                        @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                                    </div>
+                                    <div class='col-md-2'>
+                                        <label class="control-label">Nhóm</label>
+                                        @Html.DropDownListFor(model => model.GroupID, null, new { @class = "form-control select2", @style = "width: 100%;" })
+                                    </div>
+                                    <div class='col-md-2'>
+                                        <label class="control-label">Xưởng</label>
+                                        @Html.DropDownListFor(model => model.Factory, phanxuong, new { @class = "form-control select2", @style = "width: 100%;" })
+                                    </div>
+                                    <div class='col-md-2'>
+                                        <label class="control-label">Giới Tính</label>
+                                        <p>
+                                            <span style="padding-right:10px;"> @Html.RadioButtonFor(m => m.Sex, "true") Nam </span>
+                                            <span> @Html.RadioButtonFor(m => m.Sex, "false") Nữ</span>
+                                        </p>
+                                    </div>
+                                    <div class='col-md-2'>
+                                        <label class="control-label">Dân Tộc</label>
+                                        @Html.TextBoxFor(model => model.Nation, new { @class = "form-control" })
+                                    </div>
+
+
+                                    <div class='col-md-3'>
+                                        <label class="control-label">Vị Trí</label>
+                                        @Html.DropDownListFor(model => model.IDPosition, null, new { @class = "form-control select2", @style = "width: 100%;" })
+                                    </div>
+                                    <div class='col-md-3'>
+                                        <label>Ngày Vào Làm</label>
+                                        <div class="input-group mb-3">
+                                            <input autocomplete="off" class="date1 form-control" id="StartDate" name="StartDate" type="text" value="@if(@Model.StartDate!=null){@Model.StartDate.Value.ToString("MM/dd/yyyy")}">
+                                            <div class=" input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class='col-md-3'>
+                                        <label>Ngày Hết TViệc</label>
+                                        <div class="input-group mb-3">
+                                            <input autocomplete="off" class="date1 form-control" id="EndTryDate" name="EndTryDate" type="text" value="@if(@Model.EndTryDate!=null){@Model.EndTryDate.Value.ToString("MM/dd/yyyy")}">
+                                            <div class=" input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class='col-md-3'>
+                                        <label>Ngày Sinh</label>
+                                        <div class="input-group mb-3">
+                                            <input autocomplete="off" class="date1 form-control" id="Birthday" name="Birthday" type="text" value="@if(@Model.Birthday!=null){@Model.Birthday.Value.ToString("MM/dd/yyyy")}">
+                                            <div class=" input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class='col-md-3'>
+                                        <label class="control-label">Điện Thoại</label>
+                                        @Html.TextBoxFor(model => model.Phone, new { @class = "form-control" })
+                                    </div>
+                                    <div class='col-md-3'>
+                                        <label class="control-label">Số CMND</label>
+                                        @Html.TextBoxFor(model => model.CMNDCode, new { @class = "form-control" })
+                                    </div>
+                                    <div class='col-md-3'>
+                                        <label>Ngày Cấp CMND</label>
+                                        <div class="input-group mb-3">
+                                            <input autocomplete="off" class="date1 form-control" id="CMNDDate" name="CMNDDate" type="text" value="@if(@Model.CMNDDate!=null){@Model.CMNDDate.Value.ToString("MM/dd/yyyy")}">
+                                            <div class=" input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class='col-md-3'>
+                                        <label class="control-label">Nơi Cấp CMND</label>
+                                        @Html.DropDownListFor(model => model.CMNDPlace, null, new { @class = "form-control select2", @style = "width: 100%;" })
+                                    </div>
+
+                                    <div class='col-md-6'>
+                                        <label class="control-label">Chuyên ngành - chuyên môn</label>
+                                        @Html.TextBoxFor(model => model.Specialize, new { @class = "form-control", @placeholder = "chuyên ngành đã học. vd:hóa hữu cơ...." })
+                                    </div>
+                                    <div class='col-md-6'>
+                                        <label class="control-label">Thông tin liên hệ khẩn cấp</label>
+                                        @Html.TextBoxFor(model => model.InfoHotline, new { @class = "form-control", @placeholder = "tên + sdt người thân" })
+                                    </div>
+
+                                    <div class='col-md-3'>
+                                        <label class="control-label">Cấp Bậc</label>
+                                        @Html.DropDownListFor(model => model.GroupID2, capbac, new { @class = "form-control" })
+                                    </div>
+                                    <div class='col-md-6'>
+                                        <label class="control-label">Địa Chỉ</label>
+                                        @Html.TextBoxFor(model => model.Address, new { @class = "form-control" })
+                                    </div>
+                                    <div class='col-md-3'>
+                                        <label class="control-label">Thành Phố</label>
+                                        @Html.DropDownListFor(model => model.City, null, new { @class = "form-control select2", @style = "width: 100%;" })
+                                    </div>
+
+                                    <div class='col-md-3'>
+                                        <label class="control-label">Trình Độ</label>
+                                        @Html.DropDownListFor(model => model.AcademicLevel, null, new { @class = "form-control" })
+                                    </div>
+                                    <div class='col-md-3'>
+                                        <label class="control-label">Mã Số Thuế</label>
+                                        @Html.TextBoxFor(model => model.TaxCode, new { @class = "form-control" })
+                                    </div>
+                                    <div class='col-md-3'>
+                                        <label class="control-label">Người Giới Thiệu</label>
+                                        @Html.TextBoxFor(model => model.Presenter, new { @class = "form-control" })
+                                    </div>
+                                    <div class='col-md-3'>
+                                        <label class="control-label">Số Sổ BHXH</label>
+                                        @Html.TextBoxFor(model => model.BHXHCode, new { @class = "form-control" })
+                                    </div>
+
+
+                                    <div class='col-md-6'>
+                                        <label class="control-label">Hình đại diện</label>
+                                        <div class='input-group'>
+                                            @Html.TextBoxFor(model => model.Image, new { @class = "form-control", @style = "background: #f9d7d4;", @placeholder = "chọn hình nhân viên" })
+                                            <div class=" input-group-append">
+                                                <span class="input-group-text">
+                                                    <a id="btnSelectImage" href="#"><span class="fa fa-paperclip"></span></a> <span>....</span>  <a id="btnViewFile" target="_blank" href="@Model.Image"><span class="fa fa-file"></span></a>
+                                                </span>
+                                                @*<span class="input-group-text"><i class="fa fa-calendar"></i></span>*@
+                                            </div>
+                                            @*<span class="input-group-addon">
+                                                    <a id="btnSelectImage" href="#"><span class="glyphicon glyphicon-paperclip"></span></a> <span>....</span>  <a id="btnViewFile" target="_blank" href="@Model.Image"><span class="glyphicon glyphicon-file"></span></a>
+                                                </span>*@
+                                        </div>
+                                    </div>
+                                    <div class='col-md-2'>
+                                        <label class="control-label">Số YC Tuyển</label>
+                                        @Html.TextBoxFor(model => model.IDRecuiment, new { @class = "form-control", @type = "number" })
+                                    </div>
+
+
+                                    <script>
+                                        $('#btnSelectImage').on('click', function (e) {
+                                            e.preventDefault();
+                                            var finder = new CKFinder();
+                                            finder.selectActionFunction = function (url) {
+                                                $('#Image').val(url);
+                                                $('#btnViewFile').attr("href", $('#Image').val());
+                                            };
+                                            finder.popup();
+                                        })
+
+
+                                    </script>
+                                </div>
+                                <div class="row">
+                                    <div class='col-md-12'>
+                                        <label class="control-label">Ghi Chú</label>
+                                        @Html.TextAreaFor(model => model.Note, new { @class = "form-control", @rows = "5" })
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-6">
+                                    <input type="submit" value="Cập Nhật" class="btn btn-primary" />
+                                </div>
+                                <div class="col-6">
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal">Nghỉ Việc </button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <!-- /.post -->
+
+
+                </div>
+            </div><!-- /.card-body -->
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Đào Tạo</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Hình thức</th>
+                                <th>Nội dung</th>
+                                <th>Ngày đào tạo</th>
+                                <th>Thời gian</th>
+                                <th>Người giảng dạy</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in listTraining)
+                            {
+                                <tr id="row_@item.ID">
+                                    <td>
+                                        @if (item.Type == 1)
+                                        {
+                                            <span><i class="fa fa-graduation-cap text-dark"> nội bộ</i> </span>
+
+                                        }
+                                        else
+                                        {
+                                            <span><i class="fa fa-graduation-cap text-dark">bên ngoài</i> </span>
+                                        }
+
+                                    </td>
+                                    <td><a href="/Training/Edit/@item.ID"> <span class="text">@item.Name</span></a></td>
+                                    <td>
+                                        <span class="badge badge-success"><i class="fa fa-calendar"></i>@item.StartDate.Value.ToString("dd/MM/yyyy") </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-dark"><i class="fa fa-clock-o"></i>@item.Time tiếng </span>
+                                    </td>
+                                    <td><span class="badge badge-warning float-right"><i class="fa fa-user"></i> @item.TeacherName </span></td>
+
+                                </tr>
+                            }
+
+
+                        </tbody>
+                    </table>
+
+
+                </div>
+
+            </div>
+        </div><!-- /.card-body -->
+    </div>
+    <div class="col-md-12" style="display:none">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Kỹ Năng</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <center>
+                        <a class="btn btn-success themkynang" href="#" data-toggle="modal" data-target="#adModal">Thêm Kỹ Năng</a>
+                        @*  <a href="#" class="themgia" data-idcom="@item.ID" data-levels="@item.Level2" data-toggle="modal" data-target="#upModal" title="Cập Nhật"> <span class="glyphicon glyphicon-pencil"></span></a>*@
+                    </center>
+                    <p></p>
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Tên Kỹ Năng</th>
+                                <th>Mức độ kỹ năng cần đạt được</th>
+                                <th>Mức độ kỹ năng đã đạt được</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in listCompetence)
+                            {
+                                <tr id="row_@item.CompetenceName">
+                                    <td>@item.CompetenceName</td>
+                                    <td>@item.Level1</td>
+                                    @if (item.Level2 >= item.Level1)
+                                    {
+                                        if (item.Level2 == item.Level1)
+                                        {
+                                            <td>@item.Level2 - <a href="#" class="themgia" data-idcom="@item.ID" data-levels="@item.Level2" data-toggle="modal" data-target="#upModal" title="Cập Nhật"> <span class="glyphicon glyphicon-pencil"></span></a></td>
+                                        }
+                                        else
+                                        {
+                                            <td style="background: #8BC34A;">@item.Level2 - <a href="#" class="themgia" data-idcom="@item.ID" data-levels="@item.Level2" data-toggle="modal" data-target="#upModal" title="Cập Nhật"> <span class="glyphicon glyphicon-pencil"></span></a></td>
+                                        }
+
+
+                                    }
+                                    else
+                                    {
+                                        <td style="background: #F44336; ">@item.Level2- <a href="#" class="themgia" data-idcom="@item.ID" data-levels="@item.Level2" data-toggle="modal" data-target="#upModal" title="Cập Nhật"> <span class="glyphicon glyphicon-pencil"></span></a></td>
+                                    }
+                                </tr>
+                            }
+
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div><!-- /.card-body -->
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+<!--------------------------Modal Nghỉ Việc ------------------------------->
+<form id="myForm" method="post">
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="float-right"><button type="button" class="close" data-dismiss="modal" style="width:20px">&times;</button></span>
+                    <h4 class="modal-title">Thông tin nghỉ việc</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class='col-md-12'>
+                            <label class="control-label">Lý Do Nghỉ</label>
+                            <textarea class="form-control" data-val="true" id="reason" name="reason" placeholder=" " rows="4"></textarea>
+                        </div>
+                        <div class='col-md-6'>
+                            <label class="control-label">Ngày chính thức nghỉ</label>
+
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control" id="enddate" name="enddate" data-inputmask="'alias': 'mm/dd/yyyy'">
+                                </div>
+                                <!-- /.input group -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" id="createBB" class="btn-cancel" data-id="@Model.ID" style="background: red;  padding: 7px;  color: white;">Cập Nhật</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<!--------------------------Modal Nghỉ Việc ------------------------------->
+<!--------------------------Modal Update Năng Lực ------------------------------->
+@*<form id="myForm" method="post">
+        <div class="modal fade" id="upModal" role="dialog">
+            <div class="modal-dialog">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" style="width:20px">&times;</button>
+                        <h4 class="modal-title">Cập nhật thông tin</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class='col-md-6'>
+                                <label class="control-label">Điểm</label>
+                                <input class="form-control" data-val="true" id="levels" name="levels" placeholder=" " type="number" value="1">
+                            </div>
+                            <div class='col-md-6'>
+                                <label class="control-label">Thời gian</label>
+                                <div class="input-group date" id="dateup">
+                                    <input class="form-control" data-val="true" id="completedate" name="completedate" placeholder=" " type="text" value=""><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="#" id="createCC" class="updatecompetence" data-idper="@Model.ID" style="background: red;    padding: 7px;  color: white;">Lưu thông tin</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>*@
+<!--------------------------Modal Update Năng Lực ------------------------------->
+<!--------------------------Modal Add Năng Lực ------------------------------->
+@*<form id="myForm" method="post">
+        <div class="modal fade" id="adModal" role="dialog">
+            <div class="modal-dialog">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" style="width:20px">&times;</button>
+                        <h4 class="modal-title">Cập nhật thông tin</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class='col-md-6'>
+                                <label class="control-label">Tên Kỹ Năng</label>
+                                <select class="form-control" id="idcoms" name="idcoms">
+
+                                    @foreach (var item in listSkill)
+                                    {
+                                        <option value="@item.ID">
+                                            @item.Name
+                                        </option>
+                                    }
+
+                                </select>
+                            </div>
+                            <div class='col-md-2'>
+                                <label class="control-label">Điểm</label>
+                                <input class="form-control" data-val="true" id="levelss" name="levelss" placeholder=" " type="number" value="1">
+                            </div>
+                            <div class='col-md-4'>
+                                <label class="control-label">Thời gian</label>
+                                <div class="input-group date" id="datead">
+                                    <input class="form-control" data-val="true" id="completedates" name="completedates" placeholder=" " type="text" value=""><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <a href="#" id="createDD" class="addcompetence" data-idpers="@Model.ID" style="background: red;    padding: 7px;  color: white;">Lưu thông tin</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>*@
+<!--------------------------Modal Add Năng Lực ------------------------------->
+<!--------------------------Modal Edit Công Cụ Dụng Cụ ------------------------------->
+@*<form id="myForm" method="post">
+        <div class="modal fade" id="edittoolModal" role="dialog">
+            <div class="modal-dialog">
+
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class='col-md-6'>
+                                <label class="control-label">Mã Nhân Viên</label>
+                                <input class="form-control" data-val="true" id="manv" name="manv" placeholder=" " type="text">
+                            </div>
+                            <div class='col-md-6'>
+                                <label class="control-label">Ngày Hết Hạn</label>
+                                <div class="input-group date" id="hethsds">
+                                    <input class="form-control" data-val="true" id="hethsd" name="hethsd" placeholder=" " type="text" value=""><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                </div>
+                            </div>
+                            <div class='col-md-12'>
+                                <label class="control-label">Ghi chú</label>
+                                <input class="form-control" data-val="true" id="ghichu" name="ghichu" placeholder=" " type="text" value="">
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="modal-footer">
+                        <a href="#" id="eidttoolsumit" class="btnedittool" data-id="" style="background: red;    padding: 7px;  color: white;">Đồng ý</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>*@
+<!--------------------------Modal Edit Công Cụ Dụng Cục ------------------------------->
+<!--------------------------Modal Delete Công Cụ Dụng Cụ ------------------------------->
+<form id="myForm" method="post">
+    <div class="modal fade" id="deletetoolModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <h4 class="modal-title">Bạn có chắc muốn xóa dữ liệu này</h4>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" id="deletetoolsumit" class="btndeletetool" data-id="" style="background: red;    padding: 7px;  color: white;">Đồng ý</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<!--------------------------Modal Delete Công Cụ Dụng Cụ------------------------------->
+<!--------------------------Modal Add Công Cụ Dụng Cụ ------------------------------->
+<form id="myForm" method="post">
+    <div class="modal fade" id="toolModal" role="dialog">
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="float-right">
+                        <button type="button" class="close" data-dismiss="modal" style="width:20px">&times;</button>
+                    </span>
+                    <h4 class="modal-title">Thêm công cụ dụng cụ cho nhân viên này</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <label class="control-label">Tìm tên vật tư</label>
+
+                            <div class="input-group">
+                                <input type="text" class="form-control tenvt" id="tenvt" placeholder="chỉ hiện 20 kết quả gần giống nhất">
+                                <div class="input-group-append btnFindVT" id="btnFindVT">
+                                    <span class="btn btn-default"><i class="fa fa-search"></i></span>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class=" col-md-6">
+                            <label class="control-label">Chọn vật tư</label>
+                            <div class='input-group'>
+                                @Html.DropDownList("itemid", listVT, new { @class = "form-control" })
+                            </div>
+                        </div>
+
+                        <div class='col-md-2'>
+                            <label class="control-label">SL</label>
+                            <input class="form-control" data-val="true" id="quantity1" name="quantity1" placeholder=" " type="number" value="">
+                        </div>
+                        <div class='col-md-5'>
+                            <label class="control-label">Ngày Cấp</label>
+                            @*<div class="input-group date" id="startdate">
+                                    <input class="form-control" data-val="true" id="startdate1" name="startdate1" placeholder=" " type="text" value=""><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                </div>*@
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control" id="startdate1" name="startdate1" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask value="@DateTime.Now.ToString("MM/dd/yyyy")">
+                                </div>
+                                <!-- /.input group -->
+                            </div>
+                        </div>
+                        <div class='col-md-5'>
+                            <label class="control-label">Ngày Hết Hạn</label>
+                            @*<div class="input-group date" id="enddates">
+                                    <input class="form-control" data-val="true" id="enddate1" name="enddate1" placeholder=" " type="text" value=""><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                </div>*@
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control" id="enddate1" name="enddate1" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask>
+                                </div>
+                                <!-- /.input group -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-md-12'>
+                        <label class="control-label">Ghi chú</label>
+                        <input class="form-control" data-val="true" id="note1" name="note" placeholder=" " type="text" value="">
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <a href="#" id="createrr" class="btn-addtool" data-idper="@Model.ID" style="background: red;    padding: 7px;  color: white;">Lưu thông tin</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<!--------------------------Modal Add Công Cụ Dụng Cụ ------------------------------->
+<!--------------------------Thông Tin Năng Lực của Nhân Viên ------------------------------->
+@*<div class="tab-pane fade" id="profile">
+
+        <div class="table-responsive">
+            <center>
+                <a class="btn btn-success themkynang" href="#" data-toggle="modal" data-target="#adModal">Thêm Kỹ Năng</a>
+
+            </center>
+            <p></p>
+            <table class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Tên Kỹ Năng</th>
+                        <th>Mức độ kỹ năng cần đạt được</th>
+                        <th>Mức độ kỹ năng đã đạt được</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in listCompetence)
+                                    {
+                        <tr id="row_@item.CompetenceName">
+                            <td>@item.CompetenceName</td>
+                            <td>@item.Level1</td>
+                            @if (item.Level2 >= item.Level1)
+                                            {
+                                                if (item.Level2 == item.Level1)
+                                                {
+                                                    <td>@item.Level2 - <a href="#" class="themgia" data-idcom="@item.ID" data-levels="@item.Level2" data-toggle="modal" data-target="#upModal" title="Cập Nhật"> <span class="glyphicon glyphicon-pencil"></span></a></td>
+                                                }
+                                                else
+                                                {
+                                                    <td style="background: #8BC34A;">@item.Level2 - <a href="#" class="themgia" data-idcom="@item.ID" data-levels="@item.Level2" data-toggle="modal" data-target="#upModal" title="Cập Nhật"> <span class="glyphicon glyphicon-pencil"></span></a></td>
+                                                }
+
+
+                                            }
+                                            else
+                                            {
+                                <td style="background: #F44336; ">@item.Level2- <a href="#" class="themgia" data-idcom="@item.ID" data-levels="@item.Level2" data-toggle="modal" data-target="#upModal" title="Cập Nhật"> <span class="glyphicon glyphicon-pencil"></span></a></td>
+                                            }
+                        </tr>
+                                    }
+
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>*@
+<!--------------------------Thông Tin Năng Lực của Nhân Viên ------------------------------->

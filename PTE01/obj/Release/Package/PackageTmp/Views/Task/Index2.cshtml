@@ -1,0 +1,132 @@
+﻿@model PagedList.IPagedList<Model.View.TaskView1>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    string userName = ViewBag.userName;
+    int count1 = ViewBag.count1;
+    int count2 = ViewBag.count2;
+    int count3 = ViewBag.count3;
+    int count4 = ViewBag.count4;
+    int count5 = ViewBag.count5;
+    int count6 = ViewBag.count6;
+    string itMe = (string)ViewBag.itMe;
+    IEnumerable<Model.View.UserView2> lInferior = ViewBag.lInferior;
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<div class="row">
+    <div class="col-sm-6 col-md-3">
+        <div class="info-box">
+            <span class="info-box-icon bg-info elevation-1"><i class="fa fa-gear"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">Tổng</span>
+                <span class="info-box-number">(<span style="color: #007bff;">@count5</span> <span class="badge badge-dark"><i class="fa fa-user"></i></span>+ <span style="color: #007bff;">@count6</span> <span class="badge badge-dark"><i class="fa fa-user-circle"></i></span> ) = @count1</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-3">
+        <div class=" info-box">
+            <span class="info-box-icon bg-danger elevation-1"><i class="fa fa-thumbs-o-down"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">Trễ hạn</span>
+                <span class="info-box-number">@count2</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-md-3">
+        <div class="info-box">
+            <span class="info-box-icon bg-success elevation-1"><i class="fa fa-thumbs-o-up"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">Đúng hạn</span>
+                <span class="info-box-number">@count3</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-3">
+        <div class="info-box">
+            <span class="info-box-icon bg-warning elevation-1"><i class="fa fa-hand-rock-o"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">Sắp đến hạn</span>
+                <span class="info-box-number">@count4</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-success card-outline">
+            <div class="card-header">
+                <h3 class="card-title">
+                    @if (lInferior != null)
+                    {
+                        <div class="btn-group" style="height:40px">
+                            <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-address-book"></i>
+                            </button>
+                            <div class="dropdown-menu float-right" role="menu">
+                                <a href="/Task/Index2?userName=@itMe" class="dropdown-item"><i class="fa fa-user-circle"></i>Chính tôi</a>
+                                @foreach (var item in lInferior)
+                                {
+                                    <a href="/Task/Index2?userName=@item.UserName" class="dropdown-item"><i class="fa fa-user-circle"></i> @item.FullName</a>
+                                }
+
+                            </div>
+                        </div>
+                    }
+                    Nhiệm Vụ
+                </h3>
+
+                <div class="card-tools">
+
+                    <a class="btn btn-warning float-right" href="/Task/Create"><i class="fa fa-plus" style="font-size:24px;"></i></a>
+                    <div class="btn-group" style="height:40px">
+                        <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                            Filter <i class="fa fa-filter"></i>
+                        </button>
+                        <div class="dropdown-menu float-right" role="menu">
+                            <a href="/Task/Index2?userName=@userName&searchString=filterC0" style="color:black;" class="dropdown-item"><i class="fa fa-circle fa-2x" style="color: #fdb49d;"></i>Chưa xong + trễ Deadline</a>
+                            <a href="/Task/Index2?userName=@userName&searchString=filterC1" style="color:black;" class="dropdown-item"><i class="fa fa-circle fa-2x" style="color: #fbf6cb;"></i>Chưa xong + chưa đến Deadline</a>
+                            <a href="/Task/Index2?userName=@userName&searchString=filterC2" style="color:black;" class="dropdown-item"><i class="fa fa-circle fa-2x" style="color: #ceeefd;"></i>Đã xong + trễ Deadline</a>
+                            <a href="/Task/Index2?userName=@userName&searchString=filterC3" style="color:black;" class="dropdown-item"><i class="fa fa-circle fa-2x" style="color: #d6f7b1;"></i>Đã xong + đúng Deadline</a>
+                            <a href="/Task/Index2?userName=@userName&searchString=filterC-1" style="color:black;" class="dropdown-item"><i class="fa fa-circle fa-2x" style="color: #9E9E9E;"></i>Nhiện vụ bị hủy</a>
+                            <a href="/Task/Index2?userName=@userName&searchString=filterC-2" style="color:black;" class="dropdown-item"><i class="fa fa-circle fa-2x" style="color: #795548;"></i>Nhiện vụ bị từ chối</a>
+                            <a href="/Task/Index2?userName=@userName&" style="color:black;" class="dropdown-item">Tất cả</a>
+                        </div>
+                    </div>
+                    <div style="float:left">
+                        @using (Html.BeginForm("Index2", "Task", FormMethod.Get))
+                        {
+                            <div class="input-group " style="width: 300px;">
+                                <input type="text" value="@ViewBag.userName" name="userName" style="display:none;">
+
+                                <input type="text" value="@ViewBag.SearchString" name="searchString" class="form-control float-right" placeholder="tìm kiếm">
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <ul class="todo-list">
+                    @foreach (var item in Model)
+                    {
+                        @MyHelper.ViewTaskinTask(item, null)
+                    }
+
+                </ul>
+            </div>
+            <div class="card-footer clearfix">
+                <a class="btn btn-sm btn-info float-left" href="/Task/Create"><i class="fa fa-plus"></i> Thêm mới</a><a class="btn btn-sm btn-warning float-left" href="/Task/Report"><i class="fa fa-plus"></i> Report</a>
+                <div class="dataTables_paginate paging_simple_numbers float-right" id="example2_paginate">
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, @searchString = @ViewBag.SearchString }))
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

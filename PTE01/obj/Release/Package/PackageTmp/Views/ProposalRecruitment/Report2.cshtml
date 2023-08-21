@@ -1,0 +1,145 @@
+﻿@model IEnumerable<Model.View.ReportPR2>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    List<Model.View.Report1> chart1 = ViewBag.chart1;
+    DateTime homnay = DateTime.Now;
+    double countItem = Model.Count();
+    double countSum = 0;
+    foreach (var item in Model)
+    {
+        countSum = countSum + item.Quanlity;
+    }
+
+}
+<div class="card card-primary card-outline">
+    <div class="card-header">
+        <h3 class="card-title"><i class="fa fa-clipboard"></i>Tìm kiếm</h3>
+        <div class="card-tools">
+            <div class="btn-group" style="height:40px">
+                <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                    More
+                </button>
+                <div class="dropdown-menu float-right" role="menu">
+                    <a class="dropdown-item" href="/ProposalRecruitment/Index">Danh sách</a>
+                    @*<a class="dropdown-item" href="/ProposalRecruitment/Index2">Chi Tiết Tổng</a>*@
+                    <a class="dropdown-item" href="/ProposalRecruitment/Index3?month=@DateTime.Now.Month&year=@DateTime.Now.Year">Chi Tiết Từng Tháng</a>
+                    <a class="dropdown-item" href="/ProposalRecruitment/Report2?year=@DateTime.Now.Year&month=@DateTime.Now.Month">Report Nhóm Ứng Viên</a>
+                    <a class="dropdown-item" href="/ProposalRecruitment/Report5">Thống kê 12 Tháng</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        @using (Html.BeginForm("Report2", "ProposalRecruitment", FormMethod.Get))
+        {
+            <div class="row">
+                <div class="col-md-3 text-right">
+                    <p style="margin-bottom: 0;"> Chọn tháng/năm cần xem</p>
+                    <p style="color:red"> Note: nếu muốn xem cả năm thì chọn tháng = 0</p>
+                </div>
+                <div class="col-md-2">
+                    <input type="number" value="@ViewBag.month" class="form-control" name="month" />
+                </div>
+                <div class="col-md-2">
+                    <input type="number" value="@ViewBag.year" class="form-control" name="year" />
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-success form-control">Xem Báo Cáo</button>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+
+@if (Model.Count() > 0)
+{
+    <div class="card card-primary">
+        <div class="card-header">
+            Report Tuyển Dụng PTE tháng @ViewBag.month
+        </div>
+        <div class="card-body">
+
+            <div class="row">
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-primary">Tổng số người cần tuyển<span class="badge">@countSum</span></button>
+
+                </div>
+            </div>
+
+            <p></p>
+            <div class="row">
+                <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+                <script type="text/javascript">
+                            google.charts.load('current', { 'packages': ['corechart'] });
+                            google.charts.setOnLoadCallback(drawChart);
+
+                            function drawChart() {
+
+                                var data = google.visualization.arrayToDataTable([
+                                  ['Task', 'Hours per Day'],
+                                  @foreach(var item in chart1)
+                                  {
+                                       <text>
+                                       [' @item.Name.Replace("15", "Lao động phổ thong").Replace("30", "NV van phong, gian tiep, bao ve").Replace("35", "Cong nhan ky thuat co tay nghe").Replace("45", "Quan ly cap trung").Replace("60", "Quan ly cap cao").Replace("90", "Cap lanh đao")', @item.Value],
+                                        </text>
+                                     }
+                                ]);
+
+                                var options = {
+                                    title: 'Thống Kê Số Lượng Yêu Cầu Theo Nhóm Ứng Viên'
+                                };
+
+                                var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+                                chart.draw(data, options);
+                            }
+                </script>
+                <div id="piechart" style="width: 1180px; height: 500px;"></div>
+            </div>
+
+
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Số phiếu</th>
+                            <th>Người YC</th>
+                            <th>Vị Trí Tuyển</th>
+                            <th>Ngày Duyệt</th>
+                            <th>SL yêu cầu</th>
+                            @*<th>SL đã tuyển được</th>*@
+                            <th>Loại</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                                {
+                                        <tr id="row_@item.ID">
+                                            <td>@item.ID</td>
+                                            <td>@item.CreateBy</td>
+                                            <td>@item.Position  </td>
+                                            <td>@item.BOSSDate.Value.ToString("dd/MM/yyyy")</td>
+                                            <td>@item.Quanlity</td>
+                                            @*<td>@item.CountOK</td>*@
+                                            <td>@item.TypeJob</td>
+                                        </tr>
+                                }
+
+
+                    </tbody>
+                </table>
+
+            </div>
+
+            <!-- /.table-responsive -->
+
+        </div>
+    </div>
+}
+else
+{
+    <p style="color:red;">chưa có dữ liệu tháng này.....</p>
+}

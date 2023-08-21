@@ -1,0 +1,265 @@
+﻿@model List<Model.View.OverTimeView2>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    IEnumerable<Model.View.UserView2> listuser = ViewBag.listuser;
+    IEnumerable<Model.EF.PersonalGroup> listbp = ViewBag.listbp;
+    int count = 0;
+    TimeSpan sogio;
+    var tem = 0.01;
+}
+
+@section jsFooter
+{
+
+    <script src="/Assets/theme3/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+    <script>
+        $(function () {
+            $("#ngay1").datepicker();
+            $("#ngay2").datepicker();
+            $('input[type="checkbox"].flat-green, input[type="radio"].flat-green').iCheck({
+                checkboxClass: 'icheckbox_flat-green',
+                radioClass: 'iradio_flat-green'
+            })
+            $('.select2').select2()
+        })
+    </script>
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Tìm kiếm nâng cao</h3>
+        <div class="card-tools">
+            <div class="btn-group" style="height:37px">
+                <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                    More <i class="fa fa-filter"></i>
+                </button>
+                <div class="dropdown-menu float-right" role="menu">
+                    <a href="/OverTime/Index" style="color:black;" class="dropdown-item">Normal Search</a>
+                    <a href="/OverTime/SearchAdvance" style="color:black;" class="dropdown-item">Advance Search</a>
+                    <a href="/OverTime/Index?SearchString=duyet00" style="color:black;" class="dropdown-item">TBP chưa duyệt</a>
+                    <a href="/OverTime/Index?SearchString=duyet10" style="color:black;" class="dropdown-item">TBP duyệt, HCNS chưa duyệt</a>
+                </div>
+            </div>
+            
+        </div>
+
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="callout callout-info">
+                    <label class="control-label" style="color: #FF5722;">Chọn nhân viên</label><br>
+                    <select class="form-control select2" style="width: 100%;" id="manv">
+                        <option value="null">Tất Cả</option>
+                        @foreach (var item in listuser)
+                        {
+                            if (ViewBag.manv == item.UserName)
+                            {
+                                <option value="@item.UserName" selected>@item.FullName</option>
+                            }
+                            else
+                            {
+                                <option value="@item.UserName">@item.FullName</option>
+                            }
+                        }
+
+                    </select>
+
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="callout callout-info">
+                    <label class="control-label" style="color: #FF5722;">Chọn Bộ Phận</label><br>
+                    <select class="form-control select2" style="width: 100%;" id="mabp">
+                        <option value="null">Tất Cả</option>
+                        @foreach (var item in listbp)
+                        {
+
+                            if (ViewBag.mabp == item.ID.ToString())
+                            {
+                                <option value="@item.ID" selected>@item.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@item.ID">@item.Name</option>
+                            }
+
+                        }
+
+                    </select>
+
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="callout callout-info">
+                    <label class="control-label" style="color: #FF5722;">TBP Duyệt</label><br>
+                    @if (ViewBag.tbpduyet == "null" || ViewBag.tbpduyet ==null)
+                    {
+                        <label><input type="radio" class="flat-green" id="tbpduyet" name="tbpduyet" value="null" checked />Tất cả</label><br>
+                        <label><input type="radio" class="flat-green" id="tbpduyet" name="tbpduyet" value="true" />Đã duyệt</label><br>
+                        <label><input type="radio" class="flat-green" id="tbpduyet" name="tbpduyet" value="false" />chưa duyệt</label><br>
+                    }
+                    @if (ViewBag.tbpduyet == "true")
+                    {
+                        <label><input type="radio" class="flat-green" id="tbpduyet" name="tbpduyet" value="null" />Tất cả</label><br>
+                        <label><input type="radio" class="flat-green" id="tbpduyet" name="tbpduyet" value="true" checked />Đã duyệt</label><br>
+                        <label><input type="radio" class="flat-green" id="tbpduyet" name="tbpduyet" value="false" />chưa duyệt</label><br>
+                    }
+                    @if (ViewBag.tbpduyet == "false")
+                    {
+                        <label><input type="radio" class="flat-green" id="tbpduyet" name="tbpduyet" value="null" />Tất cả</label><br>
+                        <label><input type="radio" class="flat-green" id="tbpduyet" name="tbpduyet" value="true" />Đã duyệt</label><br>
+                        <label><input type="radio" class="flat-green" id="tbpduyet" name="tbpduyet" value="false" checked />chưa duyệt</label><br>
+                    }
+
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="callout callout-info">
+                    <label class="control-label" style="color: #FF5722;">HCNS Duyệt</label><br>
+                    @if (ViewBag.hcnsduyet == "null" || ViewBag.hcnsduyet == null)
+                    {
+                        <label><input type="radio" class="flat-green" id="hcnsduyet" name="hcnsduyet" value="null" checked />Tất cả</label><br>
+                        <label><input type="radio" class="flat-green" id="hcnsduyet" name="hcnsduyet" value="true" />Đã duyệt</label><br>
+                        <label><input type="radio" class="flat-green" id="hcnsduyet" name="hcnsduyet" value="false" />chưa duyệt</label><br>
+                    }
+                    @if (ViewBag.hcnsduyet == "true")
+                    {
+                        <label><input type="radio" class="flat-green" id="hcnsduyet" name="hcnsduyet" value="null" />Tất cả</label><br>
+                        <label><input type="radio" class="flat-green" id="hcnsduyet" name="hcnsduyet" value="true" checked />Đã duyệt</label><br>
+                        <label><input type="radio" class="flat-green" id="hcnsduyet" name="hcnsduyet" value="false" />chưa duyệt</label><br>
+                    }
+                    @if (ViewBag.hcnsduyet == "false")
+                    {
+                        <label><input type="radio" class="flat-green" id="hcnsduyet" name="hcnsduyet" value="null" />Tất cả</label><br>
+                        <label><input type="radio" class="flat-green" id="hcnsduyet" name="hcnsduyet" value="true" />Đã duyệt</label><br>
+                        <label><input type="radio" class="flat-green" id="hcnsduyet" name="hcnsduyet" value="false" checked />chưa duyệt</label><br>
+                    }
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="callout callout-info">
+                    <label class="control-label" style="color: #FF5722;">Thời gian tăng ca</label>
+                    <div class="bootstrap-timepicker">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <label>Từ:</label><input type="text" id="ngay1" name="ngay1" class="time1 form-control" readonly="readonly" value='@if(ViewBag.ngay1!=""){@ViewBag.ngay1}else{@DateTime.Now.ToShortDateString()}'><br>
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bootstrap-timepicker">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <label>Đến:</label> <input type="text" id="ngay2" name="ngay2" class="time1 form-control" readonly="readonly" value='@if(ViewBag.ngay2!=""){@ViewBag.ngay2}else{@DateTime.Now.AddDays(7).ToShortDateString()}'><br>
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 text-center">
+                <div class="form-group">
+                    <a class="btn btn-primary" id="inbaocao">Tìm kiếm</a>
+                </div>
+            </div>
+        </div>
+        <script src="~/Scripts/jquery-1.9.1.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                var manv = $("#manv").val();
+                var mabp = $("#mabp").val();
+                var tbpduyet = $("input[name=tbpduyet]:checked").val();
+                var hcnsduyet = $("input[name=hcnsduyet]:checked").val();
+                var ngay1 = $('#ngay1').val();
+                var ngay2 = $('#ngay2').val();
+                $('#inbaocao').attr("href", '/OverTime/SearchAdvance?manv=' + manv + '&mabp=' + mabp + '&tbpduyet=' + tbpduyet + '&hcnsduyet=' + hcnsduyet + '&ngay1=' + ngay1 + '&ngay2=' + ngay2);
+
+                $("#inbaocao").focus(function () {
+                    var manv = $("#manv").val();
+                    var mabp = $("#mabp").val();
+                    var tbpduyet = $("input[name=tbpduyet]:checked").val();
+                    var hcnsduyet = $("input[name=hcnsduyet]:checked").val();
+                    var ngay1 = $('#ngay1').val();
+                    var ngay2 = $('#ngay2').val();
+                    $('#inbaocao').attr("href", '/OverTime/SearchAdvance?manv=' + manv + '&mabp=' + mabp + '&tbpduyet=' + tbpduyet + '&hcnsduyet=' + hcnsduyet + '&ngay1=' + ngay1 + '&ngay2=' + ngay2);
+                });
+            });
+
+        </script>
+    </div>
+    <div class="card-footer">
+
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-success card-outline">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fa fa-clipboard"></i>@if (Model != null){<span>@Model.Count  Kết quả</span>}</h3>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Link</th>
+                            <th>Mã NV</th>
+                            <th>Tên NV</th>
+                            <th>Bộ Phận</th>
+                            <th>Ngày tăng ca</th>
+                            <th>Giờ tăng ca</th>
+                            <th>Note</th>
+                            <th>TBP</th>
+                            <th>HCNS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null)
+                        {
+                            foreach (var item in Model)
+                            {
+                                {
+                                    sogio = @item.Date2 - @item.Date1;
+                                    tem = @sogio.Hours + (@Convert.ToDouble(sogio.Minutes) / 60);
+                                }
+                                <tr>
+                                    <td><a href="/OverTime/Edit/@item.ID"><i class="fa fa-2x fa-link"></i></a></td>
+                                    <td>@item.PerID</td>
+                                    <td>@item.PerName</td>
+                                    <td>@item.DeName</td>
+                                    <td>@item.Date1.ToString("dd/MM/yyyy") <span style="color:red; font-weight:bold;">@item.Date1.ToString("HH:mm")-@item.Date2.ToString("HH:mm")</span> @item.Date2.ToString("dd/MM/yyyy")</td>
+                                    <td><span style="color:red; font-weight:bold;"> @String.Format("{0:0.0}", tem)</span> giờ</td>
+                                    <td>@item.Note</td>
+                                    <td>
+                                        @if (item.Approval1 == true)
+                                        {<span>duyệt</span>}
+                                        else
+                                        {<span></span>}
+                                    </td>
+                                    <td>
+                                        @if (item.Approval2 == true)
+                                        {<span>duyệt</span>}
+                                        else
+                                        {<span></span>}
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer clearfix">
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,79 @@
+﻿@model PagedList.IPagedList<Model.View.Meeting1>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-success card-outline">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fa fa-clipboard"></i> Phòng Họp</h3>
+
+                <div class="card-tools">
+                    <a href="/Meeting/Create" data-toggle="tooltip" title="Thêm mới "><i class="fa fa-plus-circle" style="font-size: 40px; color: red"></i></a>
+                    <div style="float:left">
+                        @using (Html.BeginForm("Index", "Meeting", FormMethod.Get))
+                        {
+                            <div class="input-group " style="width: 300px;">
+                                <input type="text" value="@ViewBag.SearchString" name="searchString" class="form-control float-right" placeholder="tìm kiếm">
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        }
+                        
+                    </div>
+                </div>
+               
+            </div>
+            <script src="~/Scripts/jquery-1.9.1.min.js"></script>
+            <div class="card-body">
+                <ul class="todo-list">
+                    @foreach (var item in Model)
+                    {
+                        <li>
+                            @*<a href="/Meeting/Edit/@item.ID">
+                                <span class="badge badge-dark">@item.ID </span>
+                            </a>*@
+                                @if (item.Cared == false)
+                                {
+                                    <span><i class="fa fa-home text-dark">họp nội bộ</i> </span>
+                                    <a href="/Meeting/Edit/@item.ID">(ID:@item.ID) <span class="text">@item.Reason</span></a>
+                                }
+                                else
+                                {
+                                    <span><i class="fa fa-star text-warning"> tiếp khách</i></span>
+                                    <a href="/Meeting/Edit/@item.ID"> (ID:@item.ID) <span class="text">@item.Subject</span></a> <span style="color:red;">HCNS cần chuẩn bị</span>
+                                }
+                                <span class="badge badge-info"><i class="fa fa-user-circle"></i> @item.CreateBy </span>
+                                @*<span class="badge badge-dark" data-toggle="tooltip" title="tạo ngày: @item.CreateDate"><i class="fa fa-user"></i> @item.CreateBy </span>*@
+                                <span class="badge badge-warning float-right"><i class="fa fa-clock-o"></i>@item.TimeFrom.ToString("dd/MM/yyyy") ( @item.TimeFrom.ToString("HH:mm") h - @item.TimeTo.ToString("HH:mm") h)</span>
+
+
+                                <span class="badge badge-info float-right"><i class="fa fa-university"></i> @item.RoomName </span>
+
+</li>
+    
+                    }
+
+                </ul>
+            </div>
+            <!-- The Modal -->
+
+            <div class="card-footer clearfix">
+                @*<a class="btn btn-sm btn-info float-left" href="/Meeting/Create"><i class="fa fa-plus"></i> Thêm mới</a>*@
+                <div class="dataTables_paginate paging_simple_numbers float-right" id="example2_paginate">
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, @searchString = @ViewBag.SearchString }))
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+

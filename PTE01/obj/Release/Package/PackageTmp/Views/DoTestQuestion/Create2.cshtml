@@ -1,0 +1,79 @@
+﻿@model Model.View.FullDoTestQuestion
+@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_Theme2.cshtml";
+    var detail = (Model.View.FullTestQuestion2)ViewBag.detail;
+    string userLogin = ViewBag.userLogin;
+    var lenght = detail.detail.Count();
+    long IDTeQ = ViewBag.IDTeQ;
+}
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Cot ben trai -->
+            @using (Html.BeginForm("Create2", "DoTestQuestion", FormMethod.Post))
+            {
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="col-md-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        Làm Bài Trắc Nghiệm Số: <strong>@detail.item.ID</strong>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-12 text-center">
+                                        <h2><strong>@detail.item.Name</strong></h2>
+                                    </div>
+                                </div>
+                                @if (userLogin == "nhanvien")
+                                    {
+                                    <div class="row">
+                                        <div class='col-md-6'>
+                                            <label class="control-label">Tên Người Làm</label>
+                                            @Html.TextBoxFor(model => model.item.CreateName, new { @class = "form-control", @placeholder = "" })
+                                        </div>
+
+                                    </div>
+                                    }
+                                <div style="display:none;"> <input class="form-control" name="item.IDTeQ" type="text" value="@IDTeQ"></div>
+                                @for (int i = 0; i < lenght; i++)
+                                    {
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <p><strong>Câu @(i + 1) :  @detail.detail[i].item.Name</strong>(@detail.detail[i].item.Point Điểm)</p>
+                                            <div style="display:none;"> <input class="form-control" name="detail[@i].IDQue" type="text" value="@detail.detail[i].item.ID"></div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            @foreach (var item in @detail.detail[i].detail)
+                                                {
+                                                <p> @Html.RadioButtonFor(model => model.detail[i].Answer, @item.No)  @item.No / @item.Name</p>
+
+                                                }
+                                        </div>
+                                    </div>
+                                    }
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <div class="col-md-4">
+                    <input type="submit" value="Lưu Lại" class="btn btn-primary" />
+                </div>
+            </div>
+
+            }
+
+        </div>
+
+
+    </div><!-- /.container-fluid -->
+</section>

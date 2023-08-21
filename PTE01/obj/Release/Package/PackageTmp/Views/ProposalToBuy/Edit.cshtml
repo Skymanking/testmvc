@@ -1,0 +1,291 @@
+﻿@model Model.View.FullPTB
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Theme1.cshtml";
+    var infoCreateBy = (Model.View.UserView1)ViewBag.ngtao;
+    var lenght = Model.detail.Count();
+    var lydo ="";
+}
+@section jsFooter
+{
+    <script src="/Scripts/CancelBuy.js"></script>
+}
+
+<div class="row">
+    @using (Html.BeginForm("Edit", "ProposalToBuy", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <!-- Cot ben trai -->
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    Thông Tin Yêu Cầu Mua Vật Tư
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+
+                                <div class="col-lg-4">
+                                    <label class="control-label">Người Đề Nghị: </label>
+                                    <label class="form-control">  @infoCreateBy.FullName</label>
+                                </div>
+                                <div class="col-lg-4">
+                                    <label class="control-label">Bộ phận: </label>
+                                    <label class="form-control">  @infoCreateBy.DepartmentName</label>
+                                </div>
+                                <div class="col-lg-4" style="display:block">
+                                    @Html.TextBoxFor(model => model.item.ID, new { @class = "form-control", @style = "display: none; visibility: hidden;" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <label class="control-label">Lý do</label>
+                                    @Html.TextBoxFor(model => model.item.Reason, new { @class = "form-control", @placeholder = "lý do đề nghị mua vật tư" })
+                                    @Html.ValidationMessageFor(model => model.item.Reason, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class='col-lg-4'>
+                                    <label class="control-label">Ngày yêu cầu</label>
+                                    <div class='input-group date' id='datetimepicker1'>
+                                        @Html.TextBoxFor(model => model.item.CreateDate, new { @class = "form-control", @placeholder = "ngày tạo phiếu yêu cầu" })
+                                        @Html.ValidationMessageFor(model => model.item.CreateDate, "", new { @class = "text-danger" })
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class='col-lg-4'>
+                                    <label class="control-label">Thời hạn đáp ứng </label>
+                                    <div class='input-group date' id='datetimepicker2'>
+                                        @Html.TextBoxFor(model => model.item.LimitedDate, new { @class = "form-control", @placeholder = "ngày bộ phận mua hàng phải đáp ứng" })
+                                        @Html.ValidationMessageFor(model => model.item.LimitedDate, "", new { @class = "text-danger" })
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+
+                                </div>
+                                <script type="text/javascript">
+                                    $(function () {
+                                        $('#datetimepicker1').datetimepicker({
+                                            format: 'MM/DD/YYYY'
+                                        });
+                                        $('#datetimepicker2').datetimepicker({
+                                            format: 'MM/DD/YYYY'
+                                        });
+                                    });
+                                </script>
+
+                            </div>
+
+                            <script>
+                                $(document).ready(function () {
+                                    $(window).keydown(function (event) {
+                                        if (event.keyCode == 13) {
+                                            event.preventDefault();
+                                            return false;
+                                        }
+                                    });
+                                });
+                            </script>
+
+
+
+                            <div class="form-group" style="padding-top:20px;">
+                                <table class="table table-striped table-bordered table-hover" id="gvCustomers">
+                                    <thead>
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>Tên vật tư</th>
+                                            <th>Ghi chú</th>
+                                            <th>ĐVT</th>
+                                            <th>Số lượng</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (int i = 0; i < lenght; i++)
+                                        {
+                                            <tr id="row">
+                                                <td width="80px">@Html.TextBoxFor(model => model.detail[i].No, new { @class = "form-control" })</td>
+                                                <td> @Html.TextBoxFor(model => model.detail[i].MaterialName, new { @class = "form-control", @placeholder = "tên vật tư" })</td>
+                                                <td> @Html.TextBoxFor(model => model.detail[i].Note, new { @class = "form-control", @placeholder = "ghi chú" })</td>
+                                                <td width="110px">@Html.TextBoxFor(model => model.detail[i].Unit, new { @class = "form-control", @placeholder = "đơn vị tính" })</td>
+                                                <td width="100px">@Html.TextBoxFor(model => model.detail[i].Quantity, new { @class = "form-control", @placeholder = "số lượng" })</td>
+                                            </tr>
+                                        }
+
+                                    </tbody>
+                                </table>
+                                <div id="addDelButtons" style="margin-top: 10px;" class="col-md-4">
+                                    <button type="button" id="btnAdd" class="btn btn-danger">Thêm dòng vật tư</button>
+                                </div>
+                                <div id="upload" style="margin-top: 10px; border: 1px solid #f2dede; padding: 10px; background: #fcf8e3; " class="col-md-12">
+
+                                    @if (Model.item.Files != null)
+                                    {
+                                        @Html.ActionLink("Xem file giải trình, thiết kế ...được đính kèm theo", "DownloadFile", new { fileName = @Model.item.Files })
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayText("Không có file đính kèm")
+                                    }
+
+                                </div>
+                                <script>
+                                    $(document).ready(function () {
+                                        $("#files").change(function () {
+                                            if ($("#files").val().substring(12, 400).length > 2) {
+                                                var linktext = "/ProposalToBuy/DownloadFile?fileName=" + $("#files").val().substring(12, 400);
+                                                $("#linkfile").attr("href", linktext);
+                                                $("#linkfile").show();
+                                            }
+                                            else { $("#linkfile").hide(); }
+                                        });
+                                    });
+                                </script>
+                                <script>
+                                    var count = $('#gvCustomers tr').length-1;
+                                    $(document).ready(function () {
+                                        function addRow() {
+                                            var html =
+                                            '<tr id="row_1">' +
+                                             '<td width="80px"> ' + (count + 1) + '</td>' +
+                                            '<td> <input class="form-control" data-val="true" data-val-length="The field MaterialName must be a string with a maximum length of 250." data-val-length-max="250" data-val-required="The MaterialName field is required." id="detail_' + count + '__MaterialName" name="detail[' + count + '].MaterialName" placeholder="tên vật tư" type="text" value=""> </td>' +
+                                           '<td> <input class="form-control" data-val="true" data-val-length="The field Note must be a string with a maximum length of 250." data-val-length-max="250" id="detail_' + count + '__Note" name="detail[' + count + '].Note" placeholder="ghi chú" type="text" value=""></td>' +
+                                            '<td width="110px"><input class="form-control" data-val="true" data-val-length="The field Unit must be a string with a maximum length of 50." data-val-length-max="50" id="detail_' + count + '__Unit" name="detail[' + count + '].Unit" placeholder="đơn vị tính" type="text" value=""></td>' +
+                                            '<td width="100px"><input class="form-control" data-val="true" data-val-number="The field Quantity must be a number." data-val-required="The Quantity field is required." id="detail_' + count + '__Quantity" name="detail[' + count + '].Quantity" placeholder="số lượng" type="text" value=""></td>' +
+                                             '</tr>'
+                                            count = count + 1;
+                                            $(html).appendTo($("#gvCustomers"))
+                                        };
+                                        $("#btnAdd").click(addRow);
+                                    });
+                                </script>
+                                <script>
+                                    $body = $("body");
+                                    $(document).on({
+                                        ajaxStart: function () { $body.addClass("loading"); },
+                                        ajaxStop: function () { $body.removeClass("loading"); }
+                                    });
+
+                                    $(document).ready(function () {
+                                        $("#upload").click(function () {
+                                            var data = new FormData();
+
+                                            //Add the Multiple selected files into the data object
+                                            var files = $("#files").get(0).files;
+                                            for (i = 0; i < files.length; i++) {
+                                                data.append("files" + i, files[i]);
+                                            }
+
+                                            //Post the data (files) to the server
+                                            if (files.length > 0) {
+                                                $.ajax({
+                                                    type: 'POST',
+                                                    url: "@Url.Action("Upload")",
+                                                    data: data,
+                                                    contentType: false,
+                                                    processData: false,
+                                                    success: function (data) {
+                                                        alert("Up file thanh cong!");
+                                                    },
+                                                    error: function () {
+                                                        alert("Qua trinh thanh cong!");
+                                                    },
+                                                });
+                                            }
+                                        });
+                                    });
+                                </script>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="form-group">
+            <div class="col-lg-12">
+                <label class="control-label">Ý kiến của Giám Đốc</label>
+                @Html.TextBoxFor(model => model.item.Confirm, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.item.Confirm, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th class="col-md-3">Trưởng bộ phận duyệt</th>
+                    <th class="col-md-3">Giám Đốc duyệt lần 1</th>
+                    <th class="col-md-3">BP Mua Hàng duyệt</th>
+                    <th class="col-md-3">Giám Đốc duyệt lần 2</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr id="row_0">
+                    <td>@Html.CheckBoxFor(model => model.item.HODApproval, new { @style = "height:90px; width:90px;" })</td>
+                    <td>@Html.CheckBoxFor(model => model.item.BOSSApproval1, new { @style = "height:90px; width:90px;" })</td>
+                    <td>@Html.CheckBoxFor(model => model.item.PDApproval, new { @style = "height:90px; width:90px;" })</td>
+                    <td>@Html.CheckBoxFor(model => model.item.BOSSApproval, new { @style = "height:90px; width:90px;" })</td>
+                </tr>
+            </tbody>
+        </table>
+        <!--------------------------fd-------End------------------------------------>
+        <div class="form-group">
+            <div class="col-md-4">
+                <input type="submit" value="Lưu Lại" class="btn btn-primary" />
+                
+            </div>
+            <div class="col-md-4">
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal">Xóa Phiếu Yêu Cầu </button>
+            </div>
+        </div>
+
+
+
+    }
+</div>
+
+<form id="myForm" method="post">
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            Modal content
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Lý do xóa phiếu</h4>
+                </div>
+                <div class="modal-body">
+                    <input class="form-control" data-val="true" id="lydo" name="lydo" placeholder="điền lý do hủy phiếu " type="text" value="">
+                </div>
+                <script>
+                    $(document).ready(function () {
+                        $("#lydo").keypress(function () {
+                            var lydos = $('#lydo').val();
+                        var abc = $('#huyphieu').attr("data-lydo", lydos);
+
+                        });
+                    });
+                </script>
+
+                <div class="modal-footer">
+                    <a href="#" id="huyphieu" class="btn-cancel" data-id="@Model.item.ID" style="background: red;    padding: 7px;  color: white;">Gửi mail thông báo và Xóa Phiếu</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+
+
+
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>

@@ -1,0 +1,313 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+ 
+}
+@section jsFooter
+{
+    <script src="/Scripts/ChangeReadedDocument.js"></script>
+
+}
+<script src="~/Scripts/jquery-1.9.1.min.js"></script>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-success card-outline">
+            <div class="card-header" style="background-image: url('/Assets/theme3/dist/img/bg-document1.jpg'); background-size: cover;height:200px">
+                @*<h3 class="card-title">Tài liệu</h3>*@
+                <div class="card-tools">
+                    <div class="btn-group" style="height: 37px; margin-top: -20px;">
+                        <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-filter"></i>
+                        </button>
+                        <div class="dropdown-menu float-right" role="menu">
+                            <a class="dropdown-item" href="/Document">Tất cả</a>
+                           
+                            <a class="dropdown-item" href="/Document/SearchAdvance1"><i class="fa fa-circle fa-2x" style="color: #fdb49d;"></i>Thống kê NV đã xem TL</a>
+                        </div>
+                    </div>
+                    <a href="/Document/Create" data-toggle="tooltip" title="Thêm mới "><i class="fa fa-plus-circle" style="font-size: 40px; color: red"></i></a>
+                    <div style="float:left">
+                        @using (Html.BeginForm("Index", "Document", FormMethod.Get))
+                        {
+                            <div class="input-group " style="width: 150px;">
+                                <input type="text" value="@ViewBag.SearchString" name="searchString" class="form-control float-right" placeholder="tìm kiếm">
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <!-- /.panel-heading -->
+            <div class="card-body">
+              
+                <div class="row">
+                    <div class="col-3">
+                        <button type="button" class="btn btn-block btn-success btn-lg" style="height: 70px; font-weight: bold;font-size: 26px;"> SỔ TAY</button>                        
+                    </div>
+                    <div class="col-3">
+                        <button type="button" class="btn btn-block btn-success btn-lg" style="height: 70px; font-weight: bold;font-size: 26px;">CHÍNH SÁCH</button>
+                    </div>
+                    <div class="col-3">
+                        <button type="button" class="btn btn-block btn-success btn-lg" style="height: 70px; font-weight: bold;font-size: 26px;">CHẤT LƯỢNG</button>
+                    </div>
+                    <div class="col-3">
+                        <button type="button" class="btn btn-block btn-success btn-lg" style="height: 70px; font-weight: bold;font-size: 26px;">MỤC TIÊU</button>
+                    </div>                    
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <button type="button" class="btn btn-block btn-success btn-lg" style="height: 70px; font-weight: bold;font-size: 26px;"> XÃ HỘI</button>
+                    </div>
+                    <div class="col-4">
+                        <button type="button" class="btn btn-block btn-success btn-lg" style="height: 70px; font-weight: bold;font-size: 26px;">MÔI TRƯỜNG</button>
+                    </div>
+                    <div class="col-4">
+                        <button type="button" class="btn btn-block btn-success btn-lg" style="height: 70px; font-weight: bold;font-size: 26px;">CHẤT LƯỢNG</button>
+                    </div>
+                </div>
+              
+
+                <div class="row">
+                    <div class="col-2">
+                        <div class="small-box" style="background: #28a745;">
+                            <div class="inner" style="height:120px">
+                                <p style="font-size: 18px; font-weight: bold; text-align: center; color: white;">HÀNH CHÍNH NHÂN SỰ</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-bag"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-1">
+                        <div class="small-box" style="background: #28a745;">
+                            <div class="inner" style="height:120px">
+                                <p style="font-size: 18px; font-weight: bold; text-align: center; color: white;">QMS</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-bag"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-1">
+                        <div class="small-box" style="background: #28a745;">
+                            <div class="inner" style="height:120px">
+                                <p style="font-size: 18px; font-weight: bold; text-align: center; color: white;">KẾ TOÁN</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-bag"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-1">
+                        <div class="small-box" style="background: #28a745;">
+                            <div class="inner" style="height:120px">
+                                <p style="font-size: 18px; font-weight: bold; text-align: center; color: white;">KINH DOANH</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-bag"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="small-box" style="background: #28a745;">
+                            <div class="inner" style="height:120px">
+                                <p style="font-size: 18px; font-weight: bold; text-align: center; color: white;">KẾ HOẠCH - KHO</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-bag"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-1">
+                        <div class="small-box" style="background: #28a745;">
+                            <div class="inner" style="height:120px">
+                                <p style="font-size: 18px; font-weight: bold; text-align: center; color: white;">SẢN XUẤT</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-bag"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-1">
+                        <div class="small-box" style="background: #28a745;">
+                            <div class="inner" style="height:120px">
+                                <p style="font-size: 18px; font-weight: bold; text-align: center; color: white;">R&D</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-bag"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-1">
+                        <div class="small-box" style="background: #28a745;">
+                            <div class="inner" style="height:120px">
+                                <p style="font-size: 18px; font-weight: bold; text-align: center; color: white;">KỸ THUẬT</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-bag"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-1">
+                        <div class="small-box" style="background: #28a745;">
+                            <div class="inner" style="height:120px">
+                                <p style="font-size: 18px; font-weight: bold; text-align: center; color: white;">BẢO TRÌ</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-bag"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-1">
+                        <div class="small-box" style="background: #28a745;">
+                            <div class="inner" style="height:120px">
+                                <p style="font-size: 18px; font-weight: bold; text-align: center; color: white;">QA/QC</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-bag"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                   
+                </div>
+
+                <div class="row">
+                    <div class="col-2">
+                        <div class="small-box" style="background: #28a745;">
+                            <div class="inner" style="height:120px">
+                                <p style="font-size: 26px; font-weight: bold; text-align: center; color: white;">QUY ĐỊNH</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-bag"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="small-box" style="background: #28a745;">
+                            <div class="inner" style="height:120px">
+                                <p style="font-size: 26px; font-weight: bold; text-align: center; color: white;">HƯỚNG DẪN CÔNG VIỆC</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-bag"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="small-box" style="background: #28a745;">
+                            <div class="inner" style="height:120px">
+                                <p style="font-size: 26px; font-weight: bold; text-align: center; color: white;">BIỂU MẪU</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-bag"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="small-box" style="background: #28a745;">
+                            <div class="inner" style="height:120px">
+                                <p style="font-size: 26px; font-weight: bold; text-align: center; color: white;">HỒ SƠ</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-bag"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="small-box" style="background: #28a745;">
+                            <div class="inner" style="height:120px">
+                                <p style="font-size: 26px; font-weight: bold; text-align: center; color: white;">HƯỚNG DẪN SỬ DỤNG</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-bag"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="small-box" style="background: #28a745;">
+                            <div class="inner" style="height:120px">
+                                <p style="font-size: 26px; font-weight: bold; text-align: center; color: white;">KHÁC</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-bag"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                   
+                </div>
+
+                <div class="row" style="">
+                    <div class="col-12">
+                        <button type="button" class="btn btn-outline-success">BOM Xi</button>
+                        <button type="button" class="btn btn-outline-success">BOM Ép</button>
+                        <button type="button" class="btn btn-outline-success">BOM Sơn</button>
+                        <button type="button" class="btn btn-outline-success">BOM Lắp Ráp</button>
+                        <button type="button" class="btn btn-outline-success">HDSD Web System</button>
+                        <button type="button" class="btn btn-outline-success">Đơn Xin Nghỉ Phép</button>
+                        <button type="button" class="btn btn-outline-success">Giấy Ra Cổng</button>
+                        <button type="button" class="btn btn-outline-success">Giấy Mang Hàng Hóa Ra Ngoài</button>
+                        <button type="button" class="btn btn-outline-success">BOM Xi</button>
+                        <button type="button" class="btn btn-outline-success">BOM Ép</button>
+                        <button type="button" class="btn btn-outline-success">BOM Sơn</button>
+                        <button type="button" class="btn btn-outline-success">BOM Lắp Ráp</button>
+                        <button type="button" class="btn btn-outline-success">HDSD Web System</button>
+                        <button type="button" class="btn btn-outline-success">Đơn Xin Nghỉ Phép</button>
+                        <button type="button" class="btn btn-outline-success">Giấy Ra Cổng</button>
+                        <button type="button" class="btn btn-outline-success">Giấy Mang Hàng Hóa Ra Ngoài</button>
+                        <button type="button" class="btn btn-outline-success">BOM Xi</button>
+                        <button type="button" class="btn btn-outline-success">BOM Ép</button>
+                        <button type="button" class="btn btn-outline-success">BOM Sơn</button>
+                        <button type="button" class="btn btn-outline-success">BOM Lắp Ráp</button>
+                        <button type="button" class="btn btn-outline-success">HDSD Web System</button>
+                        <button type="button" class="btn btn-outline-success">Đơn Xin Nghỉ Phép</button>
+                        <button type="button" class="btn btn-outline-success">Giấy Ra Cổng</button>
+                        <button type="button" class="btn btn-outline-success">Giấy Mang Hàng Hóa Ra Ngoài</button>
+                        <button type="button" class="btn btn-outline-success">BOM Xi</button>
+                        <button type="button" class="btn btn-outline-success">BOM Ép</button>
+                        <button type="button" class="btn btn-outline-success">BOM Sơn</button>
+                        <button type="button" class="btn btn-outline-success">BOM Lắp Ráp</button>
+                        <button type="button" class="btn btn-outline-success">HDSD Web System</button>
+                        <button type="button" class="btn btn-outline-success">Đơn Xin Nghỉ Phép</button>
+                        <button type="button" class="btn btn-outline-success">Giấy Ra Cổng</button>
+                        <button type="button" class="btn btn-outline-success">Giấy Mang Hàng Hóa Ra Ngoài</button>
+                        <button type="button" class="btn btn-outline-success">BOM Xi</button>
+                        <button type="button" class="btn btn-outline-success">BOM Ép</button>
+                        <button type="button" class="btn btn-outline-success">BOM Sơn</button>
+                        <button type="button" class="btn btn-outline-success">BOM Lắp Ráp</button>
+                        <button type="button" class="btn btn-outline-success">HDSD Web System</button>
+                        <button type="button" class="btn btn-outline-success">Đơn Xin Nghỉ Phép</button>
+                        <button type="button" class="btn btn-outline-success">Giấy Ra Cổng</button>
+                        <button type="button" class="btn btn-outline-success">Giấy Mang Hàng Hóa Ra Ngoài</button>
+                        <button type="button" class="btn btn-outline-success">BOM Xi</button>
+                        <button type="button" class="btn btn-outline-success">BOM Ép</button>
+                        <button type="button" class="btn btn-outline-success">BOM Sơn</button>
+                        <button type="button" class="btn btn-outline-success">BOM Lắp Ráp</button>
+                        <button type="button" class="btn btn-outline-success">HDSD Web System</button>
+                        <button type="button" class="btn btn-outline-success">Đơn Xin Nghỉ Phép</button>
+                        <button type="button" class="btn btn-outline-success">Giấy Ra Cổng</button>
+                        <button type="button" class="btn btn-outline-success">Giấy Mang Hàng Hóa Ra Ngoài</button>
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+    </div>
+</div>

@@ -1,0 +1,110 @@
+﻿@model PagedList.IPagedList<Model.View.TrainingPlanView1>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-success card-outline">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fa fa-clipboard"></i>Kế Hoạch đào tạo</h3>
+                <div class="card-tools">
+                    <div class="btn-group" style="height:40px">
+                        <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-file-excel-o"></i>
+                        </button>
+                        <div class="dropdown-menu float-right" role="menu">
+                            <a class="dropdown-item" href="/Training">Ghi nhận Đào tạo</a>
+                            <a class="dropdown-item" href="/TrainingPlan">Kế hoạch đào tạo</a>
+                            <a class="dropdown-item" href="#">Báo cáo</a>
+                        </div>
+                    </div>
+                    <div style="float:left">
+                        @using (Html.BeginForm("Index", "TrainingPlan", FormMethod.Get))
+                        {
+                            <div class="input-group " style="width: 300px;">
+                                <input type="text" value="@ViewBag.SearchString" name="searchString" class="form-control float-right" placeholder="tìm kiếm">
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+ 
+            <div class="card-body">
+                <div class="table-responsive">
+                    <div class="row">
+                        <div class="col-12">
+                            <a class="btn btn-sm btn-info float-left" href="/TrainingPlan/Create"><i class="fa fa-plus"></i> Thêm mới</a>
+                        </div>
+                    </div>
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Môn Đào Tạo</th>
+                                <th>Giảng viên</th>
+                                <th>Thời gian</th>
+                                <th>Tiến độ</th>                                
+                                <th>Xem</th>
+                                <th>Sửa</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    @{long rate = 0;
+                                      rate =@item.CountLearned * 100 / @item.Quantity;                                      
+                                      }
+                                    @if (rate > 100)
+                                    {rate=100; }
+                                    <td>@item.ID</td>
+                                    <td>@item.NameSub</td>
+                                    <td>@item.TeacherName</td>       
+                                    <td>@item.TimeFrom.ToString("dd/MM/yyyy") -> @item.TimeTo.ToString("dd/MM/yyyy")</td>                              
+                                    <td>
+                                        @item.CountLearned/@item.Quantity                                      
+                                        
+                                        <div class="progress progress-sm float-right" style="width: 200px; margin-top: 5px; margin-right: 10px; height: 20px;">
+
+                                            <span class="badge bg-warning" style="font-size: 100%;">@rate%</span>
+                                            <div class="progress-bar bg-primary progress-bar-striped" role="progressbar"
+                                                 aria-valuenow="@rate" aria-valuemin="0" aria-valuemax="100" style="width: @rate%">
+                                            </div>
+                                        </div>
+                                        @if (rate >= 100)
+                                        {<span class='fa fa-check-circle-o fa-2x float-right' style='color: #0cb583;font-size: 30px;'></span>}
+                                        else
+                                        {
+                                            if (item.TimeTo <= DateTime.Now)
+                                            { <span class='fa fa-times-circle-o fa-2x float-right' style='color: #dc3545; font-size: 30px;'></span>}
+                                        }
+                                    </td>                                    
+                                    <td>
+                                        <a href="/Training/?searchString=@item.ID"><span class='fa fa-eye' style="font-size: 22px;"></span></a>
+                                    </td>
+                                    <td>
+                                        <a href="/TrainingPlan/Edit/@item.ID"><span class='fa fa-edit' style="font-size: 22px;"></span></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <div class="card-footer clearfix">
+               @* <a class="btn btn-sm btn-info float-left" href="/TrainingPlan/Create"><i class="fa fa-plus"></i> Thêm mới</a>*@
+                <div class="dataTables_paginate paging_simple_numbers float-right" id="example2_paginate">
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, @searchString = @ViewBag.SearchString }))
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

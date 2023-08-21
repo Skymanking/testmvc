@@ -1,0 +1,93 @@
+﻿@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    var detail = (Model.EF.Planing)ViewBag.detail;
+    var info1 = (List<Model.View.RecordPro3>)ViewBag.info1;
+    var info2 = (List<Model.View.RecordPro2>)ViewBag.info2;
+    var product = (Model.EF.Product)ViewBag.product;
+}
+
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title"> Thông Tin Chi Tiết Kế Hoạch SX - Số Phiếu: <strong>@detail.ID</strong></h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-3">
+                @if (@product.InfoB9!= null)
+                {
+                    <img class="img-fluid pad" src="@product.InfoB9" alt="link hình bị lỗi">
+                }
+                else
+                { <img class="img-fluid pad" src="~/Assets/theme3/dist/img/noimgpro.png" alt="link hình bị lỗi">}
+
+            </div>
+            <div class="col-9">
+                <h3>@product.Name</h3>
+                <h5>Line:<strong style="color:red;">@detail.Line</strong>  Mã SP:<strong style="color:red;">@detail.ItemID</strong> Số lượng:<strong style="color:red;">@detail.Quantity</strong></h5>
+                <h5>Thời gian:<strong style="color:red;">@detail.StartDate.ToString("dd/MM/yyyy hh:mm") - @detail.EndDate.ToString("dd/MM/yyyy hh:mm") </strong> </h5>
+                <p>Người tạo: <strong>@detail.CreateBy</strong>- Ngày tạo: <strong>@detail.CreateDate.ToString("dd/MM/yyyy hh:mm")</strong>- Số lần chỉnh sửa: <strong>@detail.CountEdit</strong></p>
+                <p>Ghi chú: @detail.Note</p>
+                <p>Lịch sử chỉnh sửa: @Html.Raw(detail.History) </p>
+            </div>
+            <div class="col-md-12">
+                <h3>SỐ LƯỢNG TỪNG CÔNG ĐOẠN</h3>
+                <div class="row" style="padding-top:5px;margin:20px;">
+                    <table class="table table-striped table-bordered table-hover" id="gvCustomers">
+                        <thead>
+                            <tr>
+                                <th>Công đoạn</th>
+                                <th>Tổng số lượng OK</th>
+                                <th>Tổng số lượng NG</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in info1)
+                            {
+                            <tr>
+                                <td>@item.Step</td>
+                                <td>@item.SumOK</td>
+                                <td>@item.SumNG</td>
+                            </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+                <h3>CHI TIẾT NHẬP LIỆU SẢN XUẤT</h3>
+                <div class="row" style="padding-top:5px;margin:20px;">
+                    <table class="table table-striped table-bordered table-hover" id="gvCustomers">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>người tạo</th>
+                                <th>ngày tạo</th>
+                                <th>Mã SP</th>
+                                <th>công đoạn</th>
+                                <th>công đoạn trước/ ngày ép</th>
+                                <th>SL OK</th>
+                                <th>SL NG</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach(var item in info2)
+                            {
+                            <tr>
+                                <td>@item.ID</td>
+                                <td>@item.CreateBy</td>
+                                <td>@item.CreateDate.ToString("dd/MM/yyyyy HH:mm")</td>
+                                <td>@item.ItemID</td>
+                                <td>@item.StepName</td>
+                                <td>@item.PreRecord</td>
+                                <td>@item.SLOK</td>
+                                <td>@item.SLNG</td>
+                            </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

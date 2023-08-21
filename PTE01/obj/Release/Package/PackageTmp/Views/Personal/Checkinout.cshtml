@@ -1,0 +1,149 @@
+﻿@{
+    ViewBag.Title = "Checkinout";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    List<SelectListItem> itemfile = new List<SelectListItem>();
+    itemfile.Add(new SelectListItem
+    {
+        Text = "Chi tiết chấm công Tháng 1 năm 2019",
+        Value = "201901",
+        Selected = true
+    });
+    itemfile.Add(new SelectListItem
+    {
+        Text = "Chi tiết chấm công Tháng 2 năm 2019",
+        Value = "201902",
+    });
+    itemfile.Add(new SelectListItem
+    {
+        Text = "Chi tiết chấm công Tháng 3 năm 2019",
+        Value = "201903",
+    });
+    itemfile.Add(new SelectListItem
+    {
+        Text = "Chi tiết chấm công Tháng 4 năm 2019",
+        Value = "201904",
+    });
+    itemfile.Add(new SelectListItem
+    {
+        Text = "Chi tiết chấm công Tháng 5 năm 2019",
+        Value = "201905",
+    });
+    itemfile.Add(new SelectListItem
+    {
+        Text = "Chi tiết chấm công Tháng 6 năm 2019",
+        Value = "201906",
+    });
+    itemfile.Add(new SelectListItem
+    {
+        Text = "Chi tiết chấm công Tháng 7 năm 2019",
+        Value = "201907",
+    });
+    itemfile.Add(new SelectListItem
+    {
+        Text = "Chi tiết chấm công Tháng 8 năm 2019",
+        Value = "201908",
+    });
+    itemfile.Add(new SelectListItem
+    {
+        Text = "Chi tiết chấm công Tháng 9 năm 2019",
+        Value = "201909",
+    });
+    itemfile.Add(new SelectListItem
+    {
+        Text = "Chi tiết chấm công Tháng 10 năm 2019",
+        Value = "201910",
+    });
+    itemfile.Add(new SelectListItem
+    {
+        Text = "Chi tiết chấm công Tháng 11 năm 2019",
+        Value = "201911",
+    });
+    itemfile.Add(new SelectListItem
+    {
+        Text = "Chi tiết chấm công Tháng 12 năm 2019",
+        Value = "201912",
+    });
+    itemfile.Add(new SelectListItem
+    {
+        Text = "Chi tiết chấm công Tháng 1 năm 2020",
+        Value = "202001",    
+    });
+    itemfile.Add(new SelectListItem
+    {
+        Text = "Chi tiết chấm công Tháng 2 năm 2020",
+        Value = "202002",    
+    });
+    itemfile.Add(new SelectListItem
+    {
+        Text = "Chi tiết chấm công Tháng 3 năm 2020",
+        Value = "202003",    
+    });
+    itemfile.Add(new SelectListItem
+    {
+        Text = "Chi tiết chấm công Tháng 4 năm 2020",
+        Value = "202004",
+    });
+    itemfile.Add(new SelectListItem
+    {
+        Text = "Chi tiết chấm công Tháng 5 năm 2020",
+        Value = "202005",
+    });
+    itemfile.Add(new SelectListItem
+    {
+        Text = "Chi tiết chấm công Tháng 6 năm 2020",
+        Value = "202006",
+    });
+    itemfile.Add(new SelectListItem
+    {
+        Text = "Chi tiết chấm công Tháng 7 năm 2020",
+        Value = "202007",
+    });
+    itemfile.Add(new SelectListItem
+    {
+        Text = "Chi tiết chấm công Tháng 8 năm 2020",
+        Value = "202008",
+    });
+    itemfile.Add(new SelectListItem
+    {
+        Text = "Chi tiết chấm công Tháng 9 năm 2020",
+        Value = "202009",
+    });
+    itemfile.Add(new SelectListItem
+    {
+        Text = "Chi tiết chấm công Tháng 10 năm 2020",
+        Value = "202010",
+    });
+    itemfile.Add(new SelectListItem
+    {
+        Text = "Chi tiết chấm công Tháng 11 năm 2020",
+        Value = "202011",
+    });
+}
+
+@section jsFooter
+{
+    <script>
+        $(function () {
+            $('.select2').select2()
+        })
+    </script>
+<script>
+    $(document).ready(function () {   
+        $('.select2').on('change', function () {
+            var temp = $(this).find(":selected").val();
+            $('#download').attr("href", "/checkinout/" + temp + ".xlsx");
+        });
+    });
+</script>
+}
+<div class="row">
+
+        <label>Chọn :</label>
+    <select class="form-control select2" style="width: 300px;">
+        @foreach(var item in itemfile)
+        {
+            <option value="@item.Value">@item.Text</option>
+        }
+    </select>
+    <a class="btn btn-info" id="download" href="/checkinout/201901.xlsx"><i class="fa fa-download"> Download file</i></a>
+</div>

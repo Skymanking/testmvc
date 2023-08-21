@@ -1,0 +1,230 @@
+﻿@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+    var uutien = new List<SelectListItem>();
+    uutien.Add(new SelectListItem
+    {
+        Text = "Low",
+        Value = "1",
+        Selected = true
+    });
+    uutien.Add(new SelectListItem
+    {
+        Text = "Medium",
+        Value = "2",
+    });
+    uutien.Add(new SelectListItem
+    {
+        Text = "High",
+        Value = "3",
+    });
+    string tempid = "";
+}
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link href="~/Assets/js/jquery-ui.css" rel="stylesheet" />
+
+<script src="/Assets/theme3/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+<script>
+    $(function () {
+        $(".date").datepicker();
+        $('.select2').select2()
+        $('input[type="checkbox"].flat-green, input[type="radio"].flat-green').iCheck({
+            checkboxClass: 'icheckbox_flat-green',
+            radioClass: 'iradio_flat-green'
+        })
+        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+            checkboxClass: 'icheckbox_flat-red',
+            radioClass: 'iradio_flat-red'
+        })
+
+    })
+</script>
+
+
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Tạo mới Phiếu Gia cồng hàng mẫu </h3>
+    </div>
+    @using (Html.BeginForm("Create2", "RFQuotation", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-1">
+                    <label class="control-label col-md-12">ID</label>
+                    <input class="form-control" value="ID1" disabled />
+                </div>
+                <div class="col-md-7">
+                    <label class="control-label col-md-12">Name</label>
+                    <input class="form-control" value="Phiếu gia công hàng mẫu" />
+                </div>
+                <div class='col-md-2'>
+                    <label>Deadline:</label>
+                    <div class="input-group mb-3">
+                        <input class="form-control" value="@DateTime.Today.ToShortDateString()" />
+                        <div class=" input-group-append">
+                            <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-md-2'>
+                    <label class="control-label">Priority</label>
+                    <select class="form-control">
+                        <option>Low</option>
+                        <option>Medium</option>
+                        <option>High</option>
+                    </select>
+                </div>
+
+                <div class="col-md-12">
+                    <label class="control-label col-md-12">Note</label>
+                    <textarea class="form-control"></textarea>
+                </div>
+            </div>
+            <div class="rows">
+                <div class="form-group" style="padding-top:20px;">
+                    <table class="table table-striped table-bordered table-hover" id="gvCustomers">
+                        <thead>
+                            <tr>
+                                <th style="width: 60px;">Checked</th>
+                                <th>Operation</th>
+                                <th style="width: 100px;">Quantity</th>
+                                <th>DSNV</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < 5; i++)
+                            {
+                                <tr>
+                                    @{tempid = "detail_" + i + "__Owner"; }
+                                    <td> <input id="Process_@i" name="Process_@i" style="width:30px; height:30px" type="checkbox" value="true" checked></td>
+                                    <td>
+                                        <span style="font-size:20px; font-weight:bold;color:red;">Ope: @i</span>
+                                        <span style="display:none;"> <input class="form-control" type="text" value="@i"></span>
+                                    </td>
+                                    <td>
+                                        @*@Html.TextBoxFor(model => model.detail[i].Quantity, new { @class = "form-control", @type = "number", @style = "background:#f798c4" })*@
+                                        <input class="form-control" id="Quantity_@i" type="number" value="@i">
+                                    </td>
+
+                                    <td>
+                                        <ul>
+                                            <li id="dong_152037" style="background-color: rgb(214, 247, 177);">
+                                                <div class="tooltipImage" style="background: url('/Data/NhanVien/files/A2071_3x4.jpg');background-size: 35px;">
+                                                    <span>
+                                                        <img src="/Data/NhanVien/files/A2071_3x4.jpg" style="width: 100px;">
+                                                        <p>tam.nguyenit tạo ngày: 2/28/2023 11:54:34 AM</p>
+                                                    </span>
+                                                </div>
+                                                <span class="badge badge-info"><i class="fa fa-clock-o"></i> 04/03/2023</span>
+                                                <a href="/Task/Edit/152037">Tạo View Phiếu yêu cầu gia công hàng mẫu</a><br>
+                                                <a class="float-right" href="/Task/Copy/152037" target="_blank" id="themnvc_152037" data-toggle="tooltip" title="Copy nhiệm vụ">
+                                                    <i class="fa fa-copy" style="font-size: 20px;color: #3F51B5;"></i>
+                                                </a>
+                                                <div class="progress progress-sm float-right" style="width: 100px; margin-top: 5px; margin-right: 10px;">
+                                                    <div class="progress-bar bg-primary progress-bar-striped" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                                    </div>
+                                                </div>
+                                                <div class="tooltipImage float-right" style="background: url('/Data/NhanVien/files/A2071_3x4.jpg');background-size: 35px;">
+                                                    <span>
+                                                        <img src="/Data/NhanVien/files/A2071_3x4.jpg" style="width: 100px;">
+                                                        <p>Owner: tam.nguyenit</p>
+                                                    </span>
+                                                </div>
+                                                <span class="badge float-right" style="background-color: #000000; color: #ffffff">28/02/2023</span>
+                                                <span class="badge float-right" style="background-color: #28a745; color: #ffffff">xong</span>                                        <br>
+
+                                            </li>
+                                            <hr />
+                                            <li id="dong_152037" style="background-color: rgb(214, 247, 177);">
+                                                <div class="tooltipImage" style="background: url('/Data/NhanVien/files/A2071_3x4.jpg');background-size: 35px;">
+                                                    <span>
+                                                        <img src="/Data/NhanVien/files/A2071_3x4.jpg" style="width: 100px;">
+                                                        <p>tam.nguyenit tạo ngày: 2/28/2023 11:54:34 AM</p>
+                                                    </span>
+                                                </div>
+                                                <span class="badge badge-info"><i class="fa fa-clock-o"></i> 04/03/2023</span>
+                                                <a href="/Task/Edit/152037">Tạo View Phiếu yêu cầu gia công hàng mẫu</a><br>
+                                                <a class="float-right" href="/Task/Copy/152037" target="_blank" id="themnvc_152037" data-toggle="tooltip" title="Copy nhiệm vụ">
+                                                    <i class="fa fa-copy" style="font-size: 20px;color: #3F51B5;"></i>
+                                                </a>
+                                                <div class="progress progress-sm float-right" style="width: 100px; margin-top: 5px; margin-right: 10px;">
+                                                    <div class="progress-bar bg-primary progress-bar-striped" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                                    </div>
+                                                </div>
+                                                <div class="tooltipImage float-right" style="background: url('/Data/NhanVien/files/A2071_3x4.jpg');background-size: 35px;">
+                                                    <span>
+                                                        <img src="/Data/NhanVien/files/A2071_3x4.jpg" style="width: 100px;">
+                                                        <p>Owner: tam.nguyenit</p>
+                                                    </span>
+                                                </div>
+                                                <span class="badge float-right" style="background-color: #000000; color: #ffffff">28/02/2023</span>
+                                                <span class="badge float-right" style="background-color: #28a745; color: #ffffff">xong</span>                                        <br>
+
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <script>
+                                $(document).ready(function () {
+                                    $("#Quantity_@i").val("0");
+                                    $("#Process_@i").change(function () {
+                                        if (this.checked) {
+                                            $("#Quantity_@i").val("1");
+                                        }
+                                        else { $("#Quantity_@i").val("0"); }
+                                    });
+                                    $("#Quantity_@i").change(function () {
+                                        if ($("#Quantity_@i").val() > 0) { $("#Process_@i").prop("checked", true); }
+                                        else { { $("#Process_@i").prop("checked", false); } }
+                                    });
+                                });
+
+                                </script>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <label class="control-label col-md-12">Ý kiến của Giám Đốc</label>
+                <input class="form-control" placeholder="" />
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th class="col-md-3" style="width:20%;">R&D</th>
+                            <th class="col-md-3" style="width:20%;">BOD</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="row_0">
+                            <td style="background: #f2fbe9;"><input type="checkbox" checked style="height: 60px; width: 60px;" /></td>
+                            <td style="background: #f2fbe9;"><input type="checkbox" checked style="height: 60px; width: 60px;" /></td>
+                        </tr>
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="row">
+                <div class="col-6">
+                    <button type="submit" class="nutsave btn btn-primary" onclick="openNav()">Lưu thông tin</button>
+                </div>
+
+            </div>
+        </div>
+
+    }
+</div>
+

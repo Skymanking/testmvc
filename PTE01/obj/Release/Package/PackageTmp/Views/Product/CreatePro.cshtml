@@ -1,0 +1,142 @@
+﻿@model Model.View.ProductPro
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Theme3.cshtml";
+
+    var listT = (List<Model.EF.ProductType>)ViewBag.listType;
+    var listtype = new List<SelectListItem>();
+
+    foreach (var item in listT)
+    {
+        listtype.Add(new SelectListItem
+        {
+            Text = item.Name,
+            Value = item.ID.ToString(),
+        });
+    }
+}
+@section jsFooter
+{
+    <script>
+        $(function () {
+            $('.select2').select2()
+        })
+    </script>
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<div class="row">
+
+    <div class="col-md-12">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Thông tin Sản Phẩm</h3>
+            </div>
+            <div class="card-body">
+                <div class="tab-content">
+                    <div class="row">
+                        @using (Html.BeginForm("CreatePro", "Product", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                            <div class="col-md-12">
+                                        <div class="row">
+                                                    <div class='col-md-3'>
+                                                        <label class="control-label">Mã Cũ</label>
+                                                        @Html.TextBoxFor(model => model.Code1, null, new { @class = "form-control" })
+                                                    </div>
+                                            <div class='col-md-9'>
+                                                <label class="control-label">Tên Sản Phẩm Nội Bộ</label>
+                                                @Html.TextBoxFor(model => model.Name, new { @class = "form-control", @placeholder = "bắt buộc điền", @style = "background: #f9d7d4;" })
+                                            </div>
+                                                    
+                                                    
+                                                    <div class='col-md-3'>
+                                                        <label class="control-label">Khách Hàng</label>
+                                                        @Html.DropDownListFor(model => model.IDCus, null, new { @class = "form-control select2" })
+                                                    </div>
+                                            <div class='col-md-9'>
+                                                <label class="control-label">Tên Sản Phẩm Xuất Hóa Đơn</label>
+                                                @Html.TextBoxFor(model => model.Code2, new { @class = "form-control" })
+                                            </div>
+                                                    <table class="table table-striped table-bordered table-hover" id="gvCustomers">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>STT</th>
+                                                                <th>Mã ERP</th>
+                                                                <th>Loại Sản Phẩm</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach (var item in listtype)
+                                                            {
+                                                                if (item.Value == "1")
+                                                                { item.Selected = true; }
+                                                            }
+                                                            <tr id="row_0" class="clonedInput">
+                                                                <td width="80px">1</td>
+                                                                <td> @Html.TextBoxFor(model => model.Listitem[0].ID, new { @class = "form-control", @placeholder = "Mã ERP Khuôn nếu có", @style = "background: #8bc34a40;" })</td>
+                                                                <td> @Html.DropDownListFor(model => model.Listitem[0].IDType, listtype, new { @class = "form-control" })</td>
+                                                            </tr>
+                                                            @foreach (var item in listtype)
+                                                            {
+                                                                if (item.Value == "2")
+                                                                { item.Selected = true; }
+                                                            }
+                                                            <tr id="row_1">
+                                                                <td width="80px">2</td>
+                                                                <td> @Html.TextBoxFor(model => model.Listitem[1].ID, new { @class = "form-control", @placeholder = "Mã ERP Ép nếu có", @style = "background: #8bc34a40;" })</td>
+                                                                <td> @Html.DropDownListFor(model => model.Listitem[1].IDType, listtype, new { @class = "form-control" })</td>
+                                                            </tr>
+                                                            @foreach (var item in listtype)
+                                                            {
+                                                                if (item.Value == "3")
+                                                                { item.Selected = true; }
+                                                            }
+                                                            <tr id="row_2">
+                                                                <td width="80px">3</td>
+                                                                <td> @Html.TextBoxFor(model => model.Listitem[2].ID, new { @class = "form-control", @placeholder = "Mã ERP Xi nếu có", @style = "background: #8bc34a40;" })</td>
+                                                                <td> @Html.DropDownListFor(model => model.Listitem[2].IDType, listtype, new { @class = "form-control" })</td>
+                                                            </tr>
+                                                            @foreach (var item in listtype)
+                                                            {
+                                                                if (item.Value == "4")
+                                                                { item.Selected = true; }
+                                                            }
+                                                            <tr id="row_3">
+                                                                <td width="80px">4</td>
+                                                                <td> @Html.TextBoxFor(model => model.Listitem[3].ID, new { @class = "form-control", @placeholder = "Mã ERP Sơn nếu có", @style = "background: #8bc34a40;" })</td>
+                                                                <td> @Html.DropDownListFor(model => model.Listitem[3].IDType, listtype, new { @class = "form-control" })</td>
+                                                            </tr>
+
+                                                            @foreach (var item in listtype)
+                                                            {
+                                                                if (item.Value == "99")
+                                                                { item.Selected = true; }
+                                                            }
+                                                            <tr id="row_5">
+                                                                <td width="80px">5</td>
+                                                                <td> @Html.TextBoxFor(model => model.Listitem[5].ID, new { @class = "form-control", @placeholder = "Mã ERP Gá nếu có", @style = "background: #8bc34a40;" })</td>
+                                                                <td> @Html.DropDownListFor(model => model.Listitem[5].IDType, listtype, new { @class = "form-control" })</td>
+                                                            </tr>
+
+                                                        </tbody>
+                                                    </table>
+                                                    <div class='col-md-12'>
+                                                        <label class="control-label">Ghi chú</label>
+                                                        @Html.TextAreaFor(model => model.Note, new { @class = "form-control", @rows = "5" })
+                                                    </div>
+                                        </div>
+                            </div>
+<div class="card-footer">
+                                <button type="submit" class="btn btn-primary">Lưu thông tin</button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

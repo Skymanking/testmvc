@@ -1,0 +1,126 @@
+﻿@model PagedList.IPagedList<Model.View.FixRequest1>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Theme1.cshtml";
+    var userLogin = (string)ViewBag.userName;
+}
+@section jsFooter
+{
+    <script src="/Scripts/ChangeCompletedFixRequest.js"></script>
+}
+
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="page-header">Danh Sách Yêu Cầu Sửa Chữa Thiết Bị</h1>
+    </div>
+</div>
+<div class="row">
+
+    <div class="col-md-12">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Yêu Cầu Sửa Chữa Thiết Bị
+            </div>
+
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                @using (Html.BeginForm("Index", "FixRequest", FormMethod.Get))
+                {
+                    <div class="row form-group">
+                        <div class="col-md-12">
+                            <div class="col-md-6">                            
+                                <div class="input-group">
+                                    <input type="text" value="@ViewBag.SearchString" class="form-control" name="searchString" />
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-default" type="submit" style="padding-left:30px;padding-right:50px;"><i class="glyphicon glyphicon-search"></i> </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <a class="btn btn-primary" href="/FixRequest/Create">Thêm mới</a>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="padding-right: 80px;">
+                                        Thống Kê <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a class="btn" href="/FixRequest?searchString=chua+sua+chua">Chưa Sửa Chữa</a></li>
+                                        <li><a class="btn" href="/FixRequest?searchString=chua+nghiem+thu">Chưa Nghiệm Thu</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
+                }
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+
+                                <th>Số phiếu</th>
+                                <th>Ngày tạo</th>
+                                <th>Người YC</th>
+                                <th>Tên thiết bị</th>
+                                <th>Người nhận YC</th>
+                                <th>Người sửa chữa</th>
+                                <th>Trưởng Phòng duyệt</th>
+                                <th>Sửa xong</th>
+                                <th>Nghiệm thu</th>
+                                <th>Hành động</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr id="row_@item.ID">
+                                    <td>@item.ID</td>
+                                    <td>@item.CreateDate.ToString("dd/MM/yyyy")</td>
+                                    <td>@item.CreateBy</td>
+                                    <td>@item.DeviceName</td>
+                                    <td>@item.Receiver</td>
+                                    <td>@item.Fixer</td>
+                                    <td width="60px">@Html.Raw(item.HODApproval ? "<span class='fa fa-check fa-2x'></span>" : "<span class='fa fa-times fa-2x'></span>")</td>
+                                    
+                                          <td width="60px">@Html.Raw(item.Completed ? "<span class='fa fa-check fa-2x'></span>" : "<span class='fa fa-times fa-2x'></span>")</td>
+                                    <td width="60px">@Html.Raw(item.Finished ? "<span class='fa fa-check fa-2x'></span>" : "<span class='fa fa-times fa-2x'></span>")</td>
+                                    
+                                    
+                                    <td width="120px">
+                                        @if (item.Completed == false)
+                                        {
+                                            @Html.ActionLink("|Xem|  ", "Edit", new { ID = item.ID })
+
+                                            @Ajax.ActionLink("|Xóa|  ", "Delete", new { ID = item.ID }, new AjaxOptions
+                                            {
+                                                Confirm = "Bạn có muốn xoá bản ghi này?",
+                                                OnComplete = "$('#row_" + @item.ID + "').remove()",
+                                                HttpMethod = "Delete"
+                                            });
+                                        }
+                                        else
+                                        {
+                                            @Html.ActionLink("|Xem|  ", "Edit", new { ID = item.ID })
+                                        }
+                                    </td>
+                                </tr>
+                            }
+
+
+                        </tbody>
+                    </table>
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, @searchString = @ViewBag.SearchString }))
+                </div>
+                <!-- /.table-responsive -->
+            </div>
+            <!-- /.panel-body -->
+        </div>
+    </div>
+</div>

@@ -1,0 +1,178 @@
+﻿@model Model.EF.MMRate
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Theme1.cshtml";
+
+    List<SelectListItem> point = new List<SelectListItem>();
+    point.Add(new SelectListItem
+    {
+        Text = "Yếu",
+        Value = "1",
+
+    });
+
+    point.Add(new SelectListItem
+         {
+             Text = "Kém",
+             Value = "2",
+
+         });
+    point.Add(new SelectListItem
+    {
+        Text = "Trung Bình",
+        Value = "3",
+        Selected = true
+    });
+
+    point.Add(new SelectListItem
+         {
+             Text = "Khá",
+             Value = "4",
+
+         });
+    point.Add(new SelectListItem
+    {
+        Text = "Tốt",
+        Value = "5",
+
+    });
+    var kn1 = "Kỹ năng lắng nghe & nắm bắt tâm lý người khác";
+    var kn2 = "Kỹ năng giao tiếp, trình bày & thuyết trình trước nhóm";
+    var kn3 = "Kỹ năng thuyết phục";
+    var kn4 = "Kỹ năng quản lý cảm xúc";
+    var kn5 = "Khả năng làm việc nhóm & độc lập";
+    var kn6 = "Khả năng giải quyết vấn đề/ giải quyết xung đột";
+    var kn7 = "Khả năng ứng phó với sự thay đổi";
+    var kn8 = "Thái độ chủ động/ bị động, hướng đến hành động";
+    var kn9 = "Sẵn sàng thực hiện một nhiệm vụ mà không có hỗ trợ";
+    var kn10 = "Tuân thủ các nội quy, quy định và quy trình của công ty";
+    var kn11 = "Tuân thủ mệnh lệnh cấp trên";
+    var kn12 = "Đối xử bình đẳng với tất cả nhân viên (tôn trọng đồng nghiệp)";
+    var kn13 = "Cẩn thận, kỹ lưỡng với công việc";
+    var kn14 = "Cầu tiến và ham học hỏi";
+    var kn15 = "";
+
+}
+
+
+
+
+<div class="row">
+    @using (Html.BeginForm("Create", "MMRate", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <!-- Cot ben trai -->
+        <div class="col-md-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    Thông Tin Đánh Giá MM
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class='col-md-6'>
+                            <label class="control-label">Chọn Người Được Đánh Giá</label>
+                            @Html.DropDownListFor(model => model.UserRated, null, new { @class = "form-control" })
+                        </div>
+
+                    </div>
+                    <div class="row" style="    padding-top: 20px;">
+                        <div class='col-md-12'> <label class="control-label">@kn1 </label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point1, point, new { @class = "form-control" })  </div>
+                        <div class='col-md-9'> @Html.TextBoxFor(model => model.Comment1, new { @class = "form-control", @placeholder = "nhận xét - không bắt buộc" })</div>
+                    </div>
+                    <div class="row" style="    padding-top: 20px;">
+                        <div class='col-md-12'> <label class="control-label">@kn2</label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point2, point, new { @class = "form-control" })  </div>
+                        <div class='col-md-9'> @Html.TextBoxFor(model => model.Comment2, new { @class = "form-control", @placeholder = "nhận xét - không bắt buộc" })</div>
+                    </div>
+                    <div class="row" style="    padding-top: 20px;">
+                        <div class='col-md-12'> <label class="control-label">@kn3</label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point3, point, new { @class = "form-control" })  </div>
+                        <div class='col-md-9'> @Html.TextBoxFor(model => model.Comment3, new { @class = "form-control", @placeholder = "nhận xét - không bắt buộc" })</div>
+                    </div>
+                    <div class="row" style="    padding-top: 20px;">
+                        <div class='col-md-12'> <label class="control-label">@kn4</label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point4, point, new { @class = "form-control" })  </div>
+                        <div class='col-md-9'> @Html.TextBoxFor(model => model.Comment4, new { @class = "form-control", @placeholder = "nhận xét - không bắt buộc" })</div>
+                    </div>
+                    <div class="row" style="    padding-top: 20px;">
+                        <div class='col-md-12'> <label class="control-label">@kn5</label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point5, point, new { @class = "form-control" })  </div>
+                        <div class='col-md-9'> @Html.TextBoxFor(model => model.Comment5, new { @class = "form-control", @placeholder = "nhận xét - không bắt buộc" })</div>
+                    </div>
+                    <div class="row" style="    padding-top: 20px;">
+                        <div class='col-md-12'> <label class="control-label">@kn6</label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point6, point, new { @class = "form-control" })  </div>
+                        <div class='col-md-9'> @Html.TextBoxFor(model => model.Comment6, new { @class = "form-control", @placeholder = "nhận xét - không bắt buộc" })</div>
+                    </div>
+                    <div class="row" style="    padding-top: 20px;">
+                        <div class='col-md-12'> <label class="control-label">@kn7</label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point7, point, new { @class = "form-control" })  </div>
+                        <div class='col-md-9'> @Html.TextBoxFor(model => model.Comment7, new { @class = "form-control", @placeholder = "nhận xét - không bắt buộc" })</div>
+                    </div>
+                    <div class="row" style="    padding-top: 20px;">
+                        <div class='col-md-12'> <label class="control-label">@kn8</label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point8, point, new { @class = "form-control" })  </div>
+                        <div class='col-md-9'> @Html.TextBoxFor(model => model.Comment8, new { @class = "form-control", @placeholder = "nhận xét - không bắt buộc" })</div>
+                    </div>
+                    <div class="row" style="    padding-top: 20px;">
+                        <div class='col-md-12'> <label class="control-label">@kn9</label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point9, point, new { @class = "form-control" })  </div>
+                        <div class='col-md-9'> @Html.TextBoxFor(model => model.Comment9, new { @class = "form-control", @placeholder = "nhận xét - không bắt buộc" })</div>
+                    </div>
+                    <div class="row" style="    padding-top: 20px;">
+                        <div class='col-md-12'> <label class="control-label">@kn10</label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point10, point, new { @class = "form-control" })  </div>
+                        <div class='col-md-9'> @Html.TextBoxFor(model => model.Comment10, new { @class = "form-control", @placeholder = "nhận xét - không bắt buộc" })</div>
+                    </div>
+                    <div class="row" style="    padding-top: 20px;">
+                        <div class='col-md-12'> <label class="control-label">@kn11</label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point11, point, new { @class = "form-control" })  </div>
+                        <div class='col-md-9'> @Html.TextBoxFor(model => model.Comment11, new { @class = "form-control", @placeholder = "nhận xét - không bắt buộc" })</div>
+                    </div>
+                    <div class="row" style="    padding-top: 20px;">
+                        <div class='col-md-12'> <label class="control-label">@kn12</label> </div>
+                        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point12, point, new { @class = "form-control" })  </div>
+                        <div class='col-md-9'> @Html.TextBoxFor(model => model.Comment12, new { @class = "form-control", @placeholder = "nhận xét - không bắt buộc" })</div>
+                    </div>
+                    <div class="row" style="    padding-top: 20px;">
+                            <div class='col-md-12'> <label class="control-label">@kn13</label> </div>
+                            <div class='col-md-3'> @Html.DropDownListFor(model => model.Point13, point, new { @class = "form-control" })  </div>
+                            <div class='col-md-9'> @Html.TextBoxFor(model => model.Comment13, new { @class = "form-control", @placeholder = "nhận xét - không bắt buộc" })</div>
+                        </div>
+                        <div class="row" style="    padding-top: 20px;">
+                            <div class='col-md-12'> <label class="control-label">@kn14</label> </div>
+                            <div class='col-md-3'> @Html.DropDownListFor(model => model.Point14, point, new { @class = "form-control" })  </div>
+                            <div class='col-md-9'> @Html.TextBoxFor(model => model.Comment14, new { @class = "form-control", @placeholder = "nhận xét - không bắt buộc" })</div>
+                        </div>
+                      @*  <div class="row" style="    padding-top: 20px;">
+        <div class='col-md-12'> <label class="control-label">Tiêu chí 15</label> </div>
+        <div class='col-md-3'> @Html.DropDownListFor(model => model.Point15, point, new { @class = "form-control" })  </div>
+        <div class='col-md-9'> @Html.TextBoxFor(model => model.Comment15, new { @class = "form-control", @placeholder = "nhận xét - không bắt buộc" })</div>
+    </div>*@
+
+                </div>
+            </div>
+
+        </div>
+        <!--------------------------fd-------End------------------------------------>
+
+        <div class="form-group">
+            <div class="col-md-4">
+                <input type="submit" value="Lưu Lại" class="btn btn-primary" />
+            </div>
+        </div>
+        <br>
+        <br>
+
+    }
+</div>
+
+
+
+<p></p>
+<p></p>
+<p></p>
+<p></p>
