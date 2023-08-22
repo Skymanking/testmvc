@@ -95,5 +95,11 @@ namespace PTE01.Controllers
             string filep = Server.MapPath(@"/Data/Employees.json");
             return new EmployeeDao().CheckIDExit(ID, filep);
         }
+        [HttpPost]
+        public bool ChangeStatus(string ID)
+        {
+            string filep = Server.MapPath(@"/Data/Employees.json");
+            return new EmployeeDao().ChangeStatus(ID, filep);
+        }
     }
 }

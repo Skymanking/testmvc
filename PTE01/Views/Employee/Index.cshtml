@@ -36,6 +36,7 @@
                             <th style="width:100px">Code</th>
                             <th>Name</th>
                             <th>Department</th>
+                            <th style="width:50px">Status</th>
                             <th style="width:50px">Edit</th>
                         </tr>
                     </thead>
@@ -46,16 +47,26 @@
                                 <td>@item.ID</td>
                                 <td>@item.Name</td>
                                 <td>@item.Department</td>
-                                @if (ViewBag.permission == true)
-                                {
-                                    <td><a href="/Employee/Edit?emp=@item.ID"><i class="fa fa-wrench"></i></a></td>
-                                }
-                                else
-                                {
-                                    <td><a href="/Employee/ViewEmp?emp=@item.ID"><i class="fa fa-eye"></i></a></td>
-                                }
-                            </tr>
-                        }
+                                <td>
+                                    @if (item.Status)
+                                    {
+                                        <i class="fa fa-check-circle" style="color:blue"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fa fa-remove" style="color:red"></i>
+                                    }
+                            </td>
+                            @if (ViewBag.permission == true)
+                            {
+                                <td><a href="/Employee/Edit?emp=@item.ID"><i class="fa fa-wrench"></i></a></td>
+                            }
+                            else
+                            {
+                                <td><a href="/Employee/ViewEmp?emp=@item.ID"><i class="fa fa-eye"></i></a></td>
+                            }
+                        </tr>
+                    }
                     </tbody>
                 </table>
             </div>

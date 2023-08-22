@@ -47,6 +47,25 @@ namespace Model.Dao
             }
             return model.Any(x => x.ID == ID);
         }
+        public bool ChangeStatus(string ID, string file)
+        {
+            List<Employee> model = new List<Employee> { };
+            using (StreamReader r = new StreamReader(file))
+            {
+                string json = r.ReadToEnd();
+                model = JsonConvert.DeserializeObject<List<Employee>>(json);
+            }
+            foreach (var item in model)
+            {
+                if (item.ID == ID)
+                {
+                    item.Status = false;
+                }
+            }
+            var convertedJson = JsonConvert.SerializeObject(model, Formatting.Indented);
+            File.WriteAllText(file, convertedJson);
+            return true;
+        }
         public string Insert(Employee entity, string file)
         {
             List<Employee> model = new List<Employee> { };

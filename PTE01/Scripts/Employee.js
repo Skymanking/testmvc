@@ -13,3 +13,21 @@
         }
     });
 }
+function Delete(ID) {
+    event.preventDefault();
+    var text = "Delete?";
+    if (confirm(text)) {
+        $.ajax({
+            url: "/Employee/ChangeStatus",
+            data: { ID: ID },
+            dataType: "text",
+            type: "POST",
+            success: function (response) {
+                if (response == "True") {
+                    alert("Deleted");
+                    window.location = '/Employee';
+                }
+            }
+        });
+    }
+}
