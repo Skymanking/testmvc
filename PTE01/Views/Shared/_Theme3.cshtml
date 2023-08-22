@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>PTE SYSTEM</title>
+    <title>@ViewBag.Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/Assets/theme3/plugins/font-awesome/css/font-awesome.min.css">
 
@@ -32,9 +32,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href="../../../"><strong>Trang Chủ</strong></a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="../../../Document?searchString=HDSD%20WEB%20NỘI%20BỘ"><strong style="color: #dc3545; }">HDSD</strong></a>
-                </li>
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
@@ -53,7 +50,7 @@
                 <div class="container-fluid">
                     @RenderBody()
 
-                    <div class="not-print" style="position:fixed; bottom:30px;right:30px;"><button type="button" data-toggle="modal" data-target="#myModaladdTask" style="color: #fff; font-size: 20px; width: 50px; height: 50px; border-radius: 50%; background: red;"><span class="fa fa-plus"></span></button></div>
+                    @*<div class="not-print" style="position:fixed; bottom:30px;right:30px;"><button type="button" data-toggle="modal" data-target="#myModaladdTask" style="color: #fff; font-size: 20px; width: 50px; height: 50px; border-radius: 50%; background: red;"><span class="fa fa-plus"></span></button></div>*@
                 </div>
             </section>
         </div>
@@ -77,38 +74,40 @@
                 </center>
             </div>
         </div>
-        <form id="myFormAddTask" method="post">
-            <div class="modal fade" id="myModaladdTask" role="dialog">
-                <div class="modal-dialog" style="max-width: 400px;">
-                    <div class="modal-content">
-                        <div class="modal-body">
-                            <ul class="todo-list">
-                                <li><a href="~/ProposalToMaterial/Create" style="font-size: 20px;"><i class="fa fa-plus-circle" style="font-size: 30px; color: red"></i> Yêu cầu xuất vật tư</a></li>
-                                <li><a href="~/ProposalToBuy/Create1" style="font-size: 20px;"><i class="fa fa-plus-circle" style="font-size: 30px; color: red"></i> Yêu cầu mua vật tư</a></li>
-                                <li><a href="~/FixRequest/Create" style="font-size: 20px;"><i class="fa fa-plus-circle" style="font-size: 30px; color: red"></i> Yêu cầu sửa chữa</a></li>
-                                <li><a href="~/Meeting/Create" style="font-size: 20px;"><i class="fa fa-plus-circle" style="font-size: 30px; color: red"></i> Đặt lịch phòng họp</a></li>
-                                <li><a href="~/Task/Create" style="font-size: 20px;"><i class="fa fa-plus-circle" style="font-size: 30px; color: red"></i> Tạo nhiệm vụ</a></li>
-                                <li><a href="~/ProposalLeave/Create" style="font-size: 20px;"><i class="fa fa-plus-circle" style="font-size: 30px; color: red"></i> Xin nghỉ phép</a></li>
-                                <li><a href="~/OverTime/index" style="font-size: 20px;"><i class="fa fa-plus-circle" style="font-size: 30px; color: red"></i> Đăng ký tăng ca</a></li>
-                                <li><a href="~/T5SDefect/Create" style="font-size: 20px;"><i class="fa fa-plus-circle" style="font-size: 30px; color: red"></i> Tạo mới Defect 5S</a></li>
+        @*<form id="myFormAddTask" method="post">
+                <div class="modal fade" id="myModaladdTask" role="dialog">
+                    <div class="modal-dialog" style="max-width: 400px;">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <ul class="todo-list">
+                                    <li><a href="~/ProposalToMaterial/Create" style="font-size: 20px;"><i class="fa fa-plus-circle" style="font-size: 30px; color: red"></i> Yêu cầu xuất vật tư</a></li>
+                                    <li><a href="~/ProposalToBuy/Create1" style="font-size: 20px;"><i class="fa fa-plus-circle" style="font-size: 30px; color: red"></i> Yêu cầu mua vật tư</a></li>
+                                    <li><a href="~/FixRequest/Create" style="font-size: 20px;"><i class="fa fa-plus-circle" style="font-size: 30px; color: red"></i> Yêu cầu sửa chữa</a></li>
+                                    <li><a href="~/Meeting/Create" style="font-size: 20px;"><i class="fa fa-plus-circle" style="font-size: 30px; color: red"></i> Đặt lịch phòng họp</a></li>
+                                    <li><a href="~/Task/Create" style="font-size: 20px;"><i class="fa fa-plus-circle" style="font-size: 30px; color: red"></i> Tạo nhiệm vụ</a></li>
+                                    <li><a href="~/ProposalLeave/Create" style="font-size: 20px;"><i class="fa fa-plus-circle" style="font-size: 30px; color: red"></i> Xin nghỉ phép</a></li>
+                                    <li><a href="~/OverTime/index" style="font-size: 20px;"><i class="fa fa-plus-circle" style="font-size: 30px; color: red"></i> Đăng ký tăng ca</a></li>
+                                    <li><a href="~/T5SDefect/Create" style="font-size: 20px;"><i class="fa fa-plus-circle" style="font-size: 30px; color: red"></i> Tạo mới Defect 5S</a></li>
 
 
-                            </ul>
+                                </ul>
+                            </div>
+
+
                         </div>
 
-
                     </div>
-
                 </div>
-            </div>
 
-        </form>
+            </form>*@
 
         <footer class="main-footer">
-            <strong>Copyright &copy; 2019 <a href="http://www.pte.vn">PTE</a>.</strong>
+            <strong>
+                Copyright &copy; 2019
+            </strong>
             All rights reserved.
             <div class="float-right d-none d-sm-inline-block">
-                <b>Version</b> 20200702
+                <b>Version</b> 20230810
             </div>
         </footer>
         <!------------------------------------------------ Footer - end ------------------------------------------------->

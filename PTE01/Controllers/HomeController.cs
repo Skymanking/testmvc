@@ -24,7 +24,8 @@ namespace PTE01.Controllers
         {
             var session = (UserLogin)Session[CommonConstants.USER_SESSION];
             var owner = new UserDao();
-            ViewBag.infouser = owner.ViewInfo1(session.UserName);
+            string filep = Server.MapPath(@"/Data/User.json");
+            ViewBag.infouser = owner.GetById(session.UserName, filep);
             return View();
         }
         public ActionResult LeftMenu3()
@@ -33,12 +34,6 @@ namespace PTE01.Controllers
             string filep = Server.MapPath(@"/Data/User.json");
             var model = new UserDao().GetById(session.UserName, filep);
             ViewBag.infoUser = model;
-            return PartialView(model);
-        }
-        public ActionResult LeftMenu2()
-        {
-            var session = (UserLogin)Session[CommonConstants.USER_SESSION];
-            var model = new PersonalDao().ViewDetail(session.UserName);
             return PartialView(model);
         }
     }

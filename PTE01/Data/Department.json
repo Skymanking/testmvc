@@ -1,0 +1,14 @@
+[
+  {
+    "ID": "BOD",
+    "Name": "Ban giám đốc"
+  },
+  {
+    "ID": "IT",
+    "Name": "Phòng IT"
+  },
+  {
+    "ID": "HR",
+    "Name": "Phòng Nhân sự"
+  }
+]

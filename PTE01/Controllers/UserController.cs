@@ -20,12 +20,13 @@ namespace PTE01.Controllers
         {
 
             var session = (UserLogin)Session[CommonConstants.USER_SESSION];
-            var check1 = new PermissionDao().CheckUser("ManageUser", session.UserName);
+            string filep = Server.MapPath(@"/Data/User.json");
+            var check1 = new PermissionDao().CheckUser("Administrator", session.UserName, filep);
             IEnumerable<User> model = null;
             if (check1)
             {
                 var dao = new UserDao();
-                model = dao.ListAllPaging1(searchString, page, pageSize);
+                model = dao.ListAllPaging1(searchString, filep, page, pageSize);
                 ViewBag.SearchString = searchString;
                 ViewBag.permission = check1;
                 return View(model);
@@ -39,7 +40,10 @@ namespace PTE01.Controllers
         {
             Session["FOLDERPATH_SESSION"] = "NhanVien";
             var session = (UserLogin)Session[CommonConstants.USER_SESSION];
-            var check1 = new PermissionDao().CheckUser("ManageUser", session.UserName);
+            string filePer = Server.MapPath(@"/Data/Permission.json");
+            string filep = Server.MapPath(@"/Data/User.json");
+            ViewBag.ListPer = new PermissionDao().ListAll(filePer);
+            var check1 = new PermissionDao().CheckUser("Administrator", session.UserName, filep);
             ViewBag.permission = check1;
             return View();
         }
@@ -48,9 +52,12 @@ namespace PTE01.Controllers
         public ActionResult Edit(string userName)
         {
             Session["FOLDERPATH_SESSION"] = "NhanVien";
-            var user = new UserDao().ViewDetail(userName);
+            string filep = Server.MapPath(@"/Data/User.json");
+            string filePer = Server.MapPath(@"/Data/Permission.json");
+            ViewBag.ListPer = new PermissionDao().ListAll(filePer);
+            var user = new UserDao().GetById(userName, filep);
             var session = (UserLogin)Session[CommonConstants.USER_SESSION];
-            var check1 = new PermissionDao().CheckUser("ManageUser", session.UserName);
+            var check1 = new PermissionDao().CheckUser("Administrator", session.UserName, filep);
             ViewBag.permission = check1;
             return View(user);
         }
@@ -59,13 +66,14 @@ namespace PTE01.Controllers
         public ActionResult Create(User user)
         {
             var session = (UserLogin)Session[CommonConstants.USER_SESSION];
-            var check1 = new PermissionDao().CheckUser("ManageUser", session.UserName);
+            string filep = Server.MapPath(@"/Data/User.json");
+            var check1 = new PermissionDao().CheckUser("Administrator", session.UserName, filep);
             if (check1)
             {
                 var dao = new UserDao();
                 var encryptedMd5Pas = Encryptor.MD5Hash(user.Password);
                 user.Password = encryptedMd5Pas;
-                dao.Insert(user);
+                dao.Insert(user, filep);
             }
             return RedirectToAction("Index", "User");
         }
@@ -73,7 +81,8 @@ namespace PTE01.Controllers
         public ActionResult Edit(User user)
         {
             var session = (UserLogin)Session[CommonConstants.USER_SESSION];
-            var check1 = new PermissionDao().CheckUser("ManageUser", session.UserName);
+            string filep = Server.MapPath(@"/Data/User.json");
+            var check1 = new PermissionDao().CheckUser("Administrator", session.UserName, filep);
             if (check1)
             {
                 var dao = new UserDao();
@@ -82,26 +91,9 @@ namespace PTE01.Controllers
                     var encryptedMd5Pas = Encryptor.MD5Hash(user.Password);
                     user.Password = encryptedMd5Pas;
                 }
-                dao.Update(user);
+                dao.Update(user, filep);
             }
             return RedirectToAction("Index", "User");
-        }
-        [HttpDelete]
-        public ActionResult Delete(string userName)
-        {
-            new UserDao().Delete(userName);
-
-            return RedirectToAction("Index");
-        }
-
-        [HttpPost]
-        public JsonResult ChangeStatus(string userName)
-        {
-            var result = new UserDao().ChangeStatus(userName);
-            return Json(new
-            {
-                status = result
-            });
         }
     }
 }

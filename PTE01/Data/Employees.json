@@ -1,20 +1,32 @@
-﻿{
-  "Employees": [
-    {
-      "ID": "1",
-      "Name": "Employee 1",
-      "BirthDate": "01/01/1998",
-      "Address": "Address 1",
-      "Email": "Email 1",
-      "Phone": "0939123456"
-    },
-    {
-      "ID": "2",
-      "Name": "Employee 2",
-      "BirthDate": "12/31/1999",
-      "Address": "Address 1",
-      "Email": "Email 2",
-      "Phone": "0939876543"
-    }
-  ]
-}
+[
+  {
+    "ID": "1",
+    "Name": "Employee 1",
+    "BirthDate": "1998-01-01T00:00:00",
+    "Address": "Address 1",
+    "Email": "Email 1",
+    "Phone": "0939123456",
+    "Department": "BOD",
+    "Status": true
+  },
+  {
+    "ID": "2",
+    "Name": "Employee 2 Test Update",
+    "BirthDate": "1999-12-31T00:00:00",
+    "Address": "Address 1 Test Update",
+    "Email": "Email@gmail",
+    "Phone": "0337664294",
+    "Department": "IT",
+    "Status": true
+  },
+  {
+    "ID": "12",
+    "Name": "123",
+    "BirthDate": "2023-08-21T00:00:00",
+    "Address": "2121",
+    "Email": "skymankingtam@gmail.com",
+    "Phone": "0337664294",
+    "Department": "BOD",
+    "Status": true
+  }
+]

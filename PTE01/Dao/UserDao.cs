@@ -54,44 +54,60 @@ namespace Model.Dao
             var item = ListUser.Where(x => x.Username == username).FirstOrDefault();
             return item;
         }
-        public IEnumerable<User> ListAllPaging1(string searchString, int page, int pageSize)
+        public IEnumerable<User> ListAllPaging1(string searchString, string file, int page, int pageSize)
         {
-            IQueryable<User> model = null;
+            List<User> model = new List<User> { };
+            using (StreamReader r = new StreamReader(file))
+            {
+                string json = r.ReadToEnd();
+                model = JsonConvert.DeserializeObject<List<User>>(json);
+            }
             if (!string.IsNullOrEmpty(searchString))
             {
-                model = model.Where(x => x.Username.Contains(searchString) || x.FullName.Contains(searchString));
+                model = model.Where(x => x.Username.Contains(searchString) || x.FullName.Contains(searchString)).ToList();
             }
 
             return model.OrderByDescending(x => x.Username).ToPagedList(page, pageSize);
         }
-        public bool ChangePassword(string userName, string pass)
+        public string Insert(User entity, string file)
+        {
+            List<User> model = new List<User> { };
+            using (StreamReader r = new StreamReader(file))
+            {
+                string json = r.ReadToEnd();
+                model = JsonConvert.DeserializeObject<List<User>>(json);
+            }
+            model.Add(entity);
+            var convertedJson = JsonConvert.SerializeObject(model, Formatting.Indented);
+            File.WriteAllText(file, convertedJson);
+            return "";
+        }
+        public bool Update(User entity, string file)
         {
             try
             {
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-        public string ViewInfo1(string user)
-        {
-            return "";
-        }
-        public string ViewDetail(string user)
-        {
-            return "";
-        }
-        public string Insert(User entity)
-        {
-            return "";
-        }
-        public bool Update(User entity)
-        {
-            try
-            {
+                List<User> model = new List<User> { };
+                using (StreamReader r = new StreamReader(file))
+                {
+                    string json = r.ReadToEnd();
+                    model = JsonConvert.DeserializeObject<List<User>>(json);
+                }
+                foreach (var item in model)
+                {
+                    if (item.Username == entity.Username)
+                    {
+                        item.FullName = entity.FullName;
+                        item.Status = entity.Status;
+                        item.Level = entity.Level;
+                        if (!string.IsNullOrEmpty(entity.Password))
+                        {
+                            item.Password = entity.Password;
 
+                        }
+                    }
+                }
+                var convertedJson = JsonConvert.SerializeObject(model, Formatting.Indented);
+                File.WriteAllText(file, convertedJson);
                 return true;
             }
             catch (Exception)
@@ -99,21 +115,6 @@ namespace Model.Dao
                 return false;
             }
 
-        }
-        public bool Delete(string userName)
-        {
-            try
-            {
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-        public bool ChangeStatus(string userName)
-        {
-            return true;
         }
     }
 }

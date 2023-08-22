@@ -1,16 +1,30 @@
-﻿[
+[
   {
     "Username": "admin",
-    "Password": "202cb962ac59075b964b07152d234b70",
+    "Password": "c4ca4238a0b923820dcc509a6f75849b",
     "FullName": "Nguyễn Chí Tâm",
-    "Level": "Admin",
-    "Status": "true"
+    "Level": "Administrator",
+    "Status": true
   },
   {
     "Username": "user",
     "Password": "202cb962ac59075b964b07152d234b70",
-    "FullName": "Guest",
+    "FullName": "Guest123",
     "Level": "Guest",
-    "Status": "true"
+    "Status": true
+  },
+  {
+    "Username": "Guest1",
+    "Password": "202cb962ac59075b964b07152d234b70",
+    "FullName": "Guest2",
+    "Level": "Guest",
+    "Status": true
+  },
+  {
+    "Username": "Test1",
+    "Password": "202cb962ac59075b964b07152d234b70",
+    "FullName": "Tâm Nguyễn",
+    "Level": "Administrator",
+    "Status": true
   }
 ]

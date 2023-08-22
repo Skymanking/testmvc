@@ -6,46 +6,58 @@
 
 <aside class="main-sidebar sidebar-dark-light elevation-4">
     <a href="~/" class="brand-link">
-        <img src="/Assets/theme3/dist/img/logo.png" alt="Logo" class="brand-image img-circle elevation-3"
+        <img src="~/Assets/theme3/dist/img/logomini.png" alt="Logo" class="brand-image img-circle elevation-3"
              style="opacity: .8">
         <span class="brand-text font-weight-light">Sky Test</span>
     </a>
     <div class="sidebar">
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <div style="width: 40px;height: 40px;border-radius: 50%;background: url('../../../@avartar');background-size: 40px;float: left;"></div>
+                <div style="width: 40px; height: 40px; border-radius: 50%; background: url('../../Assets/theme3/dist/img/user.png');  background-size: 40px; float: left; "></div>
                 @*<img src="/Assets/theme3/dist/img/user.png" class="img-circle elevation-2" alt="User Image">*@
             </div>
             <div class="info">
                 <a href="#" class="d-block">@Model.FullName</a>
-                <a href="~/Personal/ViewPer" style="color: #007bff;">Xem thông tin</a>
             </div>
         </div>
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
-                        <i class="nav-icon fa fa-question-circle-o"></i><p>Khảo Sát - Góp Ý<i class="right fa fa-angle-left"></i></p>
+                        <i class="nav-icon fa fa-users"></i><p>Quản lý Nhân viên<i class="right fa fa-angle-left"></i></p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="~/MMRate/Index" class="nav-link">
-                                <i class="fa fa-circle-o nav-icon text-danger"></i><p>Đánh Giá MM</p>
+                            <a href="~/Employee" class="nav-link">
+                                <i class="fa fa-circle-o nav-icon text-danger"></i><p>Danh sách nhân viên</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="~/AllRate/Index" class="nav-link">
-                                <i class="fa fa-circle-o nav-icon text-danger"></i><p>Khảo Sát Nhân Viên</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="~/Comment/Index" class="nav-link">
-                                <i class="fa fa-circle-o nav-icon text-danger"></i><p>Phản Ánh / Góp Ý</p>
+                            <a href="~/Employee/Create" class="nav-link">
+                                <i class="fa fa-circle-o nav-icon text-danger"></i><p>Tạo nhân viên với</p>
                             </a>
                         </li>
                     </ul>
                 </li>
-
+            </ul>
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fa fa-user"></i><p>Quản lý Tài khoản<i class="right fa fa-angle-left"></i></p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="~/Employee" class="nav-link">
+                                <i class="fa fa-circle-o nav-icon text-danger"></i><p>Danh sách tài khoản</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="~/Employee/Create" class="nav-link">
+                                <i class="fa fa-circle-o nav-icon text-danger"></i><p>Tạo tài khoản mới</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
             </ul>
         </nav>
     </div>

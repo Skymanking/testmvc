@@ -76,17 +76,6 @@ namespace PTE01.Controllers
             Session[CommonConstants.USER_SESSION] = null;
             return Redirect("/");
         }
-        public ActionResult ChangePassword(string pass)
-        {
-            var session = (UserLogin)Session[CommonConstants.USER_SESSION];
-            bool kq = new UserDao().ChangePassword(session.UserName, Encryptor.MD5Hash(pass));
-            if (kq)
-            {
-                Session[CommonConstants.USER_SESSION] = null;
-                return Redirect("/");
-            }
-            else
-            { return Redirect("/"); }
-        }
+
     }
 }

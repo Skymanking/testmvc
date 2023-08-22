@@ -1,14 +1,17 @@
-﻿{
-  "Permission": [
-    {
-      "Name": "Administrator",
-      "Level": "Admin ",
-      "Status": "true"
-    },
-    {
-      "Name": "Guest",
-      "Level": "Guest ",
-      "Status": "true"
-    }
-  ]
-}
+﻿[
+  {
+    "Name": "Administrator",
+    "Level": "Admin",
+    "Permission": "2",
+    "Status": true
+  },
+  {
+    "Name": "Guest",
+    "Level": "Guest",
+    "Permission": "0",
+    "Status": true
+  }
+]
+// 0:View
+// 1:Edit
+// 2:Change
